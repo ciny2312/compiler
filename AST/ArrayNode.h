@@ -13,30 +13,25 @@ class ArrayNode : public ASTNode {
  public:
   ArrayNode() = delete;
   ArrayNode(position pos) : ASTNode(std::move(pos)) {}
-  void SetType(std::shared_ptr<Type> _type) { type = std::move(_type); }
-
+  void updata_type(std::shared_ptr<Type> _type) { type = std::move(_type); }
 };
-class SimpleArrayNode : public ArrayNode {
+
+class simpleArrayNode : public ArrayNode {
+  std::vector<std::shared_ptr<PrimaryNode>> ele;
  public:
-  SimpleArrayNode() = delete;
-  SimpleArrayNode(position pos, std::vector<std::shared_ptr<PrimaryNode>> elements)
-      : ArrayNode(std::move(pos)), elements_(std::move(elements)) {}
+  simpleArrayNode() = delete;
+  simpleArrayNode(position pos, std::vector<std::shared_ptr<PrimaryNode>> _elements)
+      : ArrayNode(std::move(pos)), ele(std::move(_elements)) {}
       
   void accept(ASTVisitor *visitor) final { visitor->visit(this); }
-
- private:
-  std::vector<std::shared_ptr<PrimaryNode>> elements_;
 };
 
-
-class JaggedArrayNode : public ArrayNode {
+class complexArrayNode : public ArrayNode {
+  std::vector<std::shared_ptr<ArrayNode>> ele;
  public:
-  JaggedArrayNode() = delete;
-  JaggedArrayNode(position pos, std::vector<std::shared_ptr<ArrayNode>> elements)
-      : ArrayNode(std::move(pos)), elements_(std::move(elements)) {}
-  std::vector<std::shared_ptr<ArrayNode>> &GetElements() { return elements_; }
-  void accept(ASTVisitor *visitor) final { visitor->visit(this); }
+  complexArrayNode() = delete;
+  complexArrayNode(position pos, std::vector<std::shared_ptr<ArrayNode>> _elements)
+      : ArrayNode(std::move(pos)), ele(std::move(_elements)) {}
 
- private:
-  std::vector<std::shared_ptr<ArrayNode>> elements_;
+  void accept(ASTVisitor *visitor) final { visitor->visit(this); }
 };

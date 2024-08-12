@@ -1,7 +1,7 @@
 #pragma once
 class RootNode;
-class JaggedArrayNode;
-class SimpleArrayNode;
+class complexArrayNode;
+class simpleArrayNode;
 class classDefNode;
 class funcDefNode;
 class varDefNode;
@@ -16,7 +16,7 @@ class threeExprNode;
 class oneExprNode;
 class constPrimaryNode;
 class newPrimaryNode;
-class ThisPrimaryNode;
+class thisPrimaryNode;
 class varPrimaryNode;
 class controlStmtNode;
 class exprStmtNode;
@@ -33,8 +33,8 @@ class varDefClassStmtNode;
 class ASTVisitor {
   public:
   virtual void visit(RootNode *node) = 0;
-  virtual void visit(JaggedArrayNode *node) = 0;
-  virtual void visit(SimpleArrayNode *node) = 0;
+  virtual void visit(complexArrayNode *node) = 0;
+  virtual void visit(simpleArrayNode *node) = 0;
   virtual void visit(classDefNode *node) = 0;
   virtual void visit(funcDefNode *node) = 0;
   virtual void visit(varDefNode *node) = 0;
@@ -49,7 +49,7 @@ class ASTVisitor {
   virtual void visit(oneExprNode *node) = 0;
   virtual void visit(constPrimaryNode *node) = 0;
   virtual void visit(newPrimaryNode *node) = 0;
-  virtual void visit(ThisPrimaryNode *node) = 0;
+  virtual void visit(thisPrimaryNode *node) = 0;
   virtual void visit(varPrimaryNode *node) = 0;
   virtual void visit(controlStmtNode *node) = 0;
   virtual void visit(exprStmtNode *node) = 0;

@@ -2,21 +2,35 @@
 
 #include "ASTBuilder.h"
 #include "RootNode.h"
+#include "PrimaryNode.h"
+#include "ArrayNode.h"
 
 #include "DefNode/DefNode.h"
 #include "DefNode/classDefNode.h"
 #include "DefNode/funcDefNode.h"
+#include "DefNode/varDefNode.h"
 
 #include "ExprNode/ExprNode.h"
 #include "ExprNode/assignExprNode.h"
+#include "ExprNode/atomExprNode.h"
+#include "ExprNode/classMemExprNode.h"
+#include "ExprNode/formatStringExprNode.h"
+#include "ExprNode/funcallExprNode.h"
+#include "ExprNode/oneExprNode.h"
 #include "ExprNode/binaryExprNode.h"
+#include "ExprNode/threeExprNode.h"
+#include "ExprNode/subExprNode.h"
 
 #include "StmtNode/StmtNode.h"
 #include "StmtNode/exprStmtNode.h"
 #include "StmtNode/ifStmtNode.h"
+#include "StmtNode/forStmtNode.h"
+#include "StmtNode/whileStmtNode.h"
 #include "StmtNode/returnStmtNode.h"
 #include "StmtNode/suiteStmtNode.h"
 #include "StmtNode/varDefStmtNode.h"
+#include "StmtNode/classStmtNode.h"
+#include "StmtNode/emptyStmtNode.h"
 
 
 

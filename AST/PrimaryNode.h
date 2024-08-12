@@ -28,10 +28,10 @@ class PrimaryNode : public ASTNode {
  protected:
   std::shared_ptr<Type> type=nullptr;
 };
-class ThisPrimaryNode : public PrimaryNode {
+class thisPrimaryNode : public PrimaryNode {
  public:
-  ThisPrimaryNode() = delete;
-  ThisPrimaryNode(position pos) : PrimaryNode(std::move(pos)) {
+  thisPrimaryNode() = delete;
+  thisPrimaryNode(position pos) : PrimaryNode(std::move(pos)) {
     lvalue = false;
     isnull = false;
   }
@@ -58,12 +58,12 @@ class newPrimaryNode : public PrimaryNode {
     isnull = false;
     lvalue = false;
   }
-  newPrimaryNode(position pos, std::string _type_name, int _dim, std::shared_ptr<ArrayNode> _array_literal)
+  newPrimaryNode(position pos, std::string _type_name, int _dim, std::shared_ptr<ArrayNode> _array)
       : PrimaryNode(std::move(pos)),
         new_type(NewType::NewArrayLiteral),
         type_name(std::move(_type_name)),
         dim(_dim),
-        array_literal(std::move(_array_literal)) {
+        array(std::move(_array)) {
     isnull = false;
     lvalue = false;
   }
@@ -72,7 +72,7 @@ class newPrimaryNode : public PrimaryNode {
         new_type(NewType::NewArray),
         type_name(std::move(_type_name)),
         dim(_dim),
-        expression(std::move(expr)) {
+        expr(std::move(expr)) {
     isnull = false;
     lvalue = false;
   }
@@ -81,9 +81,9 @@ class newPrimaryNode : public PrimaryNode {
  private:
   NewType new_type=NewType::Unknown;
   const std::string type_name;
-  std::shared_ptr<ArrayNode> array_literal=nullptr;
+  std::shared_ptr<ArrayNode> array=nullptr;
   int dim;
-  std::vector<std::shared_ptr<ExprNode>> expression;
+  std::vector<std::shared_ptr<ExprNode>> expr;
 };
 class constPrimaryNode : public PrimaryNode {
  public:
