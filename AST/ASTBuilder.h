@@ -4,84 +4,83 @@
 
 class ASTBuilder : MxBaseVisitor {
  public:
-  // Returns std::shared_ptr<RootNode> as the root for the entire AST
-  std::any visitProgram(MxParser::ProgramContext *ctx) override;
-  // Returns std::shared_ptr<StmtNode> as the function body
-  std::any visitMainFunc(MxParser::MainContext *ctx) ;//override;
-  // Returns std::shared_ptr<DefNode>
-  std::any visitClassDef(MxParser::ClassDefContext *ctx) override;
-  // Returns std::shared_ptr<ClassStmtNode>
-  std::any visitVarDef(MxParser::VarDefContext *ctx) override;
-  // Returns std::shared_ptr<ClassStmtNode>
-  //std::any visitConstructorDefStmt(MxParser::ConstructorDefStmtContext *ctx) override;
-  // Returns std::shared_ptr<ClassStmtNode>
-  //std::any visitFuncDefStmt(MxParser::FuncDefStmtContext *ctx) override;
-  // Returns std::shared_ptr<DefNode>
-  std::any visitFuncDef(MxParser::FuncDefContext *ctx) override;
-  // Returns std::shared_ptr<DefNode>
-  //std::any visitVarDef(MxParser::VarDefContext *ctx) override;
-  // Returns std::shared_ptr<StmtNode>
-  //std::any visitVarDefStmt(MxParser::VarDefStmtContext *ctx) override;
-  // Returns std::shared_ptr<StmtNode>
-  //std::any visitSuiteStmt(MxParser::SuiteStmtContext *ctx) override;
-  // Returns std::shared_ptr<StmtNode>
-  //std::any visitExprStmt(MxParser::ExprStmtContext *ctx) override;
-  // Returns std::shared_ptr<StmtNode>
-  std::any visitIfStmt(MxParser::IfStmtContext *ctx) override;
-  // Returns std::shared_ptr<StmtNode>
-  std::any visitWhileStmt(MxParser::WhileStmtContext *ctx) override;
-  // Returns std::shared_ptr<StmtNode>
-  std::any visitForStmt(MxParser::ForStmtContext *ctx) override;
-  // Returns std::shared_ptr<StmtNode>
-  std::any visitReturnStmt(MxParser::ReturnStmtContext *ctx) override;
-  // Returns std::shared_ptr<StmtNode>
-  std::any visitBreakStmt(MxParser::BreakStmtContext *ctx) override;
-  // Returns std::shared_ptr<StmtNode>
-  std::any visitContinueStmt(MxParser::ContinueStmtContext *ctx) override;
-  // Returns std::shared_ptr<ExprNode>
-  //std::any visitAtomicExpr(MxParser::AtomicExprContext *ctx) override;
-  // Returns std::shared_ptr<ExprNode>
-  //std::any visitUnaryExpr(MxParser::UnaryExprContext *ctx) override;
-  // Returns std::shared_ptr<ExprNode>
-  //std::any visitSubscriptExpr(MxParser::SubscriptExprContext *ctx) override;
-  // Returns std::shared_ptr<ExprNode>
-  //std::any visitTenaryExpr(MxParser::TenaryExprContext *ctx) override;
-  // Returns std::shared_ptr<ExprNode>
-  //std::any visitMemberExpr(MxParser::MemberExprContext *ctx) override;
-  // Returns std::shared_ptr<ExprNode>
-  //std::any visitBinaryExpr(MxParser::BinaryExprContext *ctx) override;
-  // Returns std::shared_ptr<ExprNode>
-  //std::any visitFormatExpr(MxParser::FormatExprContext *ctx) override;
-  // Returns std::shared_ptr<ExprNode>
-  //std::any visitFuncCallExpr(MxParser::FuncCallExprContext *ctx) override;
-  // Returns std::shared_ptr<ExprNode>
-  std::any visitAssignExpr(MxParser::AssignExprContext *ctx) override;
-  // Returns std::shared_ptr<ExprNode>
-  std::any visitSuite(MxParser::SuiteContext *ctx) override;
-  // Returns std::vector<std::shared_ptr<ExprNode>>
-  //std::any visitArguments(MxParser::ArgumentsContext *ctx) override;
+std::any visitProgram(MxParser::ProgramContext *ctx) override ;
 
-  //std::any visitParenPrimary(MxParser::ParenPrimaryContext *ctx) override;
+  std::any visitMain(MxParser::MainContext *ctx) override ;
 
-  //std::any visitLiteralPrimary(MxParser::LiteralPrimaryContext *ctx) override;
+  std::any visitClassDef(MxParser::ClassDefContext *ctx) override ;
 
-  //std::any visitVarPrimary(MxParser::VarPrimaryContext *ctx) override;
+  std::any visitVarDef(MxParser::VarDefContext *ctx) override ;
 
-  std::any visitThisPrimary(MxParser::ThisPrimaryContext *ctx) override;
+  std::any visitFuncDef(MxParser::FuncDefContext *ctx) override ;
 
-  std::any visitNewPrimary(MxParser::NewPrimaryContext *ctx) override;
+  std::any visitConsDef(MxParser::ConsDefContext *ctx) override ;
 
-  //std::any visitArray(MxParser::ArrayContext *ctx) override;
+  std::any visitFunctionParameterList(MxParser::FunctionParameterListContext *ctx) override ;
 
-  //std::any visitDecimalLiteral(MxParser::DecimalLiteralContext *ctx) override;
+  std::any visitSuite(MxParser::SuiteContext *ctx) override ;
 
-  //std::any visitBoolLiteral(MxParser::BoolLiteralContext *ctx) override;
+  std::any visitBlock(MxParser::BlockContext *ctx) override ;
 
-  //std::any visitStringLiteral(MxParser::StringLiteralContext *ctx) override;
+  std::any visitVardefStmt(MxParser::VardefStmtContext *ctx) override ;
 
-  //std::any visitNullLiteral(MxParser::NullLiteralContext *ctx) override;
+  std::any visitIfStmt(MxParser::IfStmtContext *ctx) override ;
 
-  //std::any visitArrayLiteral(MxParser::ArrayLiteralContext *ctx) override;
-  // Returns std::string representing the typename
-  std::any visitType(MxParser::TypeContext *ctx) override;
+  std::any visitWhileStmt(MxParser::WhileStmtContext *ctx) override ;
+
+  std::any visitForStmt(MxParser::ForStmtContext *ctx) override ;
+
+  std::any visitBreakStmt(MxParser::BreakStmtContext *ctx) override ;
+
+  std::any visitContinueStmt(MxParser::ContinueStmtContext *ctx) override ;
+
+  std::any visitReturnStmt(MxParser::ReturnStmtContext *ctx) override ;
+
+  std::any visitPureExprStmt(MxParser::PureExprStmtContext *ctx) override ;
+
+  std::any visitEmptyExprStmt(MxParser::EmptyExprStmtContext *ctx) override ;
+
+  std::any visitExprlist(MxParser::ExprlistContext *ctx) override ;
+
+  std::any visitIfstmt(MxParser::IfstmtContext *ctx) override ;
+
+  std::any visitWhilestmt(MxParser::WhilestmtContext *ctx) override ;
+
+  std::any visitForstmt(MxParser::ForstmtContext *ctx) override ;
+
+  std::any visitType(MxParser::TypeContext *ctx) override ;
+
+  std::any visitBitExpr(MxParser::BitExprContext *ctx) override ;
+
+  std::any visitArrayAccessPrimary(MxParser::ArrayAccessPrimaryContext *ctx) override ;
+
+  std::any visitOneExpr(MxParser::OneExprContext *ctx) override ;
+
+  std::any visitFormatStmt(MxParser::FormatStmtContext *ctx) override ;
+
+  std::any visitLogicExpr(MxParser::LogicExprContext *ctx) override ;
+
+  std::any visitAtomExpr(MxParser::AtomExprContext *ctx) override ;
+
+  std::any visitBinaryExpr(MxParser::BinaryExprContext *ctx) override ;
+
+  std::any visitAssignExpr(MxParser::AssignExprContext *ctx) override ;
+
+  std::any visitUsefunc(MxParser::UsefuncContext *ctx) override ;
+
+  std::any visitCompareExpr(MxParser::CompareExprContext *ctx) override ;
+
+  std::any visitThreeExpr(MxParser::ThreeExprContext *ctx) override ;
+
+  std::any visitPointExpr(MxParser::PointExprContext *ctx) override ;
+
+  std::any visitParenPrimary(MxParser::ParenPrimaryContext *ctx) override ;
+
+  std::any visitIndentifierPrimary(MxParser::IndentifierPrimaryContext *ctx) override ;
+
+  std::any visitConstPrimary(MxParser::ConstPrimaryContext *ctx) override ;
+
+  std::any visitThisPrimary(MxParser::ThisPrimaryContext *ctx) override ;
+
+  std::any visitNewPrimary(MxParser::NewPrimaryContext *ctx) override ;
 };

@@ -3,10 +3,3 @@
 
 
 #include "MxBaseVisitor.h"
-
-class My_MxVisitor:public MxBaseVisitor{
-  public:
-  std::any visitProgram(MxParser::ProgramContext *ctx) override {
-    return visitChildren(ctx);
-  }
-};
