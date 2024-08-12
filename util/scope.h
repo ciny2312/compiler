@@ -78,12 +78,12 @@ private:
 class Scope {
 public:
   Scope() = delete;
-  Scope(std::unique_ptr<Scope> parent_scope = nullptr)
-      : parent_scope(std::move(parent_scope)){};
+  Scope(std::unique_ptr<Scope> parent = nullptr)
+      : parent(std::move(parent)){};
   Scope(const Scope &other) = delete;
   Scope(Scope &&other) noexcept
       : local(std::move(other.local)),
-        parent_scope(std::move(other.parent_scope)){};
+        parent(std::move(other.parent)){};
 
   void define_var(std::string name, Type type, const position &pos) {
     auto result = local.emplace(std::move(name), std::move(type)).second;
@@ -97,7 +97,7 @@ public:
     if (it != local.end()) {
       return it->second;
     }
-    return parent_scope->ask_var(name);
+    return parent->ask_var(name);
   };
 
   Scope &operator=(const Scope &other) = delete;
@@ -106,13 +106,13 @@ public:
       return *this;
     }
     local = std::move(other.local);
-    parent_scope = std::move(other.parent_scope);
+    parent = std::move(other.parent);
     return *this;
   };
 
-  std::unique_ptr<Scope> &ask_parent() { return parent_scope; };
+  std::unique_ptr<Scope> &ask_parent() { return parent; };
 
 private:
   std::unordered_map<std::string, Type> local;
-  std::unique_ptr<Scope> parent_scope;
+  std::unique_ptr<Scope> parent;
 };

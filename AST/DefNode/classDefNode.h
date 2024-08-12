@@ -6,18 +6,15 @@
 #include <memory>
 
 
-class ClassDefNode :public DefNode {
+class classDefNode :public DefNode {
     std::vector<std::shared_ptr<varDefStmtNode>> varDefs;
     std::string name;
 
-    structDefNode(position pos, std::string name):DefNode(std::move(pos)) {
+    classDefNode(position pos, std::string name):DefNode(std::move(pos)) {
         name = name;
     }
 
     void accept(ASTVisitor* visitor) {
         visitor->visit(this);
     }
-};
-class varClassDefNode:public DefNode{
-
 };
