@@ -1,3 +1,5 @@
 .vscode/
 Compiler-Design*/
 build/
+.antlr/
+.cache/
