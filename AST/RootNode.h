@@ -7,12 +7,12 @@
 #include "vector"
 
 class RootNode :public ASTNode {
-  std::shared_ptr<StmtNode> main_func_body_{nullptr};
-  std::vector<std::shared_ptr<DefNode>> def_nodes_{};
+  std::shared_ptr<StmtNode> main_body=nullptr;
+  std::vector<std::shared_ptr<DefNode>> def_nodes;
 
     public:
     RootNode(position pos, std::shared_ptr<StmtNode> main_func, std::vector<std::shared_ptr<DefNode>> definitions)
-      : ASTNode(std::move(pos)), main_func_body_(std::move(main_func)), def_nodes_(std::move(definitions)) {}
+      : ASTNode(std::move(pos)), main_body(std::move(main_func)), def_nodes(std::move(definitions)) {}
 
     void accept(ASTVisitor *visitor) {
         visitor->visit(this);

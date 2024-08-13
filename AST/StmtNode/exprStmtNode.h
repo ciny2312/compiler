@@ -8,7 +8,7 @@
 class exprStmtNode :public StmtNode{
     std::shared_ptr<ExprNode> expr;
 
-    exprStmtNode(std::shared_ptr<ExprNode> e, position pos):StmtNode(pos) {
+    exprStmtNode(std::shared_ptr<ExprNode> e, position pos):StmtNode(std::move(pos)) {
         expr = std::move(e);
     }
 

@@ -12,7 +12,7 @@ varDef:
 	type Identifier ('=' expression)? (
 		',' Identifier ('=' expression)?
 	)* ';';
-funcDef: type Identifier '('  (type Identifier('=' expression)? (',' type Identifier('=' expression)?)*)? ')' suite;
+funcDef: return_type=type func_name=Identifier '('  (type Identifier('=' expression)? (',' type Identifier('=' expression)?)*)? ')' suite;
 consDef: Identifier '(' functionParameterList? ')' suite;
 functionParameterList: varDef (',' varDef)*;
 
@@ -36,7 +36,7 @@ ifstmt:
 	)?;
 whilestmt: While '(' expression ')' statement;
 forstmt:
-	For '(' expression ';' expression ';' expression ')' statement;
+	For '(' initializeStmt=expression ';' condiStmt=expression ';' stepStmt=expression ')' statement;
 
 type: (Int | String | Bool | Void | Identifier) (
 		'[' expression ']'

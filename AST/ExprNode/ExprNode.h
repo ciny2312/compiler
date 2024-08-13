@@ -2,30 +2,27 @@
 #include "../ASTNode.h"
 #include "../../util/position.h"
 #include "../../util/type.h"
+#include <cstddef>
 
 class ExprNode: public ASTNode {
-    Type type;
-    bool assignable,null;
+    std::shared_ptr<Type> type;
+    bool assignable,isnull;
 
     public:
-    ExprNode(position _pos):ASTNode(_pos) {
+    ExprNode(position _pos):ASTNode(std::move(_pos)) {
         //super(pos);
     }
-
-    bool isAssignable() {
-        return assignable;
-    }
-    void updata_type(Type t){
-        type=t;
+    void updata_type(std::shared_ptr<Type> t){
+        type=std::move(t);
     }
     void updata_assignable(bool flag){
         assignable=flag;
     }
     void updata_null(bool flag){
-        null=flag;
+        isnull=flag;
     }
-    Type get_type(){
-        if(!null&&type.isNull==true){
+    std::shared_ptr<Type> get_type(){
+        if(!isnull&&type==nullptr){
             throw std::runtime_error("Trying to fetch Type from an ExprNode with undetermined type");
         }
         return type;

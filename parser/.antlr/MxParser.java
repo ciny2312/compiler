@@ -473,6 +473,13 @@ public class MxParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class FuncDefContext extends ParserRuleContext {
+		public TypeContext return_type;
+		public Token func_name;
+		public TerminalNode LeftParen() { return getToken(MxParser.LeftParen, 0); }
+		public TerminalNode RightParen() { return getToken(MxParser.RightParen, 0); }
+		public SuiteContext suite() {
+			return getRuleContext(SuiteContext.class,0);
+		}
 		public List<TypeContext> type() {
 			return getRuleContexts(TypeContext.class);
 		}
@@ -482,11 +489,6 @@ public class MxParser extends Parser {
 		public List<TerminalNode> Identifier() { return getTokens(MxParser.Identifier); }
 		public TerminalNode Identifier(int i) {
 			return getToken(MxParser.Identifier, i);
-		}
-		public TerminalNode LeftParen() { return getToken(MxParser.LeftParen, 0); }
-		public TerminalNode RightParen() { return getToken(MxParser.RightParen, 0); }
-		public SuiteContext suite() {
-			return getRuleContext(SuiteContext.class,0);
 		}
 		public List<TerminalNode> Assign() { return getTokens(MxParser.Assign); }
 		public TerminalNode Assign(int i) {
@@ -516,9 +518,9 @@ public class MxParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(90);
-			type();
+			((FuncDefContext)_localctx).return_type = type();
 			setState(91);
-			match(Identifier);
+			((FuncDefContext)_localctx).func_name = match(Identifier);
 			setState(92);
 			match(LeftParen);
 			setState(111);
@@ -1126,14 +1128,11 @@ public class MxParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class ForstmtContext extends ParserRuleContext {
+		public ExpressionContext initializeStmt;
+		public ExpressionContext condiStmt;
+		public ExpressionContext stepStmt;
 		public TerminalNode For() { return getToken(MxParser.For, 0); }
 		public TerminalNode LeftParen() { return getToken(MxParser.LeftParen, 0); }
-		public List<ExpressionContext> expression() {
-			return getRuleContexts(ExpressionContext.class);
-		}
-		public ExpressionContext expression(int i) {
-			return getRuleContext(ExpressionContext.class,i);
-		}
 		public List<TerminalNode> Semi() { return getTokens(MxParser.Semi); }
 		public TerminalNode Semi(int i) {
 			return getToken(MxParser.Semi, i);
@@ -1141,6 +1140,12 @@ public class MxParser extends Parser {
 		public TerminalNode RightParen() { return getToken(MxParser.RightParen, 0); }
 		public StatementContext statement() {
 			return getRuleContext(StatementContext.class,0);
+		}
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
 		}
 		public ForstmtContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1159,15 +1164,15 @@ public class MxParser extends Parser {
 			setState(185);
 			match(LeftParen);
 			setState(186);
-			expression(0);
+			((ForstmtContext)_localctx).initializeStmt = expression(0);
 			setState(187);
 			match(Semi);
 			setState(188);
-			expression(0);
+			((ForstmtContext)_localctx).condiStmt = expression(0);
 			setState(189);
 			match(Semi);
 			setState(190);
-			expression(0);
+			((ForstmtContext)_localctx).stepStmt = expression(0);
 			setState(191);
 			match(RightParen);
 			setState(192);

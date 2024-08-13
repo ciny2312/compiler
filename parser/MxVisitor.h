@@ -1,5 +1,5 @@
 
-// Generated from Mx.g4 by ANTLR 4.13.2
+// Generated from Mx.g4 by ANTLR 4.7.2
 
 #pragma once
 
@@ -19,85 +19,85 @@ public:
   /**
    * Visit parse trees produced by MxParser.
    */
-    virtual std::any visitProgram(MxParser::ProgramContext *context) = 0;
+    virtual antlrcpp::Any visitProgram(MxParser::ProgramContext *context) = 0;
 
-    virtual std::any visitMain(MxParser::MainContext *context) = 0;
+    virtual antlrcpp::Any visitMain(MxParser::MainContext *context) = 0;
 
-    virtual std::any visitClassDef(MxParser::ClassDefContext *context) = 0;
+    virtual antlrcpp::Any visitClassDef(MxParser::ClassDefContext *context) = 0;
 
-    virtual std::any visitVarDef(MxParser::VarDefContext *context) = 0;
+    virtual antlrcpp::Any visitVarDef(MxParser::VarDefContext *context) = 0;
 
-    virtual std::any visitFuncDef(MxParser::FuncDefContext *context) = 0;
+    virtual antlrcpp::Any visitFuncDef(MxParser::FuncDefContext *context) = 0;
 
-    virtual std::any visitConsDef(MxParser::ConsDefContext *context) = 0;
+    virtual antlrcpp::Any visitConsDef(MxParser::ConsDefContext *context) = 0;
 
-    virtual std::any visitFunctionParameterList(MxParser::FunctionParameterListContext *context) = 0;
+    virtual antlrcpp::Any visitFunctionParameterList(MxParser::FunctionParameterListContext *context) = 0;
 
-    virtual std::any visitSuite(MxParser::SuiteContext *context) = 0;
+    virtual antlrcpp::Any visitSuite(MxParser::SuiteContext *context) = 0;
 
-    virtual std::any visitBlock(MxParser::BlockContext *context) = 0;
+    virtual antlrcpp::Any visitBlock(MxParser::BlockContext *context) = 0;
 
-    virtual std::any visitVardefStmt(MxParser::VardefStmtContext *context) = 0;
+    virtual antlrcpp::Any visitVardefStmt(MxParser::VardefStmtContext *context) = 0;
 
-    virtual std::any visitIfStmt(MxParser::IfStmtContext *context) = 0;
+    virtual antlrcpp::Any visitIfStmt(MxParser::IfStmtContext *context) = 0;
 
-    virtual std::any visitWhileStmt(MxParser::WhileStmtContext *context) = 0;
+    virtual antlrcpp::Any visitWhileStmt(MxParser::WhileStmtContext *context) = 0;
 
-    virtual std::any visitForStmt(MxParser::ForStmtContext *context) = 0;
+    virtual antlrcpp::Any visitForStmt(MxParser::ForStmtContext *context) = 0;
 
-    virtual std::any visitBreakStmt(MxParser::BreakStmtContext *context) = 0;
+    virtual antlrcpp::Any visitBreakStmt(MxParser::BreakStmtContext *context) = 0;
 
-    virtual std::any visitContinueStmt(MxParser::ContinueStmtContext *context) = 0;
+    virtual antlrcpp::Any visitContinueStmt(MxParser::ContinueStmtContext *context) = 0;
 
-    virtual std::any visitReturnStmt(MxParser::ReturnStmtContext *context) = 0;
+    virtual antlrcpp::Any visitReturnStmt(MxParser::ReturnStmtContext *context) = 0;
 
-    virtual std::any visitPureExprStmt(MxParser::PureExprStmtContext *context) = 0;
+    virtual antlrcpp::Any visitPureExprStmt(MxParser::PureExprStmtContext *context) = 0;
 
-    virtual std::any visitEmptyExprStmt(MxParser::EmptyExprStmtContext *context) = 0;
+    virtual antlrcpp::Any visitEmptyExprStmt(MxParser::EmptyExprStmtContext *context) = 0;
 
-    virtual std::any visitExprlist(MxParser::ExprlistContext *context) = 0;
+    virtual antlrcpp::Any visitExprlist(MxParser::ExprlistContext *context) = 0;
 
-    virtual std::any visitIfstmt(MxParser::IfstmtContext *context) = 0;
+    virtual antlrcpp::Any visitIfstmt(MxParser::IfstmtContext *context) = 0;
 
-    virtual std::any visitWhilestmt(MxParser::WhilestmtContext *context) = 0;
+    virtual antlrcpp::Any visitWhilestmt(MxParser::WhilestmtContext *context) = 0;
 
-    virtual std::any visitForstmt(MxParser::ForstmtContext *context) = 0;
+    virtual antlrcpp::Any visitForstmt(MxParser::ForstmtContext *context) = 0;
 
-    virtual std::any visitType(MxParser::TypeContext *context) = 0;
+    virtual antlrcpp::Any visitType(MxParser::TypeContext *context) = 0;
 
-    virtual std::any visitBitExpr(MxParser::BitExprContext *context) = 0;
+    virtual antlrcpp::Any visitBitExpr(MxParser::BitExprContext *context) = 0;
 
-    virtual std::any visitArrayAccessPrimary(MxParser::ArrayAccessPrimaryContext *context) = 0;
+    virtual antlrcpp::Any visitArrayAccessPrimary(MxParser::ArrayAccessPrimaryContext *context) = 0;
 
-    virtual std::any visitOneExpr(MxParser::OneExprContext *context) = 0;
+    virtual antlrcpp::Any visitOneExpr(MxParser::OneExprContext *context) = 0;
 
-    virtual std::any visitFormatStmt(MxParser::FormatStmtContext *context) = 0;
+    virtual antlrcpp::Any visitFormatStmt(MxParser::FormatStmtContext *context) = 0;
 
-    virtual std::any visitLogicExpr(MxParser::LogicExprContext *context) = 0;
+    virtual antlrcpp::Any visitLogicExpr(MxParser::LogicExprContext *context) = 0;
 
-    virtual std::any visitAtomExpr(MxParser::AtomExprContext *context) = 0;
+    virtual antlrcpp::Any visitAtomExpr(MxParser::AtomExprContext *context) = 0;
 
-    virtual std::any visitBinaryExpr(MxParser::BinaryExprContext *context) = 0;
+    virtual antlrcpp::Any visitBinaryExpr(MxParser::BinaryExprContext *context) = 0;
 
-    virtual std::any visitAssignExpr(MxParser::AssignExprContext *context) = 0;
+    virtual antlrcpp::Any visitAssignExpr(MxParser::AssignExprContext *context) = 0;
 
-    virtual std::any visitUsefunc(MxParser::UsefuncContext *context) = 0;
+    virtual antlrcpp::Any visitUsefunc(MxParser::UsefuncContext *context) = 0;
 
-    virtual std::any visitCompareExpr(MxParser::CompareExprContext *context) = 0;
+    virtual antlrcpp::Any visitCompareExpr(MxParser::CompareExprContext *context) = 0;
 
-    virtual std::any visitThreeExpr(MxParser::ThreeExprContext *context) = 0;
+    virtual antlrcpp::Any visitThreeExpr(MxParser::ThreeExprContext *context) = 0;
 
-    virtual std::any visitPointExpr(MxParser::PointExprContext *context) = 0;
+    virtual antlrcpp::Any visitPointExpr(MxParser::PointExprContext *context) = 0;
 
-    virtual std::any visitParenPrimary(MxParser::ParenPrimaryContext *context) = 0;
+    virtual antlrcpp::Any visitParenPrimary(MxParser::ParenPrimaryContext *context) = 0;
 
-    virtual std::any visitIndentifierPrimary(MxParser::IndentifierPrimaryContext *context) = 0;
+    virtual antlrcpp::Any visitIndentifierPrimary(MxParser::IndentifierPrimaryContext *context) = 0;
 
-    virtual std::any visitConstPrimary(MxParser::ConstPrimaryContext *context) = 0;
+    virtual antlrcpp::Any visitConstPrimary(MxParser::ConstPrimaryContext *context) = 0;
 
-    virtual std::any visitThisPrimary(MxParser::ThisPrimaryContext *context) = 0;
+    virtual antlrcpp::Any visitThisPrimary(MxParser::ThisPrimaryContext *context) = 0;
 
-    virtual std::any visitNewPrimary(MxParser::NewPrimaryContext *context) = 0;
+    virtual antlrcpp::Any visitNewPrimary(MxParser::NewPrimaryContext *context) = 0;
 
 
 };

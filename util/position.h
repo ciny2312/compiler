@@ -19,9 +19,9 @@ class position {
         text=token->getText();
     }
 
-    position(antlr4::tree::TerminalNode terminal):position(terminal.getSymbol()) {}
+    position(antlr4::tree::TerminalNode *terminal):position(terminal->getSymbol()) {}
 
-    position(antlr4::ParserRuleContext ctx):position(ctx.getStart()) {}
+    position(antlr4::ParserRuleContext *ctx):position(ctx->getStart()) {}
 
     int get_row() { return row; }
 
@@ -32,7 +32,7 @@ class position {
     std::string toString() { 
         char a='0'+row,b='0'+column;
         std::string ans;
-        ans=a;ans+=',';ans+=b;
+        ans=a;ans+=',';ans+=b;ans+=": ";ans+=text;
         return ans; 
     }
 };

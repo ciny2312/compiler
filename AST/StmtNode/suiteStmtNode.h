@@ -8,6 +8,7 @@
 
 class suiteStmtNode :public StmtNode {
     std::vector<std::shared_ptr<StmtNode>>stmts;
+    public:
     suiteStmtNode(position pos,std::vector<std::shared_ptr<StmtNode>> s):StmtNode(std::move(pos)) {
         stmts=std::move(s);
     }
