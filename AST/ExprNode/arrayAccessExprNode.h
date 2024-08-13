@@ -3,13 +3,13 @@
 #include "../ASTNode.h"
 #include "AST/ASTVisitor.h"
 #include "ExprNode.h"
-class subExprNode : public ExprNode {
+class arrayAccessExprNode : public ExprNode {
   std::shared_ptr<ExprNode> a_expr = nullptr;
   std::vector<std::shared_ptr<ExprNode>> index_expr;
 
 public:
-  subExprNode() = delete;
-  subExprNode(position pos, std::shared_ptr<ExprNode> base,
+  arrayAccessExprNode() = delete;
+  arrayAccessExprNode(position pos, std::shared_ptr<ExprNode> base,
                     std::vector<std::shared_ptr<ExprNode>> index)
       : ExprNode(std::move(pos)), a_expr(std::move(base)),
         index_expr(std::move(index)) {}

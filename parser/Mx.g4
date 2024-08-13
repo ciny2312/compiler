@@ -7,12 +7,17 @@ program: (classDef | funcDef | varDef)* main (
 main: 'int' 'main' '(' ')' suite;
 
 classDef:
-	'class' Identifier '{' (varDef | funcDef | consDef)*'}' ';';
+	'class' Identifier '{' (varDef | funcDef | consDef)* '}' ';';
 varDef:
 	type Identifier ('=' expression)? (
 		',' Identifier ('=' expression)?
 	)* ';';
-funcDef: return_type=type func_name=Identifier '('  (type Identifier('=' expression)? (',' type Identifier('=' expression)?)*)? ')' suite;
+funcDef:
+	return_type = type func_name = Identifier '(' (
+		type Identifier ('=' expression)? (
+			',' type Identifier ('=' expression)?
+		)*
+	)? ')' suite;
 consDef: Identifier '(' functionParameterList? ')' suite;
 functionParameterList: varDef (',' varDef)*;
 
@@ -36,7 +41,8 @@ ifstmt:
 	)?;
 whilestmt: While '(' expression ')' statement;
 forstmt:
-	For '(' initializeStmt=expression ';' condiStmt=expression ';' stepStmt=expression ')' statement;
+	For '(' initializeStmt = expression ';' condiStmt = expression ';' stepStmt = expression ')'
+		statement;
 
 type: (Int | String | Bool | Void | Identifier) (
 		'[' expression ']'
@@ -52,35 +58,44 @@ FormatString4:
 	'$' ('\\n' | '\\\\' | '\\"' | '$$' | [ !#%-[\]-~])* '"';
 
 expression:
-	primary																		# atomExpr
-	| FormatString1															# formatStmt
-	| FormatString2 expression (FormatString3 expression)* FormatString4	# formatStmt
-	| <assoc = right> expression (SelfPlus | SelfMinus)							# oneExpr
-	| <assoc = right> (SelfPlus | SelfMinus) expression							# oneExpr
-	| <assoc = right> ('!' | '~' | '-') expression								# oneExpr
-	| expression op = ('*' | '/' | '%') expression								# binaryExpr
-	| expression op = ('+' | '-') expression									# binaryExpr
-	| expression op = ('<<' | '>>') expression									# bitExpr
-	| expression op = ('<' | '<=' | '>' | '>=') expression						# compareExpr
-	| expression op = ('!=' | '==') expression									# compareExpr
-	| expression op = '&' expression											# bitExpr
-	| expression op = '^' expression											# bitExpr
-	| expression op = '|' expression											# bitExpr
-	| expression op = '&&' expression											# logicExpr
-	| expression op = '||' expression											# logicExpr
-	| <assoc = right> expression '?' expression ':' expression					# threeExpr
-	| <assoc = right> expression '=' expression									# assignExpr
-	| expression '.' Identifier													# pointExpr
-	| expression '(' exprlist? ')'												# usefunc
-	| expression '[' expression ']'												# arrayAccessPrimary;
+	primary																	# atomExpr
+	| FormatString1															# formatExpr
+	| FormatString2 expression (FormatString3 expression)* FormatString4	# formatExpr
+	| <assoc = right> expression (SelfPlus | SelfMinus)						# oneExpr
+	| <assoc = right> (SelfPlus | SelfMinus) expression						# oneExpr
+	| <assoc = right> ('!' | '~' | '-') expression							# oneExpr
+	| expression op = ('*' | '/' | '%') expression							# binaryExpr
+	| expression op = ('+' | '-') expression								# binaryExpr
+	| expression op = ('<<' | '>>') expression								# bitExpr
+	| expression op = ('<' | '<=' | '>' | '>=') expression					# compareExpr
+	| expression op = ('!=' | '==') expression								# compareExpr
+	| expression op = '&' expression										# bitExpr
+	| expression op = '^' expression										# bitExpr
+	| expression op = '|' expression										# bitExpr
+	| expression op = '&&' expression										# logicExpr
+	| expression op = '||' expression										# logicExpr
+	| <assoc = right> expression '?' expression ':' expression				# threeExpr
+	| <assoc = right> expression '=' expression								# assignExpr
+	| expression '.' Identifier												# pointExpr
+	| expression '(' exprlist? ')'											# usefunc
+	| expression '[' expression ']'											# arrayAccessExpr;
 
 primary:
 	'(' expression ')'		# parenPrimary
 	| Identifier			# indentifierPrimary
-	| Const					# constPrimary
+	| mxconst					# constPrimary
 	| This					# thisPrimary
-	| 'new' type Const		# newPrimary
+	| 'new' type mxconst		# newPrimary
 	| 'new' type ('(' ')')?	# newPrimary;
+
+mxconst:
+	IntegerConst	# intConst
+	| StringConst	# stringConst
+	| BoolConst		# boolConst
+	| Null			# nullConst
+	| array			# arrayConst;
+
+array: '{' '}' | '{' mxconst (',' mxconst)* '}';
 
 Int: 'int';
 If: 'if';
@@ -143,14 +158,6 @@ SelfMinus: '--';
 Belong: '.';
 Yinghao: '"';
 
-Const:
-	IntegerConst
-	| StringConst
-	| BoolConst
-	| Null
-	| ArrayConst;
-
-ArrayConst: '{' '}' | '{' Const (',' Const)* '}';
 IntegerConst: [1-9] [0-9]* | '0';
 BoolConst: True | False;
 StringConst: '"' ('\\n' | '\\\\' | '\\"' | [ !#-[\]-~])* '"';

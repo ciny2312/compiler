@@ -67,17 +67,17 @@ public:
 
     virtual antlrcpp::Any visitBitExpr(MxParser::BitExprContext *context) = 0;
 
-    virtual antlrcpp::Any visitArrayAccessPrimary(MxParser::ArrayAccessPrimaryContext *context) = 0;
-
     virtual antlrcpp::Any visitOneExpr(MxParser::OneExprContext *context) = 0;
 
-    virtual antlrcpp::Any visitFormatStmt(MxParser::FormatStmtContext *context) = 0;
+    virtual antlrcpp::Any visitArrayAccessExpr(MxParser::ArrayAccessExprContext *context) = 0;
 
     virtual antlrcpp::Any visitLogicExpr(MxParser::LogicExprContext *context) = 0;
 
     virtual antlrcpp::Any visitAtomExpr(MxParser::AtomExprContext *context) = 0;
 
     virtual antlrcpp::Any visitBinaryExpr(MxParser::BinaryExprContext *context) = 0;
+
+    virtual antlrcpp::Any visitFormatExpr(MxParser::FormatExprContext *context) = 0;
 
     virtual antlrcpp::Any visitAssignExpr(MxParser::AssignExprContext *context) = 0;
 
@@ -98,6 +98,18 @@ public:
     virtual antlrcpp::Any visitThisPrimary(MxParser::ThisPrimaryContext *context) = 0;
 
     virtual antlrcpp::Any visitNewPrimary(MxParser::NewPrimaryContext *context) = 0;
+
+    virtual antlrcpp::Any visitIntConst(MxParser::IntConstContext *context) = 0;
+
+    virtual antlrcpp::Any visitStringConst(MxParser::StringConstContext *context) = 0;
+
+    virtual antlrcpp::Any visitBoolConst(MxParser::BoolConstContext *context) = 0;
+
+    virtual antlrcpp::Any visitNullConst(MxParser::NullConstContext *context) = 0;
+
+    virtual antlrcpp::Any visitArrayConst(MxParser::ArrayConstContext *context) = 0;
+
+    virtual antlrcpp::Any visitArray(MxParser::ArrayContext *context) = 0;
 
 
 };

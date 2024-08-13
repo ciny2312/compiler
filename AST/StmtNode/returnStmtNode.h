@@ -14,9 +14,9 @@ private:
   const StmtType stmt_type = StmtType::Unknown;
 
 public:
-  controlStmtNode(StmtType t, position pos)
+  controlStmtNode(position pos,StmtType t)
       : StmtNode(std::move(pos)), stmt_type(t) {}
-  controlStmtNode(std::shared_ptr<ExprNode> value, StmtType t, position pos)
+  controlStmtNode(position pos, StmtType t,std::shared_ptr<ExprNode> value)
       : StmtNode(std::move(pos)), stmt_type(t) {
     value = std::move(value);
   }

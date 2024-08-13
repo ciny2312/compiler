@@ -111,15 +111,11 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitArrayAccessPrimary(MxParser::ArrayAccessPrimaryContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
   virtual antlrcpp::Any visitOneExpr(MxParser::OneExprContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitFormatStmt(MxParser::FormatStmtContext *ctx) override {
+  virtual antlrcpp::Any visitArrayAccessExpr(MxParser::ArrayAccessExprContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -132,6 +128,10 @@ public:
   }
 
   virtual antlrcpp::Any visitBinaryExpr(MxParser::BinaryExprContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitFormatExpr(MxParser::FormatExprContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -172,6 +172,30 @@ public:
   }
 
   virtual antlrcpp::Any visitNewPrimary(MxParser::NewPrimaryContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitIntConst(MxParser::IntConstContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitStringConst(MxParser::StringConstContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitBoolConst(MxParser::BoolConstContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitNullConst(MxParser::NullConstContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitArrayConst(MxParser::ArrayConstContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitArray(MxParser::ArrayContext *ctx) override {
     return visitChildren(ctx);
   }
 

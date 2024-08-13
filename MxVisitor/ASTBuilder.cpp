@@ -25,7 +25,7 @@
 #include "../AST/ExprNode/oneExprNode.h"
 #include "../AST/ExprNode/binaryExprNode.h"
 #include "../AST/ExprNode/threeExprNode.h"
-#include "../AST/ExprNode/subExprNode.h"
+#include "../AST/ExprNode/arrayAccessExprNode.h"
 
 #include "../AST/StmtNode/StmtNode.h"
 #include "../AST/StmtNode/exprStmtNode.h"
@@ -100,7 +100,7 @@ std::any ASTBuilder::visitVarDef(MxParser::VarDefContext *ctx) {
     }
   }
   assert(ret_name.size() == ret_val.size());
-  return std::shared_ptr<DefNode>(new varDefNode({ctx}, std::move(type_name), std::move(ret_name), std::move(ret_val)));
+  return std::shared_ptr<DefNode>(new varDefNode({ctx}, Type(std::move(type_name)), std::move(ret_name), std::move(ret_val)));
 }
 
 std::any ASTBuilder::visitFuncDef(MxParser::FuncDefContext *ctx) {
@@ -144,7 +144,7 @@ std::any ASTBuilder::visitBlock(MxParser::BlockContext *ctx){
 }
 
 std::any ASTBuilder::visitVardefStmt(MxParser::VardefStmtContext *ctx){
-  
+  return ctx->varDef()->accept(this);
 }
 
 std::any ASTBuilder::visitIfStmt(MxParser::IfStmtContext *ctx) {
@@ -207,7 +207,7 @@ std::any ASTBuilder::visitReturnStmt(MxParser::ReturnStmtContext *ctx) {
   return std::shared_ptr<StmtNode>(new controlStmtNode({ctx}, controlStmtNode::StmtType::Return, ret));
 }
 std::any ASTBuilder::visitPureExprStmt(MxParser::PureExprStmtContext *ctx){
-
+  return ctx->exprlist()->accept(this);
 }
 std::any ASTBuilder::visitEmptyExprStmt(MxParser::EmptyExprStmtContext *ctx){
 
@@ -220,109 +220,53 @@ std::any ASTBuilder::visitExprlist(MxParser::ExprlistContext *ctx) {
   }
   return std::shared_ptr<StmtNode>(new exprStmtNode({ctx}, std::move(expr)));
 }
-std::any ASTBuilder::visitAtomicExpr(MxParser::AtomicExprContext *ctx) {
-  auto primary = ctx->primary();
-  auto ret = std::any_cast<std::shared_ptr<PrimaryNode>>(primary->accept(this));
-  return std::shared_ptr<ExprNode>(new AtomExprNode({ctx}, std::move(ret)));
-}
 
+std::any ASTBuilder::visitType(MxParser::TypeContext *ctx) { return ctx->getText(); }
 
-
-std::any ASTBuilder::visitUnaryExpr(MxParser::UnaryExprContext *ctx) {
-  auto expr = ctx->expression();
-  auto expr_ret = std::any_cast<std::shared_ptr<ExprNode>>(expr->accept(this));
-  UnaryExprNode::OpType op_type;
-  if (ctx->Add()) {
-    op_type = UnaryExprNode::OpType::kPlus;
-  } else if (ctx->Sub()) {
-    op_type = UnaryExprNode::OpType::kMinus;
-  } else if (ctx->Not()) {
-    op_type = UnaryExprNode::OpType::kNot;
-  } else if (ctx->NotLogic()) {
-    op_type = UnaryExprNode::OpType::kNotLogic;
-  } else if (auto increment = ctx->Increment()) {
-    op_type = expr->getSourceInterval().a < increment->getSourceInterval().a ? UnaryExprNode::OpType::kPreIncrement
-                                                                             : UnaryExprNode::OpType::kSufIncrement;
-  } else if (auto decrement = ctx->Decrement()) {
-    op_type = expr->getSourceInterval().a < decrement->getSourceInterval().a ? UnaryExprNode::OpType::kPreDecrement
-                                                                             : UnaryExprNode::OpType::kSufDecrement;
-  } else {
-    throw std::runtime_error("No valid operator for unary expr");
-  }
-  return std::shared_ptr<ExprNode>(new UnaryExprNode({ctx}, op_type, std::move(expr_ret)));
-}
-
-std::any ASTBuilder::visitBinaryExpr(MxParser::BinaryExprContext *ctx) {
+std::any ASTBuilder::visitBitExpr(MxParser::BitExprContext *ctx){
   auto expr = ctx->expression();
   auto lhs = std::any_cast<std::shared_ptr<ExprNode>>(expr[0]->accept(this));
   auto rhs = std::any_cast<std::shared_ptr<ExprNode>>(expr[1]->accept(this));
-  BinaryExprNode::OpType op_type;
-  if (ctx->Add()) {
-    op_type = BinaryExprNode::OpType::kAdd;
-  } else if (ctx->Sub()) {
-    op_type = BinaryExprNode::OpType::kSub;
-  } else if (ctx->Mul()) {
-    op_type = BinaryExprNode::OpType::kMul;
-  } else if (ctx->Div()) {
-    op_type = BinaryExprNode::OpType::kDiv;
-  } else if (ctx->Mod()) {
-    op_type = BinaryExprNode::OpType::kMod;
-  } else if (ctx->And()) {
-    op_type = BinaryExprNode::OpType::kAnd;
+  binaryExprNode::OpType op_type;
+  if (ctx->And()) {
+    op_type = binaryExprNode::OpType::And;
   } else if (ctx->Or()) {
-    op_type = BinaryExprNode::OpType::kOr;
-  } else if (ctx->Xor()) {
-    op_type = BinaryExprNode::OpType::kXor;
-  } else if (ctx->AndLogic()) {
-    op_type = BinaryExprNode::OpType::kAndLogic;
-  } else if (ctx->OrLogic()) {
-    op_type = BinaryExprNode::OpType::kOrLogic;
-  } else if (ctx->ShiftLeft()) {
-    op_type = BinaryExprNode::OpType::kShiftL;
-  } else if (ctx->ShiftRight()) {
-    op_type = BinaryExprNode::OpType::kShiftR;
-  } else if (ctx->Equal()) {
-    op_type = BinaryExprNode::OpType::kEqual;
-  } else if (ctx->UnEqual()) {
-    op_type = BinaryExprNode::OpType::kNotEqual;
-  } else if (ctx->Less()) {
-    op_type = BinaryExprNode::OpType::kLess;
-  } else if (ctx->Greater()) {
-    op_type = BinaryExprNode::OpType::kGreater;
-  } else if (ctx->LessEqual()) {
-    op_type = BinaryExprNode::OpType::kLessEqual;
-  } else if (ctx->GreaterEqual()) {
-    op_type = BinaryExprNode::OpType::kGreaterEqual;
+    op_type = binaryExprNode::OpType::Or;
+  } else if (ctx->Caret()) {
+    op_type = binaryExprNode::OpType::Xor;
+  } else if (ctx->LeftShift()) {
+    op_type = binaryExprNode::OpType::ShiftL;
+  } else if (ctx->RightShift()) {
+    op_type = binaryExprNode::OpType::ShiftR;
   } else {
     throw std::runtime_error("Invalid binary operator");
   }
-  return std::shared_ptr<ExprNode>(new BinaryExprNode({ctx}, op_type, std::move(lhs), std::move(rhs)));
+  return std::shared_ptr<ExprNode>(new binaryExprNode({ctx}, op_type, std::move(lhs), std::move(rhs)));
 }
 
-std::any ASTBuilder::visitTenaryExpr(MxParser::TenaryExprContext *ctx) {
+std::any ASTBuilder::visitOneExpr(MxParser::OneExprContext *ctx) {
   auto expr = ctx->expression();
-  auto condition = std::any_cast<std::shared_ptr<ExprNode>>(expr[0]->accept(this));
-  auto true_expr = std::any_cast<std::shared_ptr<ExprNode>>(expr[1]->accept(this));
-  auto false_expr = std::any_cast<std::shared_ptr<ExprNode>>(expr[2]->accept(this));
-  return std::shared_ptr<ExprNode>(
-      new TenaryExprNode({ctx}, std::move(condition), std::move(true_expr), std::move(false_expr)));
+  auto expr_ret = std::any_cast<std::shared_ptr<ExprNode>>(expr->accept(this));
+  oneExprNode::OpType op_type;
+  if (ctx->Minus()) {
+    op_type = oneExprNode::OpType::Minus;
+  } else if (ctx->Not()) {
+    op_type = oneExprNode::OpType::Not;
+  } else if (ctx->Tilde()) {
+    op_type = oneExprNode::OpType::NotLogic;
+  } else if (auto increment = ctx->SelfPlus()) {
+    op_type = expr->getSourceInterval().a < increment->getSourceInterval().a ? oneExprNode::OpType::PreIncrement
+                                                                             : oneExprNode::OpType::SufIncrement;
+  } else if (auto decrement = ctx->SelfMinus()) {
+    op_type = expr->getSourceInterval().a < decrement->getSourceInterval().a ? oneExprNode::OpType::PreDecrement
+                                                                             : oneExprNode::OpType::SufDecrement;
+  } else {
+    throw std::runtime_error("No valid operator for unary expr");
+  }
+  return std::shared_ptr<ExprNode>(new oneExprNode({ctx}, op_type, std::move(expr_ret)));
 }
 
-std::any ASTBuilder::visitAssignExpr(MxParser::AssignExprContext *ctx) {
-  auto expr = ctx->expression();
-  auto lhs = std::any_cast<std::shared_ptr<ExprNode>>(expr[0]->accept(this));
-  auto rhs = std::any_cast<std::shared_ptr<ExprNode>>(expr[1]->accept(this));
-  return std::shared_ptr<ExprNode>(new AssignExprNode({ctx}, std::move(lhs), std::move(rhs)));
-}
-
-std::any ASTBuilder::visitMemberExpr(MxParser::MemberExprContext *ctx) {
-  auto expr = ctx->expression();
-  auto ret = std::any_cast<std::shared_ptr<ExprNode>>(expr->accept(this));
-  std::string member = ctx->Identifier()->getText();
-  return std::shared_ptr<ExprNode>(new MemberExprNode({ctx}, std::move(ret), std::move(member)));
-}
-
-std::any ASTBuilder::visitSubscriptExpr(MxParser::SubscriptExprContext *ctx) {
+std::any ASTBuilder::visitArrayAccessExpr(MxParser::ArrayAccessExprContext *ctx) {
   auto expr = ctx->expression();
   auto base = std::any_cast<std::shared_ptr<ExprNode>>(expr[0]->accept(this));
   std::vector<std::shared_ptr<ExprNode>> index;
@@ -330,9 +274,51 @@ std::any ASTBuilder::visitSubscriptExpr(MxParser::SubscriptExprContext *ctx) {
     auto ret = std::any_cast<std::shared_ptr<ExprNode>>(expr[i]->accept(this));
     index.push_back(std::move(ret));
   }
-  return std::shared_ptr<ExprNode>(new SubscriptExprNode({ctx}, std::move(base), std::move(index)));
+  return std::shared_ptr<ExprNode>(new arrayAccessExprNode({ctx}, std::move(base), std::move(index)));
 }
 
+std::any ASTBuilder::visitLogicExpr(MxParser::LogicExprContext *ctx){
+  auto expr = ctx->expression();
+  auto lhs = std::any_cast<std::shared_ptr<ExprNode>>(expr[0]->accept(this));
+  auto rhs = std::any_cast<std::shared_ptr<ExprNode>>(expr[1]->accept(this));
+  binaryExprNode::OpType op_type;
+  if (ctx->AndAnd()) {
+    op_type = binaryExprNode::OpType::AndAnd;
+  } else if (ctx->OrOr()) {
+    op_type = binaryExprNode::OpType::OrOr;
+  } else {
+    throw std::runtime_error("Invalid binary operator");
+  }
+  return std::shared_ptr<ExprNode>(new binaryExprNode({ctx}, op_type, std::move(lhs), std::move(rhs)));
+
+}
+
+std::any ASTBuilder::visitAtomExpr(MxParser::AtomExprContext *ctx) {
+  auto primary = ctx->primary();
+  auto ret = std::any_cast<std::shared_ptr<PrimaryNode>>(primary->accept(this));
+  return std::shared_ptr<ExprNode>(new atomExprNode({ctx}, std::move(ret)));
+}
+
+std::any ASTBuilder::visitBinaryExpr(MxParser::BinaryExprContext *ctx) {
+  auto expr = ctx->expression();
+  auto lhs = std::any_cast<std::shared_ptr<ExprNode>>(expr[0]->accept(this));
+  auto rhs = std::any_cast<std::shared_ptr<ExprNode>>(expr[1]->accept(this));
+  binaryExprNode::OpType op_type;
+  if (ctx->Plus()) {
+    op_type = binaryExprNode::OpType::Add;
+  } else if (ctx->Minus()) {
+    op_type = binaryExprNode::OpType::Sub;
+  } else if (ctx->Mul()) {
+    op_type = binaryExprNode::OpType::Mul;
+  } else if (ctx->Div()) {
+    op_type = binaryExprNode::OpType::Div;
+  } else if (ctx->Mod()) {
+    op_type = binaryExprNode::OpType::Mod;
+  } else {
+    throw std::runtime_error("Invalid binary operator");
+  }
+  return std::shared_ptr<ExprNode>(new binaryExprNode({ctx}, op_type, std::move(lhs), std::move(rhs)));
+}
 std::any ASTBuilder::visitFormatExpr(MxParser::FormatExprContext *ctx) {
   auto literal = ctx->FormatStringLiteral();
   auto expr = ctx->expression();
@@ -360,12 +346,16 @@ std::any ASTBuilder::visitFormatExpr(MxParser::FormatExprContext *ctx) {
   return std::shared_ptr<ExprNode>(new FormatExprNode({ctx}, std::move(format)));
 }
 
-std::any ASTBuilder::visitParenExpr(MxParser::ParenExprContext *ctx) {
+
+std::any ASTBuilder::visitAssignExpr(MxParser::AssignExprContext *ctx) {
   auto expr = ctx->expression();
-  return expr->accept(this);
+  auto lhs = std::any_cast<std::shared_ptr<ExprNode>>(expr[0]->accept(this));
+  auto rhs = std::any_cast<std::shared_ptr<ExprNode>>(expr[1]->accept(this));
+  return std::shared_ptr<ExprNode>(new assignExprNode({ctx}, std::move(lhs), std::move(rhs)));
 }
 
-std::any ASTBuilder::visitFuncCallExpr(MxParser::FuncCallExprContext *ctx) {
+
+std::any ASTBuilder::visitUsefunc(MxParser::UsefuncContext *ctx) {
   auto func_name = ctx->funcName->getText();
   auto arguments = ctx->arguments();
   auto ret_arg = std::any_cast<std::vector<std::shared_ptr<ExprNode>>>(arguments->accept(this));
@@ -375,31 +365,68 @@ std::any ASTBuilder::visitFuncCallExpr(MxParser::FuncCallExprContext *ctx) {
     ret_val = std::any_cast<std::shared_ptr<ExprNode>>(class_var->accept(this));
   }
   return std::shared_ptr<ExprNode>(
-      new FunctionCallExprNode({ctx}, std::move(ret_val), std::move(func_name), std::move(ret_arg)));
+      new functionCallExprNode({ctx}, std::move(ret_val), std::move(func_name), std::move(ret_arg)));
 }
 
-std::any ASTBuilder::visitArguments(MxParser::ArgumentsContext *ctx) {
-  auto expr = ctx->expression();
-  std::vector<std::shared_ptr<ExprNode>> ret_args;
-  for (const auto &it : expr) {
-    auto ret = std::any_cast<std::shared_ptr<ExprNode>>(it->accept(this));
-    ret_args.push_back(std::move(ret));
+std::any ASTBuilder::visitCompareExpr(MxParser::CompareExprContext *ctx){
+auto expr = ctx->expression();
+  auto lhs = std::any_cast<std::shared_ptr<ExprNode>>(expr[0]->accept(this));
+  auto rhs = std::any_cast<std::shared_ptr<ExprNode>>(expr[1]->accept(this));
+  binaryExprNode::OpType op_type;
+  if (ctx->Equal()) {
+    op_type = binaryExprNode::OpType::Equal;
+  } else if (ctx->NotEqual()) {
+    op_type = binaryExprNode::OpType::NotEqual;
+  } else if (ctx->Less()) {
+    op_type = binaryExprNode::OpType::Less;
+  } else if (ctx->Greater()) {
+    op_type = binaryExprNode::OpType::Greater;
+  } else if (ctx->LessEqual()) {
+    op_type = binaryExprNode::OpType::LessEqual;
+  } else if (ctx->GreaterEqual()) {
+    op_type = binaryExprNode::OpType::GreaterEqual;
+  } else {
+    throw std::runtime_error("Invalid binary operator");
   }
-  return std::move(ret_args);
+  return std::shared_ptr<ExprNode>(new binaryExprNode({ctx}, op_type, std::move(lhs), std::move(rhs)));
 }
 
-std::any ASTBuilder::visitVarPrimary(MxParser::VarPrimaryContext *ctx) {
+std::any ASTBuilder::visitThreeExpr(MxParser::ThreeExprContext *ctx) {
+  auto expr = ctx->expression();
+  auto condition = std::any_cast<std::shared_ptr<ExprNode>>(expr[0]->accept(this));
+  auto true_expr = std::any_cast<std::shared_ptr<ExprNode>>(expr[1]->accept(this));
+  auto false_expr = std::any_cast<std::shared_ptr<ExprNode>>(expr[2]->accept(this));
+  return std::shared_ptr<ExprNode>(
+      new threeExprNode({ctx}, std::move(condition), std::move(true_expr), std::move(false_expr)));
+}
+
+
+std::any ASTBuilder::visitPointExpr(MxParser::PointExprContext *ctx) {
+  auto expr = ctx->expression();
+  auto ret = std::any_cast<std::shared_ptr<ExprNode>>(expr->accept(this));
+  std::string member = ctx->Identifier()->getText();
+  return std::shared_ptr<ExprNode>(new classMemExprNode({ctx}, std::move(ret), std::move(member)));
+}
+
+
+std::any ASTBuilder::visitParenPrimary(MxParser::ParenPrimaryContext *ctx) {
+  auto expr = ctx->expression();
+  return expr->accept(this);
+}
+
+
+std::any ASTBuilder::visitIndentifierPrimary(MxParser::IndentifierPrimaryContext *ctx) {
   auto name = ctx->Identifier()->getText();
-  return std::shared_ptr<PrimaryNode>(new VarPrimaryNode({ctx}, std::move(name)));
+  return std::shared_ptr<PrimaryNode>(new varPrimaryNode({ctx}, std::move(name)));
 }
 
-std::any ASTBuilder::visitLiteralPrimary(MxParser::LiteralPrimaryContext *ctx) {
-  auto literal = ctx->literal();
+std::any ASTBuilder::visitConstPrimary(MxParser::ConstPrimaryContext *ctx) {
+  auto literal = ctx->Const();
   return literal->accept(this);
 }
 
 std::any ASTBuilder::visitThisPrimary(MxParser::ThisPrimaryContext *ctx) {
-  return std::shared_ptr<PrimaryNode>(new ThisPrimaryNode(Position{ctx}));
+  return std::shared_ptr<PrimaryNode>(new thisPrimaryNode(position{ctx}));
 }
 
 std::any ASTBuilder::visitNewPrimary(MxParser::NewPrimaryContext *ctx) {
@@ -468,4 +495,3 @@ std::any ASTBuilder::visitArray(MxParser::ArrayContext *ctx) {
   return std::shared_ptr<ArrayNode>(new SimpleArrayNode({ctx}, std::move(literal_ret)));
 }
 
-std::any ASTBuilder::visitType(MxParser::TypeContext *ctx) { return ctx->getText(); }

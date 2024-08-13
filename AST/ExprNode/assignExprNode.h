@@ -7,7 +7,7 @@
 class assignExprNode :public ExprNode{
     std::shared_ptr<ExprNode> lhs, rhs;
     public:
-    assignExprNode(std::shared_ptr<ExprNode> lhs, std::shared_ptr<ExprNode> rhs, position _pos):ExprNode(_pos) {
+    assignExprNode(position _pos, std::shared_ptr<ExprNode> lhs, std::shared_ptr<ExprNode> rhs):ExprNode(_pos) {
         lhs = std::move(lhs);
         rhs = std::move(rhs);
     }

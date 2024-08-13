@@ -22,8 +22,8 @@ public:
     And = 40, Or = 41, AndAnd = 42, OrOr = 43, Caret = 44, Not = 45, Tilde = 46, 
     Question = 47, Colon = 48, Semi = 49, Comma = 50, Assign = 51, Equal = 52, 
     NotEqual = 53, SelfPlus = 54, SelfMinus = 55, Belong = 56, Yinghao = 57, 
-    Const = 58, ArrayConst = 59, IntegerConst = 60, BoolConst = 61, StringConst = 62, 
-    Identifier = 63, Whitespace = 64, Newline = 65, BlockComment = 66, LineComment = 67
+    IntegerConst = 58, BoolConst = 59, StringConst = 60, Identifier = 61, 
+    Whitespace = 62, Newline = 63, BlockComment = 64, LineComment = 65
   };
 
   MxLexer(antlr4::CharStream *input);

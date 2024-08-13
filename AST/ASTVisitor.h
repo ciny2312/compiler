@@ -11,7 +11,7 @@ class binaryExprNode;
 class formatStringExprNode;
 class functionCallExprNode;
 class classMemExprNode;
-class subExprNode;
+class arrayAccessExprNode;
 class threeExprNode;
 class oneExprNode;
 class constPrimaryNode;
@@ -44,7 +44,7 @@ class ASTVisitor {
   virtual void visit(formatStringExprNode *node) = 0;
   virtual void visit(functionCallExprNode *node) = 0;
   virtual void visit(classMemExprNode *node) = 0;
-  virtual void visit(subExprNode *node) = 0;
+  virtual void visit(arrayAccessExprNode *node) = 0;
   virtual void visit(threeExprNode *node) = 0;
   virtual void visit(oneExprNode *node) = 0;
   virtual void visit(constPrimaryNode *node) = 0;

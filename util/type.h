@@ -35,7 +35,7 @@ private:
 class Typename {
 public:
   Typename() = default;
-  explicit Typename(std::string _name) : name(_name) {
+  Typename(std::string _name) : name(_name) {
     if (name == "int") {
       type_info = MyType::Int;
     } else if (name == "bool") {
