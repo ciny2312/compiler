@@ -9,8 +9,8 @@
 class ifStmtNode:public StmtNode {
     std::shared_ptr<ExprNode> condition;
     std::shared_ptr<StmtNode> thenStmt, elseStmt;
-
-    ifStmtNode(std::shared_ptr<ExprNode> condition, std::shared_ptr<StmtNode> thenStmt, std::shared_ptr<StmtNode> elseStmt, position pos):StmtNode(pos) {
+    public:
+    ifStmtNode(position pos,std::shared_ptr<ExprNode> condition, std::shared_ptr<StmtNode> thenStmt, std::shared_ptr<StmtNode> elseStmt):StmtNode(pos) {
         condition = std::move(condition);
         thenStmt = std::move(thenStmt);
         elseStmt = std::move(elseStmt);

@@ -621,7 +621,7 @@ public:
 
     antlr4::tree::TerminalNode *New();
     TypeContext *type();
-    MxconstContext *mxconst();
+    ArrayContext *array();
     antlr4::tree::TerminalNode *LeftParen();
     antlr4::tree::TerminalNode *RightParen();
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
@@ -690,10 +690,12 @@ public:
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *LeftBrace();
     antlr4::tree::TerminalNode *RightBrace();
-    std::vector<MxconstContext *> mxconst();
-    MxconstContext* mxconst(size_t i);
+    std::vector<ArrayContext *> array();
+    ArrayContext* array(size_t i);
     std::vector<antlr4::tree::TerminalNode *> Comma();
     antlr4::tree::TerminalNode* Comma(size_t i);
+    std::vector<MxconstContext *> mxconst();
+    MxconstContext* mxconst(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    

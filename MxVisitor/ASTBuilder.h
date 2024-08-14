@@ -83,4 +83,16 @@ public:
   std::any visitThisPrimary(MxParser::ThisPrimaryContext *ctx) override ;
 
   std::any visitNewPrimary(MxParser::NewPrimaryContext *ctx) override ;
+
+  std::any visitIntConst(MxParser::IntConstContext *ctx) override ;
+
+  std::any visitStringConst(MxParser::StringConstContext *ctx) override ;
+
+  std::any visitBoolConst(MxParser::BoolConstContext *ctx) override ;
+
+  std::any visitNullConst(MxParser::NullConstContext *ctx) override ;
+
+  std::any visitArrayConst(MxParser::ArrayConstContext *ctx) override ;
+
+  std::any visitArray(MxParser::ArrayContext *ctx) override ;
 };

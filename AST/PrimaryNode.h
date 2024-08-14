@@ -1,9 +1,11 @@
 #pragma once
 
+#include "AST/ASTVisitor.h"
 #include "ASTNode.h"
 #include "../util/type.h"
 #include "ExprNode/ExprNode.h"
 #include "ArrayNode.h"
+#include "TypeNode.h"
 #include <variant>
 
 class PrimaryNode : public ASTNode {
@@ -53,25 +55,23 @@ class newPrimaryNode : public PrimaryNode {
  public:
   enum class NewType : int { Unknown = 0, NewVar, NewArray, NewArrayLiteral };
   newPrimaryNode() = delete;
-  newPrimaryNode(position pos, std::string _type_name)
+  newPrimaryNode(position pos, std::shared_ptr<TypeNode> _type_name)
       : PrimaryNode(std::move(pos)), new_type(NewType::NewVar), type_name(std::move(_type_name)) {
     isnull = false;
     lvalue = false;
   }
-  newPrimaryNode(position pos, std::string _type_name, int _dim, std::shared_ptr<ArrayNode> _array)
+  newPrimaryNode(position pos, std::shared_ptr<TypeNode> _type_name, int _dim, std::shared_ptr<ArrayNode> _array)
       : PrimaryNode(std::move(pos)),
         new_type(NewType::NewArrayLiteral),
         type_name(std::move(_type_name)),
-        dim(_dim),
         array(std::move(_array)) {
     isnull = false;
     lvalue = false;
   }
-  newPrimaryNode(position pos, std::string _type_name, int _dim, std::vector<std::shared_ptr<ExprNode>> expr)
+  newPrimaryNode(position pos, std::shared_ptr<TypeNode> _type_name, int _dim, std::vector<std::shared_ptr<ExprNode>> expr)
       : PrimaryNode(std::move(pos)),
         new_type(NewType::NewArray),
         type_name(std::move(_type_name)),
-        dim(_dim),
         expr(std::move(expr)) {
     isnull = false;
     lvalue = false;
@@ -80,9 +80,8 @@ class newPrimaryNode : public PrimaryNode {
 
  private:
   NewType new_type=NewType::Unknown;
-  const std::string type_name;
+  std::shared_ptr<TypeNode> type_name;
   std::shared_ptr<ArrayNode> array=nullptr;
-  int dim;
   std::vector<std::shared_ptr<ExprNode>> expr;
 };
 class constPrimaryNode : public PrimaryNode {

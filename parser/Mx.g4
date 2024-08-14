@@ -83,9 +83,9 @@ expression:
 primary:
 	'(' expression ')'		# parenPrimary
 	| Identifier			# indentifierPrimary
-	| mxconst					# constPrimary
+	| mxconst				# constPrimary
 	| This					# thisPrimary
-	| 'new' type mxconst		# newPrimary
+	| 'new' type array	# newPrimary
 	| 'new' type ('(' ')')?	# newPrimary;
 
 mxconst:
@@ -95,7 +95,10 @@ mxconst:
 	| Null			# nullConst
 	| array			# arrayConst;
 
-array: '{' '}' | '{' mxconst (',' mxconst)* '}';
+array:
+	'{' '}'
+	| '{' array (',' array)* '}'
+	| '{' mxconst (',' mxconst)* '}';
 
 Int: 'int';
 If: 'if';

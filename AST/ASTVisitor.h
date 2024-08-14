@@ -29,6 +29,7 @@ class whileStmtNode;
 class constructorClassStmtNode;
 class functionDefClassStmtNode;
 class varDefClassStmtNode;
+class TypeNode;
 
 class ASTVisitor {
   public:
@@ -62,4 +63,5 @@ class ASTVisitor {
   virtual void visit(constructorClassStmtNode *node) = 0;
   virtual void visit(functionDefClassStmtNode *node) = 0;
   virtual void visit(varDefClassStmtNode *node) = 0;
+  virtual void visit(TypeNode *node) = 0;
 };
