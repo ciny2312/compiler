@@ -9,11 +9,12 @@
 
 
 class classDefNode :public DefNode {
+    public:
+    std::string name;
     std::vector<std::shared_ptr<constructorClassStmtNode>> consDef;
     std::vector<std::shared_ptr<funcDefNode>> funcDef;
     std::vector<std::shared_ptr<varDefNode>> varDef;
-    std::string name;
-
+    
     classDefNode(position pos, std::string _name
     ,std::vector<std::shared_ptr<constructorClassStmtNode>> cons
     ,std::vector<std::shared_ptr<funcDefNode>> func

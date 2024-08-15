@@ -34,6 +34,7 @@ private:
 
 class Typename {
 public:
+  const std::string name;
   Typename() = default;
   Typename(std::string _name) : name(_name) {
     if (name == "int") {
@@ -95,7 +96,6 @@ public:
 
 private:
   MyType type_info = MyType::Unknown;
-  const std::string name{};
   std::unordered_map<std::string, const Type &> member;
   std::unordered_map<std::string, const Function &> func;
 };

@@ -7,7 +7,7 @@ class position {
     std::string text;
 
     public:
-    position(int row, int col,int tex) {
+    position(int row, int col,std::string tex) {
         row = row;
         column = col;
         text=tex;
@@ -29,7 +29,7 @@ class position {
     
     std::string get_text(){ return text; }
 
-    std::string toString() { 
+    std::string toString() const{ 
         char a='0'+row,b='0'+column;
         std::string ans;
         ans=a;ans+=',';ans+=b;ans+=": ";ans+=text;

@@ -6,6 +6,7 @@
 #include "StmtNode.h"
 class constructorClassStmtNode : public ASTNode {
  public:
+  const std::string type;
   constructorClassStmtNode() = delete;
   constructorClassStmtNode(position pos, std::string _type, std::shared_ptr<StmtNode> _func)
       : ASTNode(std::move(pos)), type(std::move(_type)), func(std::move(_func)) {}
@@ -14,6 +15,5 @@ class constructorClassStmtNode : public ASTNode {
   void accept(ASTVisitor *visitor) final { visitor->visit(this); }
 
  private:
-  const std::string type;
   std::shared_ptr<StmtNode> func;
 };
