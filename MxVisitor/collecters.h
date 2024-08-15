@@ -5,7 +5,7 @@
 #include "AST/ASTVisitor.h"
 #include "util/scope.h"
 
-#include "util/semanticError.h"
+#include "util/error.h"
 
 class ClassCollector : public ASTVisitor {
 public:
