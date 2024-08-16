@@ -9,7 +9,7 @@ build:
 	@cd $(BUILD_DIR) && $(MAKE) -j$(nproc)
 
 run:
-	@cd $(BUILD_DIR) && ./MxCompiler
+	@cd $(BUILD_DIR) && ./code
 
 clean:
 	@rm -rf $(BUILD_DIR)
