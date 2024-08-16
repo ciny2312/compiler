@@ -5,10 +5,9 @@
 #include "ExprNode.h"
 
 class classMemExprNode : public ExprNode {
+public:
   std::shared_ptr<ExprNode> expr_node = nullptr;
   const std::string name;
-
-public:
   classMemExprNode() = delete;
   classMemExprNode(position pos, std::shared_ptr<ExprNode> _expr_node,
                    std::string member_name)

@@ -7,9 +7,10 @@
 #include "vector"
 #include <memory>
 class ifStmtNode:public StmtNode {
+    public:
     std::shared_ptr<ExprNode> condition;
     std::shared_ptr<StmtNode> thenStmt, elseStmt;
-    public:
+    
     ifStmtNode(position pos,std::shared_ptr<ExprNode> condition, std::shared_ptr<StmtNode> thenStmt, std::shared_ptr<StmtNode> elseStmt):StmtNode(pos) {
         condition = std::move(condition);
         thenStmt = std::move(thenStmt);

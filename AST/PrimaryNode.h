@@ -10,7 +10,7 @@
 
 class PrimaryNode : public ASTNode {
  public:
-  bool lvalue=false,isnull=false;
+  bool assignable=false,isnull=false;
   PrimaryNode() = delete;
   PrimaryNode(position pos) : ASTNode(std::move(pos)) {}
 
@@ -34,22 +34,20 @@ class thisPrimaryNode : public PrimaryNode {
  public:
   thisPrimaryNode() = delete;
   thisPrimaryNode(position pos) : PrimaryNode(std::move(pos)) {
-    lvalue = false;
+    assignable = false;
     isnull = false;
   }
   void accept(ASTVisitor *visitor) final { visitor->visit(this); }
 };
 class varPrimaryNode : public PrimaryNode {
  public:
+  const std::string name;
   varPrimaryNode() = delete;
   varPrimaryNode(position pos, std::string _name) : PrimaryNode(std::move(pos)), name(std::move(_name)) {
-    lvalue = true;
+    assignable = true;
     isnull = false;
   }
   void accept(ASTVisitor *visitor) final { visitor->visit(this); }
-
- private:
-  const std::string name;
 };
 class newPrimaryNode : public PrimaryNode {
  public:
@@ -58,23 +56,15 @@ class newPrimaryNode : public PrimaryNode {
   newPrimaryNode(position pos, std::shared_ptr<TypeNode> _type_name)
       : PrimaryNode(std::move(pos)), new_type(NewType::NewVar), type_name(std::move(_type_name)) {
     isnull = false;
-    lvalue = false;
+    assignable = false;
   }
-  newPrimaryNode(position pos, std::shared_ptr<TypeNode> _type_name, int _dim, std::shared_ptr<ArrayNode> _array)
+  newPrimaryNode(position pos, std::shared_ptr<TypeNode> _type_name, std::shared_ptr<ArrayNode> _array)
       : PrimaryNode(std::move(pos)),
         new_type(NewType::NewArrayLiteral),
         type_name(std::move(_type_name)),
         array(std::move(_array)) {
     isnull = false;
-    lvalue = false;
-  }
-  newPrimaryNode(position pos, std::shared_ptr<TypeNode> _type_name, int _dim, std::vector<std::shared_ptr<ExprNode>> expr)
-      : PrimaryNode(std::move(pos)),
-        new_type(NewType::NewArray),
-        type_name(std::move(_type_name)),
-        expr(std::move(expr)) {
-    isnull = false;
-    lvalue = false;
+    assignable = false;
   }
   void accept(ASTVisitor *visitor) final { visitor->visit(this); }
 
@@ -82,28 +72,28 @@ class newPrimaryNode : public PrimaryNode {
   NewType new_type=NewType::Unknown;
   std::shared_ptr<TypeNode> type_name;
   std::shared_ptr<ArrayNode> array=nullptr;
-  std::vector<std::shared_ptr<ExprNode>> expr;
 };
 class constPrimaryNode : public PrimaryNode {
  public:
   enum ConstType : int { Unknown = 0, Int, Bool, String, Null, Array };
+
+  const ConstType const_type=ConstType::Unknown;
+  std::variant<int, bool, std::string, std::shared_ptr<ArrayNode>> value;
+
   constPrimaryNode() = delete;
-  // Constructor when the literal is null
-  constPrimaryNode(position pos) : PrimaryNode(std::move(pos)), const_type(ConstType::Null) { Initialize(); }
-  // Constructor when the literal is a decimal number
+  constPrimaryNode(position pos) : PrimaryNode(std::move(pos)), const_type(ConstType::Null) { 
+    Initialize(); 
+  }
   constPrimaryNode(position pos, int val) : PrimaryNode(std::move(pos)), const_type(ConstType::Int), value(val) {
     Initialize();
   }
-  // Constructor when the literal is a bool
   constPrimaryNode(position pos, bool val) : PrimaryNode(std::move(pos)), const_type(ConstType::Bool), value(val) {
     Initialize();
   }
-  // Constructor when the literal is a string
   constPrimaryNode(position pos, std::string str)
       : PrimaryNode(std::move(pos)), const_type(String), value(std::move(str)) {
     Initialize();
   }
-  // Constructor when the literal is an array literal
   constPrimaryNode(position pos, std::shared_ptr<ArrayNode> array)
       : PrimaryNode(std::move(pos)), const_type(Array), value(std::move(array)) {
     Initialize();
@@ -112,9 +102,7 @@ class constPrimaryNode : public PrimaryNode {
 
  private:
   void Initialize() {
-    lvalue = false;
+    assignable = false;
     isnull = const_type == ConstType::Null;
   }
-  const ConstType const_type=ConstType::Unknown;
-  std::variant<int, bool, std::string, std::shared_ptr<ArrayNode>> value;
 };

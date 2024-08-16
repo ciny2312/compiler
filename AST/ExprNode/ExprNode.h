@@ -2,13 +2,13 @@
 #include "../ASTNode.h"
 #include "../../util/position.h"
 #include "../../util/type.h"
+#include "util/function.h"
 #include <cstddef>
 
 class ExprNode: public ASTNode {
-    std::shared_ptr<Type> type;
-    bool assignable,isnull;
-
+    std::shared_ptr<Type> type=nullptr;
     public:
+    bool assignable=false,isnull=false;
     ExprNode(position _pos):ASTNode(std::move(_pos)) {
         //super(pos);
     }

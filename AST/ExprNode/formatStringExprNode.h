@@ -5,9 +5,9 @@
 #include "ExprNode.h"
 #include <variant>
 class formatStringExprNode : public ExprNode {
+public:
   std::vector<std::variant<std::string, std::shared_ptr<ExprNode>>> ele;
 
-public:
   formatStringExprNode() = delete;
   formatStringExprNode(
       position pos,

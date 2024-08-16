@@ -4,10 +4,10 @@
 #include "AST/ASTVisitor.h"
 #include "ExprNode.h"
 class arrayAccessExprNode : public ExprNode {
+public:
   std::shared_ptr<ExprNode> a_expr = nullptr;
   std::vector<std::shared_ptr<ExprNode>> index_expr;
 
-public:
   arrayAccessExprNode() = delete;
   arrayAccessExprNode(position pos, std::shared_ptr<ExprNode> base,
                     std::vector<std::shared_ptr<ExprNode>> index)

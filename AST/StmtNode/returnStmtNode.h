@@ -9,11 +9,9 @@ class controlStmtNode : public StmtNode {
 public:
   enum class StmtType { Unknown = 0, Break, Continue, Return };
 
-private:
   std::shared_ptr<ExprNode> value;
   const StmtType stmt_type = StmtType::Unknown;
 
-public:
   controlStmtNode(position pos,StmtType t)
       : StmtNode(std::move(pos)), stmt_type(t) {}
   controlStmtNode(position pos, StmtType t,std::shared_ptr<ExprNode> value)

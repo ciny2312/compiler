@@ -7,15 +7,15 @@
 /**
  * A class used to regulate and report errors in Mx Compiler.
  */
-class CompilerError : public std::exception {
+class compilerError : public std::exception {
  public:
-  CompilerError() = delete;
-  CompilerError(const std::string &_error_type, const std::string &_error_detail, const position &_pos)
+  compilerError() = delete;
+  compilerError(const std::string &_error_type, const std::string &_error_detail, const position &_pos)
       : error_type(_error_type), error_detail(_error_detail), pos(_pos) {
-    error_msg = error_header + error_type + ": " + error_detail + ".\nLine " + pos.toString();
+    message = error_header + error_type + ": " + error_detail + ".\nLine " + pos.toString();
   }
   const char *what() const noexcept override {
-    return error_msg.c_str();
+    return message.c_str();
   }
 
  private:
@@ -23,120 +23,84 @@ class CompilerError : public std::exception {
   const std::string error_type;
   const std::string error_detail;
   const position pos;
-  std::string error_msg;
+  std::string message;
 };
 
-class SemanticError : public CompilerError {
+class semanticError : public compilerError {
  public:
-  SemanticError() = delete;
-  SemanticError(const std::string &error_detail, const position &pos)
-      : CompilerError("Semantic Error", error_detail, pos) {}
+  semanticError() = delete;
+  semanticError(const std::string &error_detail, const position &pos)
+      : compilerError("Semantic Error", error_detail, pos) {}
 };
 
-/**
- * Multiple definitions for a single variable/function/class.
- */
-class MultipleDef : public SemanticError {
+class type_wrong : public semanticError {
  public:
-  MultipleDef() = delete;
-  MultipleDef(const position &pos) : SemanticError("Multiple Definitions", pos) {}
+  type_wrong() = delete;
+  type_wrong(const position &pos) : semanticError("Type Mismatch", pos) {}
 };
 
-/**
- * Invalid use of type.(e.g. Declare variable using 'void' or use non-boolean variables as if condition.)
- */
-class InvalidType : public SemanticError {
+class dim_wrong : public semanticError {
  public:
-  InvalidType() = delete;
-  InvalidType(const position &pos) : SemanticError("Invalid Type", pos) {}
+  dim_wrong() = delete;
+  dim_wrong(const position &pos) : semanticError("Dimension Out Of Bound", pos) {}
 };
 
-/**
- * Use of undefined class/function/variable.
- */
-class UndefinedIdentifier : public SemanticError {
+class argument_wrong : public semanticError {
  public:
-  UndefinedIdentifier() = delete;
-  UndefinedIdentifier(const position &pos) : SemanticError("Undefined Identifier", pos) {}
+  argument_wrong() = delete;
+  argument_wrong(const position &pos) : semanticError("Invalid Function Argument", pos) {}
 };
 
-/**
- * Invalid constuctor of a certain class.
- */
-class InvalidContructor : public SemanticError {
+class flow_wrong : public semanticError {
  public:
-  InvalidContructor() = delete;
-  InvalidContructor(const position &pos) : SemanticError("Invalid Class Constructor", pos) {}
+  flow_wrong() = delete;
+  flow_wrong(const position &pos) : semanticError("Invalid Control Flow", pos) {}
 };
 
-/**
- * Mismatch of operands
- */
-class TypeMismatch : public SemanticError {
+class multiple_def : public semanticError {
  public:
-  TypeMismatch() = delete;
-  TypeMismatch(const position &pos) : SemanticError("Type Mismatch", pos) {}
+  multiple_def() = delete;
+  multiple_def(const position &pos) : semanticError("Multiple Definitions", pos) {}
 };
 
-/**
- * The value/expression used in assign expression is not assignable(i.e. not lvalue)
- */
-class NotAssignable : public SemanticError {
+class invalid_type : public semanticError {
  public:
-  NotAssignable() = delete;
-  NotAssignable(const position &pos) : SemanticError("Value Is Not Assignable", pos) {}
+  invalid_type() = delete;
+  invalid_type(const position &pos) : semanticError("Invalid Type", pos) {}
 };
 
-/**
- * Missing return statement for a function/class method.
- */
-class NoReturn : public SemanticError {
+class undefined_identifier : public semanticError {
  public:
-  NoReturn() = delete;
-  NoReturn(const position &pos) : SemanticError("Missing Return Statement", pos) {}
+  undefined_identifier() = delete;
+  undefined_identifier(const position &pos) : semanticError("Undefined Identifier", pos) {}
 };
 
-/**
- * Certain class member/method is undefined.
- */
-class InvalidMember : public SemanticError {
+class invalid_contructor : public semanticError {
  public:
-  InvalidMember() = delete;
-  InvalidMember(const position &pos) : SemanticError("Class Member/Method Is Invalid", pos) {}
+  invalid_contructor() = delete;
+  invalid_contructor(const position &pos) : semanticError("Invalid Class Constructor", pos) {}
 };
 
-/**
- * Trying to visit the index of a non-array type. (e.g. visit a[0][0][0] with int[][] a)
- */
-class DimOutOfBound : public SemanticError {
+class assign_disassign : public semanticError {
  public:
-  DimOutOfBound() = delete;
-  DimOutOfBound(const position &pos) : SemanticError("Dimension Out Of Bound", pos) {}
+  assign_disassign() = delete;
+  assign_disassign(const position &pos) : semanticError("Value Is Not Assignable", pos) {}
 };
 
-/**
- * Trying to call a function with mismatched arguments.
- */
-class InvalidArgs : public SemanticError {
+class miss_return : public semanticError {
  public:
-  InvalidArgs() = delete;
-  InvalidArgs(const position &pos) : SemanticError("Invalid Function Argument", pos) {}
+  miss_return() = delete;
+  miss_return(const position &pos) : semanticError("Missing Return Statement", pos) {}
 };
 
-/**
- * Invalid control statements(e.g. continue/break outside loop body)
- */
-class InvalidControlFlow : public SemanticError {
+class invalid_class_member : public semanticError {
  public:
-  InvalidControlFlow() = delete;
-  InvalidControlFlow(const position &pos) : SemanticError("Invalid Control Flow", pos) {}
+  invalid_class_member() = delete;
+  invalid_class_member(const position &pos) : semanticError("Class Member/Method Is Invalid", pos) {}
 };
 
-/**
- * Denoting that an error is not handled correctly or in the right place.
- */
-class UnhandledErr : public SemanticError {
+class unknown_error : public semanticError {
  public:
-  UnhandledErr() : SemanticError("An error isn't handled corrently", {0, 0, "Unknown"}) {}
-  UnhandledErr(const std::string &text) : SemanticError("An error isn't handled correctly", {0, 0, text}) {}
+  unknown_error() : semanticError("An error isn't handled corrently", {0, 0, "Unknown"}) {}
+  unknown_error(const std::string &text) : semanticError("An error isn't handled correctly", {0, 0, text}) {}
 };

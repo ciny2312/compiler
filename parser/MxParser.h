@@ -28,10 +28,9 @@ public:
 
   enum {
     RuleProgram = 0, RuleMain = 1, RuleClassDef = 2, RuleVarDef = 3, RuleFuncDef = 4, 
-    RuleConsDef = 5, RuleFunctionParameterList = 6, RuleSuite = 7, RuleStatement = 8, 
-    RuleExprlist = 9, RuleIfstmt = 10, RuleWhilestmt = 11, RuleForstmt = 12, 
-    RuleType = 13, RuleExpression = 14, RulePrimary = 15, RuleMxconst = 16, 
-    RuleArray = 17
+    RuleConsDef = 5, RuleSuite = 6, RuleStatement = 7, RuleExprlist = 8, 
+    RuleIfstmt = 9, RuleWhilestmt = 10, RuleForstmt = 11, RuleType = 12, 
+    RuleExpression = 13, RulePrimary = 14, RuleMxconst = 15, RuleArray = 16
   };
 
   MxParser(antlr4::TokenStream *input);
@@ -50,7 +49,6 @@ public:
   class VarDefContext;
   class FuncDefContext;
   class ConsDefContext;
-  class FunctionParameterListContext;
   class SuiteContext;
   class StatementContext;
   class ExprlistContext;
@@ -174,28 +172,12 @@ public:
     antlr4::tree::TerminalNode *LeftParen();
     antlr4::tree::TerminalNode *RightParen();
     SuiteContext *suite();
-    FunctionParameterListContext *functionParameterList();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
 
   ConsDefContext* consDef();
-
-  class  FunctionParameterListContext : public antlr4::ParserRuleContext {
-  public:
-    FunctionParameterListContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    std::vector<VarDefContext *> varDef();
-    VarDefContext* varDef(size_t i);
-    std::vector<antlr4::tree::TerminalNode *> Comma();
-    antlr4::tree::TerminalNode* Comma(size_t i);
-
-    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-   
-  };
-
-  FunctionParameterListContext* functionParameterList();
 
   class  SuiteContext : public antlr4::ParserRuleContext {
   public:

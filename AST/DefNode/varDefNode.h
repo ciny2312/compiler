@@ -8,10 +8,10 @@
 #include "DefNode.h"
 #include <memory>
 class varDefNode : public DefNode {
+public:
   std::shared_ptr<TypeNode> type_name;
   std::vector<std::string> var_name;
   std::vector<std::shared_ptr<ExprNode>> init_val;
-public:
   varDefNode() = delete;
   varDefNode(position pos, std::shared_ptr<TypeNode> _type_name, std::vector<std::string> _var_name,
              std::vector<std::shared_ptr<ExprNode>> initial)

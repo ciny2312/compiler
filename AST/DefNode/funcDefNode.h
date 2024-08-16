@@ -7,15 +7,14 @@
 #include "DefNode.h"
 #include "vector"
 class funcDefNode : public DefNode {
-  std::shared_ptr<StmtNode> func;
-
 public:
+  std::shared_ptr<StmtNode> func;
   const std::string func_name;
-  const std::string return_type;
-  std::vector<std::pair<std::string, std::string>> arguments;
+  std::shared_ptr<TypeNode>  return_type;
+  std::vector<std::pair<TypeNode, std::string>> arguments;
   
-  funcDefNode(position pos, std::string name, std::string re_type,
-              std::vector<std::pair<std::string, std::string>> arg,
+  funcDefNode(position pos, std::string name, std::shared_ptr<TypeNode> re_type,
+              std::vector<std::pair<TypeNode, std::string>> arg,
               std::shared_ptr<StmtNode> f)
       : DefNode(std::move(pos)), func_name(std::move(name)),
         return_type(std::move(re_type)), arguments(std::move(arg)),

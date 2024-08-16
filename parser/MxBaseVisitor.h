@@ -39,10 +39,6 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitFunctionParameterList(MxParser::FunctionParameterListContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
   virtual antlrcpp::Any visitSuite(MxParser::SuiteContext *ctx) override {
     return visitChildren(ctx);
   }

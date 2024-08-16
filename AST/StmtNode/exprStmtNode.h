@@ -6,8 +6,8 @@
 #include <memory>
 
 class exprStmtNode :public StmtNode{
-    std::vector<std::shared_ptr<ExprNode> >expr;
     public:
+    std::vector<std::shared_ptr<ExprNode> >expr;
     exprStmtNode(position pos,std::vector<std::shared_ptr<ExprNode> > e):StmtNode(std::move(pos)) {
         expr = std::move(e);
     }

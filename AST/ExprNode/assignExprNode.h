@@ -5,8 +5,8 @@
 #include "../../util/type.h"
 
 class assignExprNode :public ExprNode{
-    std::shared_ptr<ExprNode> lhs, rhs;
     public:
+    std::shared_ptr<ExprNode> lhs, rhs;
     assignExprNode(position _pos, std::shared_ptr<ExprNode> lhs, std::shared_ptr<ExprNode> rhs):ExprNode(_pos) {
         lhs = std::move(lhs);
         rhs = std::move(rhs);

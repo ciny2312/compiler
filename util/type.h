@@ -11,6 +11,8 @@ class Function;
 
 class Type {
 public:
+  int dim=0;
+  const std::shared_ptr<Typename> type_name;
   Type();
   Type(std::shared_ptr<Typename> _type_name, int _dim = 0)
       : type_name(std::move(_type_name)) {
@@ -26,10 +28,6 @@ public:
   bool operator!=(const Type &other) const { return !(*this == other); };
 
   void updata_dim(int _dim) { dim = _dim; }
-
-private:
-  const std::shared_ptr<Typename> type_name;
-  int dim=0;
 };
 
 class Typename {
@@ -115,5 +113,3 @@ const Type IntType(IntTypename, 0);
 const Type BoolType(BoolTypename, 0);
 const Type VoidType(VoidTypename, 0);
 const Type StringType(StringTypename, 0);
-
-std::shared_ptr<Typename> GetStringTypename() ;

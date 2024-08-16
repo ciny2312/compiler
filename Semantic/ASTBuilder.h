@@ -16,8 +16,6 @@ public:
 
   std::any visitConsDef(MxParser::ConsDefContext *ctx) override ;
 
-  std::any visitFunctionParameterList(MxParser::FunctionParameterListContext *ctx) override ;
-
   std::any visitSuite(MxParser::SuiteContext *ctx) override ;
 
   std::any visitBlock(MxParser::BlockContext *ctx) override ;

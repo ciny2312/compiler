@@ -1,3 +1,4 @@
+#pragma once
 #include "../ASTNode.h"
 #include "AST/ASTVisitor.h"
 #include "AST/DefNode/varDefNode.h"

@@ -27,6 +27,8 @@ public:
     OrOr,
     Xor
   };
+  std::shared_ptr<ExprNode> lhs, rhs;
+  OpType opCode;
 
   binaryExprNode(position pos, OpType opCode, std::shared_ptr<ExprNode> lhs,
                  std::shared_ptr<ExprNode> rhs)
@@ -37,8 +39,4 @@ public:
   }
 
   void accept(ASTVisitor *visitor) { visitor->visit(this); }
-
-private:
-  std::shared_ptr<ExprNode> lhs, rhs;
-  OpType opCode;
 };

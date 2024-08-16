@@ -1,3 +1,4 @@
+#include <any>
 #include <memory>
 
 #include "AST/ASTVisitor.h"
@@ -113,16 +114,16 @@ std::any ASTBuilder::visitVarDef(MxParser::VarDefContext *ctx) {
 }
 
 std::any ASTBuilder::visitFuncDef(MxParser::FuncDefContext *ctx) {
-  auto return_type = ctx->return_type->getText();
+  auto return_type = std::any_cast<std::shared_ptr<TypeNode>>(ctx->return_type->accept(this));
   auto func_name = ctx->func_name->getText();
   auto arg_type = ctx->type();
   auto arg_name = ctx->Identifier();
-  std::vector<std::pair<std::string, std::string>> arguments;
+  std::vector<std::pair<TypeNode, std::string>> arguments;
   if (arg_type.size() != arg_name.size() + 1) {
     throw std::runtime_error("Arg type number does not match arg name number in Method definition");
   }
   for (int i = 0; i < arg_name.size(); ++i) {
-    arguments.emplace_back(arg_type[i + 1]->getText(), arg_name[i]->getText());
+    arguments.emplace_back(std::any_cast<TypeNode>(arg_type[i]->accept(this)), arg_name[i]->getText());
   }
   auto func_body = std::any_cast<std::shared_ptr<StmtNode>>(ctx->suite()->accept(this));
   return std::shared_ptr<DefNode>(new funcDefNode({ctx}, std::move(func_name), std::move(return_type),
@@ -134,9 +135,6 @@ std::any ASTBuilder::visitConsDef(MxParser::ConsDefContext *ctx) {
   auto func_body = std::any_cast<std::shared_ptr<StmtNode>>(ctx->suite()->accept(this));
   return std::shared_ptr<constructorClassStmtNode>(
       new constructorClassStmtNode({ctx}, std::move(class_name), std::move(func_body)));
-}
-std::any ASTBuilder::visitFunctionParameterList(MxParser::FunctionParameterListContext *ctx){
-
 }
 
 std::any ASTBuilder::visitSuite(MxParser::SuiteContext *ctx) {
@@ -231,23 +229,29 @@ std::any ASTBuilder::visitExprlist(MxParser::ExprlistContext *ctx) {
 }
 
 std::any ASTBuilder::visitType(MxParser::TypeContext *ctx) {
-	if (!ctx->bad.empty())
-		throw std::runtime_error(__FUNCTION__ + std::string(": bad type name: ") + ctx->getText());
-	auto node = new AstTypeNode{};
-	if (auto id = ctx->Identifier(); id)
-		node->name = id->getText();
-	else
-		node->name = ctx->BasicType()->getText();
-	node->dimension = ctx->BracketLeft().size();
-	auto list = ctx->good;
-	node->arraySize.reserve(list.size());
-	for (auto expr: list) {
-		auto visRes = visit(expr);
-		if (!visRes.has_value()) throw std::runtime_error(__FUNCTION__ + std::string(": bad array size"));
-		auto val = std::any_cast<AstExprNode *>(visRes);
-		node->arraySize.emplace_back(val);
-	}
-	return std::shared_ptr<ExprNode>(new binaryExprNode({ctx}, op_type, std::move(lhs), std::move(rhs)));
+  std::string identifier;
+  if (auto id = ctx->Identifier()) {
+    identifier = id->getText();
+  } else if (ctx->Bool()) {
+    identifier = "bool";
+  } else if (ctx->Int()) {
+    identifier = "int";
+  } else if (ctx->String()) {
+    identifier = "string";
+  } else if (ctx->Void()) {
+    identifier = "void";
+  } else {
+    throw std::runtime_error("Invalid type");
+  }
+  auto size=ctx->expression();
+  if(size.empty()){
+    return TypeNode({ctx},std::move(identifier), ctx->LeftBracket().size());
+  }
+  std::vector<std::shared_ptr<ExprNode>> expr;
+  for(auto it:size){
+    expr.push_back( std::any_cast<std::shared_ptr<ExprNode>>(it->accept(this)));
+  }
+  return TypeNode({ctx},std::move(identifier), ctx->LeftBracket().size(),expr);
 }
 
 std::any ASTBuilder::visitBitExpr(MxParser::BitExprContext *ctx){
@@ -377,35 +381,15 @@ std::any ASTBuilder::visitAssignExpr(MxParser::AssignExprContext *ctx) {
   return std::shared_ptr<ExprNode>(new assignExprNode({ctx}, std::move(lhs), std::move(rhs)));
 }
 
-
 std::any ASTBuilder::visitUsefunc(MxParser::UsefuncContext *ctx) {
-  auto func_name = ctx->funcName->getText();
-  auto arguments = ctx->arguments();
-  auto ret_arg = std::any_cast<std::vector<std::shared_ptr<ExprNode>>>(arguments->accept(this));
-  auto class_var = ctx->classVar;
-  std::shared_ptr<ExprNode> ret_val = nullptr;
-  if (class_var) {
-    ret_val = std::any_cast<std::shared_ptr<ExprNode>>(class_var->accept(this));
+	auto func_name = std::any_cast<std::shared_ptr<ExprNode>>(visit(ctx->expression()));
+  auto argu=ctx->exprlist()->expression();
+
+  std::vector<std::shared_ptr<ExprNode>> expr;
+  for(const auto & it:argu){
+    expr.push_back( std::any_cast<std::shared_ptr<ExprNode>>(it->accept(this)));
   }
-  return std::shared_ptr<ExprNode>(
-      new functionCallExprNode({ctx}, std::move(ret_val), std::move(func_name), std::move(ret_arg)));
-
-
-	auto node = new AstFuncCallExprNode{};
-	auto f = visit(ctx->expression());
-	node->func = std::any_cast<AstExprNode *>(f);
-	if (auto list = ctx->exprList(); list) {
-		auto exprs = list->expression();
-		node->args.reserve(exprs.size());
-		for (auto expr: exprs) {
-			auto visRes = visit(expr);
-			if (!visRes.has_value())
-				throw std::runtime_error(__FUNCTION__);
-			auto val = std::any_cast<AstExprNode *>(visRes);
-			node->args.emplace_back(val);
-		}
-	}
-	return static_cast<AstExprNode *>(node);
+  return std::shared_ptr<ExprNode>(new functionCallExprNode({ctx},func_name,expr));
 }
 
 std::any ASTBuilder::visitCompareExpr(MxParser::CompareExprContext *ctx){
@@ -470,14 +454,14 @@ std::any ASTBuilder::visitThisPrimary(MxParser::ThisPrimaryContext *ctx) {
 }
 
 std::any ASTBuilder::visitNewPrimary(MxParser::NewPrimaryContext *ctx) {
-  auto type_name = ctx->type()->accept(this);
+  auto type_name = std::any_cast<std::shared_ptr<TypeNode>>(ctx->type()->accept(this));
   auto array = ctx->array();
   if (array) {
     auto array_ret = std::any_cast<std::shared_ptr<ArrayNode>>(array->accept(this));
     return std::shared_ptr<PrimaryNode>(
         new newPrimaryNode({ctx}, std::move(type_name), std::move(array_ret)));
   }
-  return std::shared_ptr<PrimaryNode>(new newPrimaryNode({ctx}, std::move(type_name), l_bracket, std::move(index)));
+  return std::shared_ptr<PrimaryNode>(new newPrimaryNode({ctx}, std::move(type_name)));
 }
 
 std::any ASTBuilder::visitBoolConst(MxParser::BoolConstContext *ctx) {

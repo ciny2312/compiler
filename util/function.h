@@ -8,9 +8,13 @@
  */
 class Function {
 public:
+  const Type return_type;
+  std::vector<Type> arguments;
+
   Function() : return_type(VoidType){};
   Function(Type _return_type, std::vector<Type> args)
       : return_type(std::move(_return_type)), arguments(std::move(args)){};
+
   std::size_t ask_arg_num() const { return arguments.size(); };
   Type ask_arg(int index) const {
     if (index >= arguments.size()) {
@@ -21,8 +25,4 @@ public:
     }
     return arguments[index];
   };
-
-private:
-  const Type return_type;
-  std::vector<Type> arguments;
 };

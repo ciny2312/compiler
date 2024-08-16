@@ -7,6 +7,7 @@
 #include "function.h"
 #include "position.h"
 #include "type.h"
+#include "error.h"
 
 class GlobalScope {
 public:
@@ -36,20 +37,20 @@ public:
   void add_type(std::string name, std::shared_ptr<Typename> ty,
                 const position &pos) {
     if (func.contains(name)) {
-      throw std::runtime_error("multiple define");
+      throw multiple_def(pos);
     }
     auto result = type.emplace(std::move(name), std::move(ty)).second;
     if (!result) {
-      throw std::runtime_error("multiple define");
+      throw multiple_def(pos);
     }
   };
   void add_function(std::string name, Function function, const position &pos) {
     if (type.contains(name)) {
-      throw std::runtime_error("multiple define");
+      throw multiple_def(pos);
     }
     auto result = func.emplace(std::move(name), std::move(function)).second;
     if (!result) {
-      throw std::runtime_error("multiple define");
+      throw multiple_def(pos);
     }
   };
 
@@ -88,7 +89,7 @@ public:
   void define_var(std::string name, Type type, const position &pos) {
     auto result = local.emplace(std::move(name), std::move(type)).second;
     if (!result) {
-      throw std::runtime_error("multiple define");
+      throw multiple_def(pos);
     }
   };
   bool is_var(const std::string &name) const { return local.count(name) != 0; };

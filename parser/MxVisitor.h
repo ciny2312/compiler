@@ -31,8 +31,6 @@ public:
 
     virtual antlrcpp::Any visitConsDef(MxParser::ConsDefContext *context) = 0;
 
-    virtual antlrcpp::Any visitFunctionParameterList(MxParser::FunctionParameterListContext *context) = 0;
-
     virtual antlrcpp::Any visitSuite(MxParser::SuiteContext *context) = 0;
 
     virtual antlrcpp::Any visitBlock(MxParser::BlockContext *context) = 0;

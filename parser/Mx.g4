@@ -18,8 +18,7 @@ funcDef:
 			',' type Identifier ('=' expression)?
 		)*
 	)? ')' suite;
-consDef: Identifier '(' functionParameterList? ')' suite;
-functionParameterList: varDef (',' varDef)*;
+consDef: Identifier '('  ')' suite;
 
 suite: '{' statement* '}';
 statement:
