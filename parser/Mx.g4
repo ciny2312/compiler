@@ -18,7 +18,7 @@ funcDef:
 			',' type Identifier ('=' expression)?
 		)*
 	)? ')' suite;
-consDef: Identifier '('  ')' suite;
+consDef: Identifier '(' ')' suite;
 
 suite: '{' statement* '}';
 statement:
@@ -76,7 +76,8 @@ expression:
 	| <assoc = right> expression '?' expression ':' expression				# threeExpr
 	| <assoc = right> expression '=' expression								# assignExpr
 	| expression '.' Identifier												# pointExpr
-	| expression '(' exprlist? ')'											# usefunc
+	| name = Identifier '(' exprlist? ')'									# usefunc
+	| classname = expression '.' name = Identifier '(' exprlist? ')'		# usefunc
 	| expression '[' expression ']'											# arrayAccessExpr;
 
 primary:
@@ -84,7 +85,7 @@ primary:
 	| Identifier			# indentifierPrimary
 	| mxconst				# constPrimary
 	| This					# thisPrimary
-	| 'new' type array	# newPrimary
+	| 'new' type array		# newPrimary
 	| 'new' type ('(' ')')?	# newPrimary;
 
 mxconst:

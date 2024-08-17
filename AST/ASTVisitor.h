@@ -27,8 +27,8 @@ class suiteStmtNode;
 class varDefStmtNode;
 class whileStmtNode;
 class constructorClassStmtNode;
-class functionDefClassStmtNode;
-class varDefClassStmtNode;
+//class functionDefClassStmtNode;
+//class varDefClassStmtNode;
 class TypeNode;
 
 class ASTVisitor {
@@ -61,7 +61,7 @@ class ASTVisitor {
   virtual void visit(varDefStmtNode *node) = 0;
   virtual void visit(whileStmtNode *node) = 0;
   virtual void visit(constructorClassStmtNode *node) = 0;
-  virtual void visit(functionDefClassStmtNode *node) = 0;
-  virtual void visit(varDefClassStmtNode *node) = 0;
+//  virtual void visit(functionDefClassStmtNode *node) = 0;
+//  virtual void visit(varDefClassStmtNode *node) = 0;
   virtual void visit(TypeNode *node) = 0;
 };

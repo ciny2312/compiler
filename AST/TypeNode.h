@@ -6,10 +6,11 @@
 #include "util/position.h"
 #include <memory>
 class TypeNode : public ASTNode {
-	std::vector<std::shared_ptr<ExprNode> > arraySize;
     public:
 	std::string name;
 	int dim = 0;
+	std::vector<std::shared_ptr<ExprNode> > arraySize;
+    
     TypeNode(position pos,std::string _name,int _dim,std::vector<std::shared_ptr<ExprNode> > _arraysize)
     :ASTNode(std::move(pos)), name(std::move(_name)),arraySize(std::move(_arraysize)){}
     TypeNode(position pos,std::string _name,int _dim)

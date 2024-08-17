@@ -1,12 +1,6 @@
 #include "type.h"
 #include "function.h"
 #include <memory>
-std::pair<bool, const Function &>
-Typename::ask_function(const std::string &name) const {
-  auto it = func.find(name);
-  return it == func.end() ? std::pair(false, Function())
-                          : std::pair{true, it->second};
-}
 std::shared_ptr<Typename> GetStringTypename() {
   Typename t("string");
   Function length(IntType, {});

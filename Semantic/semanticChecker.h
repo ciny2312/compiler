@@ -42,8 +42,8 @@ private:
   void visit(varDefStmtNode *node) final ;
   void visit(whileStmtNode *node) final ;
   void visit(constructorClassStmtNode *node) final ;
-  void visit(functionDefClassStmtNode *node) final ;
-  void visit(varDefClassStmtNode *node) final ;
+//  void visit(functionDefClassStmtNode *node) final ;
+//  void visit(varDefClassStmtNode *node) final ;
 
   void visit(TypeNode *node) final ;
   

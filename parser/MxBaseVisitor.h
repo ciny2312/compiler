@@ -1,5 +1,5 @@
 
-// Generated from Mx.g4 by ANTLR 4.7.2
+// Generated from Mx.g4 by ANTLR 4.13.2
 
 #pragma once
 
@@ -15,183 +15,183 @@
 class  MxBaseVisitor : public MxVisitor {
 public:
 
-  virtual antlrcpp::Any visitProgram(MxParser::ProgramContext *ctx) override {
+  virtual std::any visitProgram(MxParser::ProgramContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitMain(MxParser::MainContext *ctx) override {
+  virtual std::any visitMain(MxParser::MainContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitClassDef(MxParser::ClassDefContext *ctx) override {
+  virtual std::any visitClassDef(MxParser::ClassDefContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitVarDef(MxParser::VarDefContext *ctx) override {
+  virtual std::any visitVarDef(MxParser::VarDefContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitFuncDef(MxParser::FuncDefContext *ctx) override {
+  virtual std::any visitFuncDef(MxParser::FuncDefContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitConsDef(MxParser::ConsDefContext *ctx) override {
+  virtual std::any visitConsDef(MxParser::ConsDefContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitSuite(MxParser::SuiteContext *ctx) override {
+  virtual std::any visitSuite(MxParser::SuiteContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitBlock(MxParser::BlockContext *ctx) override {
+  virtual std::any visitBlock(MxParser::BlockContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitVardefStmt(MxParser::VardefStmtContext *ctx) override {
+  virtual std::any visitVardefStmt(MxParser::VardefStmtContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitIfStmt(MxParser::IfStmtContext *ctx) override {
+  virtual std::any visitIfStmt(MxParser::IfStmtContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitWhileStmt(MxParser::WhileStmtContext *ctx) override {
+  virtual std::any visitWhileStmt(MxParser::WhileStmtContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitForStmt(MxParser::ForStmtContext *ctx) override {
+  virtual std::any visitForStmt(MxParser::ForStmtContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitBreakStmt(MxParser::BreakStmtContext *ctx) override {
+  virtual std::any visitBreakStmt(MxParser::BreakStmtContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitContinueStmt(MxParser::ContinueStmtContext *ctx) override {
+  virtual std::any visitContinueStmt(MxParser::ContinueStmtContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitReturnStmt(MxParser::ReturnStmtContext *ctx) override {
+  virtual std::any visitReturnStmt(MxParser::ReturnStmtContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitPureExprStmt(MxParser::PureExprStmtContext *ctx) override {
+  virtual std::any visitPureExprStmt(MxParser::PureExprStmtContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitEmptyExprStmt(MxParser::EmptyExprStmtContext *ctx) override {
+  virtual std::any visitEmptyExprStmt(MxParser::EmptyExprStmtContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitExprlist(MxParser::ExprlistContext *ctx) override {
+  virtual std::any visitExprlist(MxParser::ExprlistContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitIfstmt(MxParser::IfstmtContext *ctx) override {
+  virtual std::any visitIfstmt(MxParser::IfstmtContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitWhilestmt(MxParser::WhilestmtContext *ctx) override {
+  virtual std::any visitWhilestmt(MxParser::WhilestmtContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitForstmt(MxParser::ForstmtContext *ctx) override {
+  virtual std::any visitForstmt(MxParser::ForstmtContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitType(MxParser::TypeContext *ctx) override {
+  virtual std::any visitType(MxParser::TypeContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitBitExpr(MxParser::BitExprContext *ctx) override {
+  virtual std::any visitBitExpr(MxParser::BitExprContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitOneExpr(MxParser::OneExprContext *ctx) override {
+  virtual std::any visitOneExpr(MxParser::OneExprContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitArrayAccessExpr(MxParser::ArrayAccessExprContext *ctx) override {
+  virtual std::any visitArrayAccessExpr(MxParser::ArrayAccessExprContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitLogicExpr(MxParser::LogicExprContext *ctx) override {
+  virtual std::any visitLogicExpr(MxParser::LogicExprContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitAtomExpr(MxParser::AtomExprContext *ctx) override {
+  virtual std::any visitAtomExpr(MxParser::AtomExprContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitBinaryExpr(MxParser::BinaryExprContext *ctx) override {
+  virtual std::any visitBinaryExpr(MxParser::BinaryExprContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitFormatExpr(MxParser::FormatExprContext *ctx) override {
+  virtual std::any visitFormatExpr(MxParser::FormatExprContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitAssignExpr(MxParser::AssignExprContext *ctx) override {
+  virtual std::any visitAssignExpr(MxParser::AssignExprContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitUsefunc(MxParser::UsefuncContext *ctx) override {
+  virtual std::any visitUsefunc(MxParser::UsefuncContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitCompareExpr(MxParser::CompareExprContext *ctx) override {
+  virtual std::any visitCompareExpr(MxParser::CompareExprContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitThreeExpr(MxParser::ThreeExprContext *ctx) override {
+  virtual std::any visitThreeExpr(MxParser::ThreeExprContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitPointExpr(MxParser::PointExprContext *ctx) override {
+  virtual std::any visitPointExpr(MxParser::PointExprContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitParenPrimary(MxParser::ParenPrimaryContext *ctx) override {
+  virtual std::any visitParenPrimary(MxParser::ParenPrimaryContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitIndentifierPrimary(MxParser::IndentifierPrimaryContext *ctx) override {
+  virtual std::any visitIndentifierPrimary(MxParser::IndentifierPrimaryContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitConstPrimary(MxParser::ConstPrimaryContext *ctx) override {
+  virtual std::any visitConstPrimary(MxParser::ConstPrimaryContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitThisPrimary(MxParser::ThisPrimaryContext *ctx) override {
+  virtual std::any visitThisPrimary(MxParser::ThisPrimaryContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitNewPrimary(MxParser::NewPrimaryContext *ctx) override {
+  virtual std::any visitNewPrimary(MxParser::NewPrimaryContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitIntConst(MxParser::IntConstContext *ctx) override {
+  virtual std::any visitIntConst(MxParser::IntConstContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitStringConst(MxParser::StringConstContext *ctx) override {
+  virtual std::any visitStringConst(MxParser::StringConstContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitBoolConst(MxParser::BoolConstContext *ctx) override {
+  virtual std::any visitBoolConst(MxParser::BoolConstContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitNullConst(MxParser::NullConstContext *ctx) override {
+  virtual std::any visitNullConst(MxParser::NullConstContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitArrayConst(MxParser::ArrayConstContext *ctx) override {
+  virtual std::any visitArrayConst(MxParser::ArrayConstContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitArray(MxParser::ArrayContext *ctx) override {
+  virtual std::any visitArray(MxParser::ArrayContext *ctx) override {
     return visitChildren(ctx);
   }
 

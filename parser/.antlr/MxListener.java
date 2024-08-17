@@ -67,16 +67,6 @@ public interface MxListener extends ParseTreeListener {
 	 */
 	void exitConsDef(MxParser.ConsDefContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MxParser#functionParameterList}.
-	 * @param ctx the parse tree
-	 */
-	void enterFunctionParameterList(MxParser.FunctionParameterListContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MxParser#functionParameterList}.
-	 * @param ctx the parse tree
-	 */
-	void exitFunctionParameterList(MxParser.FunctionParameterListContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link MxParser#suite}.
 	 * @param ctx the parse tree
 	 */
@@ -269,18 +259,6 @@ public interface MxListener extends ParseTreeListener {
 	 */
 	void exitBitExpr(MxParser.BitExprContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code arrayAccessPrimary}
-	 * labeled alternative in {@link MxParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterArrayAccessPrimary(MxParser.ArrayAccessPrimaryContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code arrayAccessPrimary}
-	 * labeled alternative in {@link MxParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitArrayAccessPrimary(MxParser.ArrayAccessPrimaryContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code oneExpr}
 	 * labeled alternative in {@link MxParser#expression}.
 	 * @param ctx the parse tree
@@ -293,17 +271,17 @@ public interface MxListener extends ParseTreeListener {
 	 */
 	void exitOneExpr(MxParser.OneExprContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code formatStmt}
+	 * Enter a parse tree produced by the {@code arrayAccessExpr}
 	 * labeled alternative in {@link MxParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterFormatStmt(MxParser.FormatStmtContext ctx);
+	void enterArrayAccessExpr(MxParser.ArrayAccessExprContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code formatStmt}
+	 * Exit a parse tree produced by the {@code arrayAccessExpr}
 	 * labeled alternative in {@link MxParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitFormatStmt(MxParser.FormatStmtContext ctx);
+	void exitArrayAccessExpr(MxParser.ArrayAccessExprContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code logicExpr}
 	 * labeled alternative in {@link MxParser#expression}.
@@ -340,6 +318,18 @@ public interface MxListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBinaryExpr(MxParser.BinaryExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code formatExpr}
+	 * labeled alternative in {@link MxParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterFormatExpr(MxParser.FormatExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code formatExpr}
+	 * labeled alternative in {@link MxParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitFormatExpr(MxParser.FormatExprContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code assignExpr}
 	 * labeled alternative in {@link MxParser#expression}.
@@ -460,4 +450,74 @@ public interface MxListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitNewPrimary(MxParser.NewPrimaryContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code intConst}
+	 * labeled alternative in {@link MxParser#mxconst}.
+	 * @param ctx the parse tree
+	 */
+	void enterIntConst(MxParser.IntConstContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code intConst}
+	 * labeled alternative in {@link MxParser#mxconst}.
+	 * @param ctx the parse tree
+	 */
+	void exitIntConst(MxParser.IntConstContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code stringConst}
+	 * labeled alternative in {@link MxParser#mxconst}.
+	 * @param ctx the parse tree
+	 */
+	void enterStringConst(MxParser.StringConstContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code stringConst}
+	 * labeled alternative in {@link MxParser#mxconst}.
+	 * @param ctx the parse tree
+	 */
+	void exitStringConst(MxParser.StringConstContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code boolConst}
+	 * labeled alternative in {@link MxParser#mxconst}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolConst(MxParser.BoolConstContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code boolConst}
+	 * labeled alternative in {@link MxParser#mxconst}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolConst(MxParser.BoolConstContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code nullConst}
+	 * labeled alternative in {@link MxParser#mxconst}.
+	 * @param ctx the parse tree
+	 */
+	void enterNullConst(MxParser.NullConstContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code nullConst}
+	 * labeled alternative in {@link MxParser#mxconst}.
+	 * @param ctx the parse tree
+	 */
+	void exitNullConst(MxParser.NullConstContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code arrayConst}
+	 * labeled alternative in {@link MxParser#mxconst}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrayConst(MxParser.ArrayConstContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code arrayConst}
+	 * labeled alternative in {@link MxParser#mxconst}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrayConst(MxParser.ArrayConstContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MxParser#array}.
+	 * @param ctx the parse tree
+	 */
+	void enterArray(MxParser.ArrayContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MxParser#array}.
+	 * @param ctx the parse tree
+	 */
+	void exitArray(MxParser.ArrayContext ctx);
 }

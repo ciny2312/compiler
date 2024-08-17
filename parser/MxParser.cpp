@@ -1,5 +1,5 @@
 
-// Generated from Mx.g4 by ANTLR 4.7.2
+// Generated from Mx.g4 by ANTLR 4.13.2
 
 
 #include "MxVisitor.h"
@@ -8,14 +8,226 @@
 
 
 using namespace antlrcpp;
+
 using namespace antlr4;
 
-MxParser::MxParser(TokenStream *input) : Parser(input) {
-  _interpreter = new atn::ParserATNSimulator(this, _atn, _decisionToDFA, _sharedContextCache);
+namespace {
+
+struct MxParserStaticData final {
+  MxParserStaticData(std::vector<std::string> ruleNames,
+                        std::vector<std::string> literalNames,
+                        std::vector<std::string> symbolicNames)
+      : ruleNames(std::move(ruleNames)), literalNames(std::move(literalNames)),
+        symbolicNames(std::move(symbolicNames)),
+        vocabulary(this->literalNames, this->symbolicNames) {}
+
+  MxParserStaticData(const MxParserStaticData&) = delete;
+  MxParserStaticData(MxParserStaticData&&) = delete;
+  MxParserStaticData& operator=(const MxParserStaticData&) = delete;
+  MxParserStaticData& operator=(MxParserStaticData&&) = delete;
+
+  std::vector<antlr4::dfa::DFA> decisionToDFA;
+  antlr4::atn::PredictionContextCache sharedContextCache;
+  const std::vector<std::string> ruleNames;
+  const std::vector<std::string> literalNames;
+  const std::vector<std::string> symbolicNames;
+  const antlr4::dfa::Vocabulary vocabulary;
+  antlr4::atn::SerializedATNView serializedATN;
+  std::unique_ptr<antlr4::atn::ATN> atn;
+};
+
+::antlr4::internal::OnceFlag mxParserOnceFlag;
+#if ANTLR4_USE_THREAD_LOCAL_CACHE
+static thread_local
+#endif
+std::unique_ptr<MxParserStaticData> mxParserStaticData = nullptr;
+
+void mxParserInitialize() {
+#if ANTLR4_USE_THREAD_LOCAL_CACHE
+  if (mxParserStaticData != nullptr) {
+    return;
+  }
+#else
+  assert(mxParserStaticData == nullptr);
+#endif
+  auto staticData = std::make_unique<MxParserStaticData>(
+    std::vector<std::string>{
+      "program", "main", "classDef", "varDef", "funcDef", "consDef", "suite", 
+      "statement", "exprlist", "ifstmt", "whilestmt", "forstmt", "type", 
+      "expression", "primary", "mxconst", "array"
+    },
+    std::vector<std::string>{
+      "", "'main'", "", "", "", "", "'int'", "'if'", "'else'", "'return'", 
+      "'void'", "'bool'", "'string'", "'new'", "'class'", "'null'", "'true'", 
+      "'false'", "'this'", "'for'", "'while'", "'break'", "'continue'", 
+      "'('", "')'", "'['", "']'", "'{'", "'}'", "'<'", "'<='", "'>'", "'>='", 
+      "'<<'", "'>>'", "'+'", "'-'", "'*'", "'/'", "'%'", "'&'", "'|'", "'&&'", 
+      "'||'", "'^'", "'!'", "'~'", "'\\u003F'", "':'", "';'", "','", "'='", 
+      "'=='", "'!='", "'++'", "'--'", "'.'", "'\"'"
+    },
+    std::vector<std::string>{
+      "", "", "FormatString1", "FormatString2", "FormatString3", "FormatString4", 
+      "Int", "If", "Else", "Return", "Void", "Bool", "String", "New", "Class", 
+      "Null", "True", "False", "This", "For", "While", "Break", "Continue", 
+      "LeftParen", "RightParen", "LeftBracket", "RightBracket", "LeftBrace", 
+      "RightBrace", "Less", "LessEqual", "Greater", "GreaterEqual", "LeftShift", 
+      "RightShift", "Plus", "Minus", "Mul", "Div", "Mod", "And", "Or", "AndAnd", 
+      "OrOr", "Caret", "Not", "Tilde", "Question", "Colon", "Semi", "Comma", 
+      "Assign", "Equal", "NotEqual", "SelfPlus", "SelfMinus", "Belong", 
+      "Yinghao", "IntegerConst", "BoolConst", "StringConst", "Identifier", 
+      "Whitespace", "Newline", "BlockComment", "LineComment"
+    }
+  );
+  static const int32_t serializedATNSegment[] = {
+  	4,1,65,343,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
+  	7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,
+  	14,2,15,7,15,2,16,7,16,1,0,1,0,1,0,5,0,38,8,0,10,0,12,0,41,9,0,1,0,1,
+  	0,1,0,1,0,5,0,47,8,0,10,0,12,0,50,9,0,1,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,
+  	1,2,1,2,1,2,1,2,1,2,1,2,5,2,66,8,2,10,2,12,2,69,9,2,1,2,1,2,1,2,1,3,1,
+  	3,1,3,1,3,3,3,78,8,3,1,3,1,3,1,3,1,3,3,3,84,8,3,5,3,86,8,3,10,3,12,3,
+  	89,9,3,1,3,1,3,1,4,1,4,1,4,1,4,1,4,1,4,1,4,3,4,100,8,4,1,4,1,4,1,4,1,
+  	4,1,4,3,4,107,8,4,5,4,109,8,4,10,4,12,4,112,9,4,3,4,114,8,4,1,4,1,4,1,
+  	4,1,5,1,5,1,5,1,5,1,5,1,6,1,6,5,6,126,8,6,10,6,12,6,129,9,6,1,6,1,6,1,
+  	7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,3,7,144,8,7,1,7,1,7,1,7,1,7,
+  	1,7,3,7,151,8,7,1,8,1,8,1,8,5,8,156,8,8,10,8,12,8,159,9,8,1,9,1,9,1,9,
+  	1,9,1,9,1,9,1,9,3,9,168,8,9,1,10,1,10,1,10,1,10,1,10,1,10,1,11,1,11,1,
+  	11,1,11,1,11,1,11,1,11,1,11,1,11,1,11,1,12,1,12,1,12,1,12,1,12,5,12,191,
+  	8,12,10,12,12,12,194,9,12,1,12,1,12,5,12,198,8,12,10,12,12,12,201,9,12,
+  	1,13,1,13,1,13,1,13,1,13,1,13,1,13,5,13,210,8,13,10,13,12,13,213,9,13,
+  	1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,3,13,224,8,13,1,13,3,13,
+  	227,8,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,
+  	1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,
+  	1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,
+  	1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,3,13,278,8,13,1,13,1,13,
+  	1,13,1,13,1,13,1,13,5,13,286,8,13,10,13,12,13,289,9,13,1,14,1,14,1,14,
+  	1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,3,14,306,
+  	8,14,3,14,308,8,14,1,15,1,15,1,15,1,15,1,15,3,15,315,8,15,1,16,1,16,1,
+  	16,1,16,1,16,1,16,5,16,323,8,16,10,16,12,16,326,9,16,1,16,1,16,1,16,1,
+  	16,1,16,1,16,5,16,334,8,16,10,16,12,16,337,9,16,1,16,1,16,3,16,341,8,
+  	16,1,16,0,1,26,17,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,0,8,3,
+  	0,6,6,10,12,61,61,1,0,54,55,2,0,36,36,45,46,1,0,37,39,1,0,35,36,1,0,33,
+  	34,1,0,29,32,1,0,52,53,394,0,39,1,0,0,0,2,53,1,0,0,0,4,59,1,0,0,0,6,73,
+  	1,0,0,0,8,92,1,0,0,0,10,118,1,0,0,0,12,123,1,0,0,0,14,150,1,0,0,0,16,
+  	152,1,0,0,0,18,160,1,0,0,0,20,169,1,0,0,0,22,175,1,0,0,0,24,185,1,0,0,
+  	0,26,226,1,0,0,0,28,307,1,0,0,0,30,314,1,0,0,0,32,340,1,0,0,0,34,38,3,
+  	4,2,0,35,38,3,8,4,0,36,38,3,6,3,0,37,34,1,0,0,0,37,35,1,0,0,0,37,36,1,
+  	0,0,0,38,41,1,0,0,0,39,37,1,0,0,0,39,40,1,0,0,0,40,42,1,0,0,0,41,39,1,
+  	0,0,0,42,48,3,2,1,0,43,47,3,4,2,0,44,47,3,8,4,0,45,47,3,6,3,0,46,43,1,
+  	0,0,0,46,44,1,0,0,0,46,45,1,0,0,0,47,50,1,0,0,0,48,46,1,0,0,0,48,49,1,
+  	0,0,0,49,51,1,0,0,0,50,48,1,0,0,0,51,52,5,0,0,1,52,1,1,0,0,0,53,54,5,
+  	6,0,0,54,55,5,1,0,0,55,56,5,23,0,0,56,57,5,24,0,0,57,58,3,12,6,0,58,3,
+  	1,0,0,0,59,60,5,14,0,0,60,61,5,61,0,0,61,67,5,27,0,0,62,66,3,6,3,0,63,
+  	66,3,8,4,0,64,66,3,10,5,0,65,62,1,0,0,0,65,63,1,0,0,0,65,64,1,0,0,0,66,
+  	69,1,0,0,0,67,65,1,0,0,0,67,68,1,0,0,0,68,70,1,0,0,0,69,67,1,0,0,0,70,
+  	71,5,28,0,0,71,72,5,49,0,0,72,5,1,0,0,0,73,74,3,24,12,0,74,77,5,61,0,
+  	0,75,76,5,51,0,0,76,78,3,26,13,0,77,75,1,0,0,0,77,78,1,0,0,0,78,87,1,
+  	0,0,0,79,80,5,50,0,0,80,83,5,61,0,0,81,82,5,51,0,0,82,84,3,26,13,0,83,
+  	81,1,0,0,0,83,84,1,0,0,0,84,86,1,0,0,0,85,79,1,0,0,0,86,89,1,0,0,0,87,
+  	85,1,0,0,0,87,88,1,0,0,0,88,90,1,0,0,0,89,87,1,0,0,0,90,91,5,49,0,0,91,
+  	7,1,0,0,0,92,93,3,24,12,0,93,94,5,61,0,0,94,113,5,23,0,0,95,96,3,24,12,
+  	0,96,99,5,61,0,0,97,98,5,51,0,0,98,100,3,26,13,0,99,97,1,0,0,0,99,100,
+  	1,0,0,0,100,110,1,0,0,0,101,102,5,50,0,0,102,103,3,24,12,0,103,106,5,
+  	61,0,0,104,105,5,51,0,0,105,107,3,26,13,0,106,104,1,0,0,0,106,107,1,0,
+  	0,0,107,109,1,0,0,0,108,101,1,0,0,0,109,112,1,0,0,0,110,108,1,0,0,0,110,
+  	111,1,0,0,0,111,114,1,0,0,0,112,110,1,0,0,0,113,95,1,0,0,0,113,114,1,
+  	0,0,0,114,115,1,0,0,0,115,116,5,24,0,0,116,117,3,12,6,0,117,9,1,0,0,0,
+  	118,119,5,61,0,0,119,120,5,23,0,0,120,121,5,24,0,0,121,122,3,12,6,0,122,
+  	11,1,0,0,0,123,127,5,27,0,0,124,126,3,14,7,0,125,124,1,0,0,0,126,129,
+  	1,0,0,0,127,125,1,0,0,0,127,128,1,0,0,0,128,130,1,0,0,0,129,127,1,0,0,
+  	0,130,131,5,28,0,0,131,13,1,0,0,0,132,151,3,12,6,0,133,151,3,6,3,0,134,
+  	151,3,18,9,0,135,151,3,20,10,0,136,151,3,22,11,0,137,138,5,21,0,0,138,
+  	151,5,49,0,0,139,140,5,22,0,0,140,151,5,49,0,0,141,143,5,9,0,0,142,144,
+  	3,26,13,0,143,142,1,0,0,0,143,144,1,0,0,0,144,145,1,0,0,0,145,151,5,49,
+  	0,0,146,147,3,16,8,0,147,148,5,49,0,0,148,151,1,0,0,0,149,151,5,49,0,
+  	0,150,132,1,0,0,0,150,133,1,0,0,0,150,134,1,0,0,0,150,135,1,0,0,0,150,
+  	136,1,0,0,0,150,137,1,0,0,0,150,139,1,0,0,0,150,141,1,0,0,0,150,146,1,
+  	0,0,0,150,149,1,0,0,0,151,15,1,0,0,0,152,157,3,26,13,0,153,154,5,50,0,
+  	0,154,156,3,26,13,0,155,153,1,0,0,0,156,159,1,0,0,0,157,155,1,0,0,0,157,
+  	158,1,0,0,0,158,17,1,0,0,0,159,157,1,0,0,0,160,161,5,7,0,0,161,162,5,
+  	23,0,0,162,163,3,26,13,0,163,164,5,24,0,0,164,167,3,14,7,0,165,166,5,
+  	8,0,0,166,168,3,14,7,0,167,165,1,0,0,0,167,168,1,0,0,0,168,19,1,0,0,0,
+  	169,170,5,20,0,0,170,171,5,23,0,0,171,172,3,26,13,0,172,173,5,24,0,0,
+  	173,174,3,14,7,0,174,21,1,0,0,0,175,176,5,19,0,0,176,177,5,23,0,0,177,
+  	178,3,26,13,0,178,179,5,49,0,0,179,180,3,26,13,0,180,181,5,49,0,0,181,
+  	182,3,26,13,0,182,183,5,24,0,0,183,184,3,14,7,0,184,23,1,0,0,0,185,192,
+  	7,0,0,0,186,187,5,25,0,0,187,188,3,26,13,0,188,189,5,26,0,0,189,191,1,
+  	0,0,0,190,186,1,0,0,0,191,194,1,0,0,0,192,190,1,0,0,0,192,193,1,0,0,0,
+  	193,199,1,0,0,0,194,192,1,0,0,0,195,196,5,25,0,0,196,198,5,26,0,0,197,
+  	195,1,0,0,0,198,201,1,0,0,0,199,197,1,0,0,0,199,200,1,0,0,0,200,25,1,
+  	0,0,0,201,199,1,0,0,0,202,203,6,13,-1,0,203,227,3,28,14,0,204,227,5,2,
+  	0,0,205,206,5,3,0,0,206,211,3,26,13,0,207,208,5,4,0,0,208,210,3,26,13,
+  	0,209,207,1,0,0,0,210,213,1,0,0,0,211,209,1,0,0,0,211,212,1,0,0,0,212,
+  	214,1,0,0,0,213,211,1,0,0,0,214,215,5,5,0,0,215,227,1,0,0,0,216,217,7,
+  	1,0,0,217,227,3,26,13,18,218,219,7,2,0,0,219,227,3,26,13,17,220,221,5,
+  	61,0,0,221,223,5,23,0,0,222,224,3,16,8,0,223,222,1,0,0,0,223,224,1,0,
+  	0,0,224,225,1,0,0,0,225,227,5,24,0,0,226,202,1,0,0,0,226,204,1,0,0,0,
+  	226,205,1,0,0,0,226,216,1,0,0,0,226,218,1,0,0,0,226,220,1,0,0,0,227,287,
+  	1,0,0,0,228,229,10,16,0,0,229,230,7,3,0,0,230,286,3,26,13,17,231,232,
+  	10,15,0,0,232,233,7,4,0,0,233,286,3,26,13,16,234,235,10,14,0,0,235,236,
+  	7,5,0,0,236,286,3,26,13,15,237,238,10,13,0,0,238,239,7,6,0,0,239,286,
+  	3,26,13,14,240,241,10,12,0,0,241,242,7,7,0,0,242,286,3,26,13,13,243,244,
+  	10,11,0,0,244,245,5,40,0,0,245,286,3,26,13,12,246,247,10,10,0,0,247,248,
+  	5,44,0,0,248,286,3,26,13,11,249,250,10,9,0,0,250,251,5,41,0,0,251,286,
+  	3,26,13,10,252,253,10,8,0,0,253,254,5,42,0,0,254,286,3,26,13,9,255,256,
+  	10,7,0,0,256,257,5,43,0,0,257,286,3,26,13,8,258,259,10,6,0,0,259,260,
+  	5,47,0,0,260,261,3,26,13,0,261,262,5,48,0,0,262,263,3,26,13,6,263,286,
+  	1,0,0,0,264,265,10,5,0,0,265,266,5,51,0,0,266,286,3,26,13,5,267,268,10,
+  	19,0,0,268,286,7,1,0,0,269,270,10,4,0,0,270,271,5,56,0,0,271,286,5,61,
+  	0,0,272,273,10,2,0,0,273,274,5,56,0,0,274,275,5,61,0,0,275,277,5,23,0,
+  	0,276,278,3,16,8,0,277,276,1,0,0,0,277,278,1,0,0,0,278,279,1,0,0,0,279,
+  	286,5,24,0,0,280,281,10,1,0,0,281,282,5,25,0,0,282,283,3,26,13,0,283,
+  	284,5,26,0,0,284,286,1,0,0,0,285,228,1,0,0,0,285,231,1,0,0,0,285,234,
+  	1,0,0,0,285,237,1,0,0,0,285,240,1,0,0,0,285,243,1,0,0,0,285,246,1,0,0,
+  	0,285,249,1,0,0,0,285,252,1,0,0,0,285,255,1,0,0,0,285,258,1,0,0,0,285,
+  	264,1,0,0,0,285,267,1,0,0,0,285,269,1,0,0,0,285,272,1,0,0,0,285,280,1,
+  	0,0,0,286,289,1,0,0,0,287,285,1,0,0,0,287,288,1,0,0,0,288,27,1,0,0,0,
+  	289,287,1,0,0,0,290,291,5,23,0,0,291,292,3,26,13,0,292,293,5,24,0,0,293,
+  	308,1,0,0,0,294,308,5,61,0,0,295,308,3,30,15,0,296,308,5,18,0,0,297,298,
+  	5,13,0,0,298,299,3,24,12,0,299,300,3,32,16,0,300,308,1,0,0,0,301,302,
+  	5,13,0,0,302,305,3,24,12,0,303,304,5,23,0,0,304,306,5,24,0,0,305,303,
+  	1,0,0,0,305,306,1,0,0,0,306,308,1,0,0,0,307,290,1,0,0,0,307,294,1,0,0,
+  	0,307,295,1,0,0,0,307,296,1,0,0,0,307,297,1,0,0,0,307,301,1,0,0,0,308,
+  	29,1,0,0,0,309,315,5,58,0,0,310,315,5,60,0,0,311,315,5,59,0,0,312,315,
+  	5,15,0,0,313,315,3,32,16,0,314,309,1,0,0,0,314,310,1,0,0,0,314,311,1,
+  	0,0,0,314,312,1,0,0,0,314,313,1,0,0,0,315,31,1,0,0,0,316,317,5,27,0,0,
+  	317,341,5,28,0,0,318,319,5,27,0,0,319,324,3,32,16,0,320,321,5,50,0,0,
+  	321,323,3,32,16,0,322,320,1,0,0,0,323,326,1,0,0,0,324,322,1,0,0,0,324,
+  	325,1,0,0,0,325,327,1,0,0,0,326,324,1,0,0,0,327,328,5,28,0,0,328,341,
+  	1,0,0,0,329,330,5,27,0,0,330,335,3,30,15,0,331,332,5,50,0,0,332,334,3,
+  	30,15,0,333,331,1,0,0,0,334,337,1,0,0,0,335,333,1,0,0,0,335,336,1,0,0,
+  	0,336,338,1,0,0,0,337,335,1,0,0,0,338,339,5,28,0,0,339,341,1,0,0,0,340,
+  	316,1,0,0,0,340,318,1,0,0,0,340,329,1,0,0,0,341,33,1,0,0,0,32,37,39,46,
+  	48,65,67,77,83,87,99,106,110,113,127,143,150,157,167,192,199,211,223,
+  	226,277,285,287,305,307,314,324,335,340
+  };
+  staticData->serializedATN = antlr4::atn::SerializedATNView(serializedATNSegment, sizeof(serializedATNSegment) / sizeof(serializedATNSegment[0]));
+
+  antlr4::atn::ATNDeserializer deserializer;
+  staticData->atn = deserializer.deserialize(staticData->serializedATN);
+
+  const size_t count = staticData->atn->getNumberOfDecisions();
+  staticData->decisionToDFA.reserve(count);
+  for (size_t i = 0; i < count; i++) { 
+    staticData->decisionToDFA.emplace_back(staticData->atn->getDecisionState(i), i);
+  }
+  mxParserStaticData = std::move(staticData);
+}
+
+}
+
+MxParser::MxParser(TokenStream *input) : MxParser(input, antlr4::atn::ParserATNSimulatorOptions()) {}
+
+MxParser::MxParser(TokenStream *input, const antlr4::atn::ParserATNSimulatorOptions &options) : Parser(input) {
+  MxParser::initialize();
+  _interpreter = new atn::ParserATNSimulator(this, *mxParserStaticData->atn, mxParserStaticData->decisionToDFA, mxParserStaticData->sharedContextCache, options);
 }
 
 MxParser::~MxParser() {
   delete _interpreter;
+}
+
+const atn::ATN& MxParser::getATN() const {
+  return *mxParserStaticData->atn;
 }
 
 std::string MxParser::getGrammarFileName() const {
@@ -23,11 +235,15 @@ std::string MxParser::getGrammarFileName() const {
 }
 
 const std::vector<std::string>& MxParser::getRuleNames() const {
-  return _ruleNames;
+  return mxParserStaticData->ruleNames;
 }
 
-dfa::Vocabulary& MxParser::getVocabulary() const {
-  return _vocabulary;
+const dfa::Vocabulary& MxParser::getVocabulary() const {
+  return mxParserStaticData->vocabulary;
+}
+
+antlr4::atn::SerializedATNView MxParser::getSerializedATN() const {
+  return mxParserStaticData->serializedATN;
 }
 
 
@@ -74,7 +290,8 @@ size_t MxParser::ProgramContext::getRuleIndex() const {
   return MxParser::RuleProgram;
 }
 
-antlrcpp::Any MxParser::ProgramContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::ProgramContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitProgram(this);
   else
@@ -86,7 +303,11 @@ MxParser::ProgramContext* MxParser::program() {
   enterRule(_localctx, 0, MxParser::RuleProgram);
   size_t _la = 0;
 
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
   auto onExit = finally([=] {
+#endif
     exitRule();
   });
   try {
@@ -118,6 +339,8 @@ MxParser::ProgramContext* MxParser::program() {
           break;
         }
 
+        default:
+          break;
         } 
       }
       setState(41);
@@ -130,12 +353,7 @@ MxParser::ProgramContext* MxParser::program() {
     _errHandler->sync(this);
     _la = _input->LA(1);
     while ((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & ((1ULL << MxParser::Int)
-      | (1ULL << MxParser::Void)
-      | (1ULL << MxParser::Bool)
-      | (1ULL << MxParser::String)
-      | (1ULL << MxParser::Class)
-      | (1ULL << MxParser::Identifier))) != 0)) {
+      ((1ULL << _la) & 2305843009213717568) != 0)) {
       setState(46);
       _errHandler->sync(this);
       switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 2, _ctx)) {
@@ -157,6 +375,8 @@ MxParser::ProgramContext* MxParser::program() {
         break;
       }
 
+      default:
+        break;
       }
       setState(50);
       _errHandler->sync(this);
@@ -202,7 +422,8 @@ size_t MxParser::MainContext::getRuleIndex() const {
   return MxParser::RuleMain;
 }
 
-antlrcpp::Any MxParser::MainContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::MainContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitMain(this);
   else
@@ -213,7 +434,11 @@ MxParser::MainContext* MxParser::main() {
   MainContext *_localctx = _tracker.createInstance<MainContext>(_ctx, getState());
   enterRule(_localctx, 2, MxParser::RuleMain);
 
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
   auto onExit = finally([=] {
+#endif
     exitRule();
   });
   try {
@@ -294,7 +519,8 @@ size_t MxParser::ClassDefContext::getRuleIndex() const {
   return MxParser::RuleClassDef;
 }
 
-antlrcpp::Any MxParser::ClassDefContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::ClassDefContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitClassDef(this);
   else
@@ -306,7 +532,11 @@ MxParser::ClassDefContext* MxParser::classDef() {
   enterRule(_localctx, 4, MxParser::RuleClassDef);
   size_t _la = 0;
 
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
   auto onExit = finally([=] {
+#endif
     exitRule();
   });
   try {
@@ -321,11 +551,7 @@ MxParser::ClassDefContext* MxParser::classDef() {
     _errHandler->sync(this);
     _la = _input->LA(1);
     while ((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & ((1ULL << MxParser::Int)
-      | (1ULL << MxParser::Void)
-      | (1ULL << MxParser::Bool)
-      | (1ULL << MxParser::String)
-      | (1ULL << MxParser::Identifier))) != 0)) {
+      ((1ULL << _la) & 2305843009213701184) != 0)) {
       setState(65);
       _errHandler->sync(this);
       switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 4, _ctx)) {
@@ -347,6 +573,8 @@ MxParser::ClassDefContext* MxParser::classDef() {
         break;
       }
 
+      default:
+        break;
       }
       setState(69);
       _errHandler->sync(this);
@@ -418,7 +646,8 @@ size_t MxParser::VarDefContext::getRuleIndex() const {
   return MxParser::RuleVarDef;
 }
 
-antlrcpp::Any MxParser::VarDefContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::VarDefContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitVarDef(this);
   else
@@ -430,7 +659,11 @@ MxParser::VarDefContext* MxParser::varDef() {
   enterRule(_localctx, 6, MxParser::RuleVarDef);
   size_t _la = 0;
 
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
   auto onExit = finally([=] {
+#endif
     exitRule();
   });
   try {
@@ -547,7 +780,8 @@ size_t MxParser::FuncDefContext::getRuleIndex() const {
   return MxParser::RuleFuncDef;
 }
 
-antlrcpp::Any MxParser::FuncDefContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::FuncDefContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitFuncDef(this);
   else
@@ -559,15 +793,19 @@ MxParser::FuncDefContext* MxParser::funcDef() {
   enterRule(_localctx, 8, MxParser::RuleFuncDef);
   size_t _la = 0;
 
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
   auto onExit = finally([=] {
+#endif
     exitRule();
   });
   try {
     enterOuterAlt(_localctx, 1);
     setState(92);
-    dynamic_cast<FuncDefContext *>(_localctx)->return_type = type();
+    antlrcpp::downCast<FuncDefContext *>(_localctx)->return_type = type();
     setState(93);
-    dynamic_cast<FuncDefContext *>(_localctx)->func_name = match(MxParser::Identifier);
+    antlrcpp::downCast<FuncDefContext *>(_localctx)->func_name = match(MxParser::Identifier);
     setState(94);
     match(MxParser::LeftParen);
     setState(113);
@@ -575,11 +813,7 @@ MxParser::FuncDefContext* MxParser::funcDef() {
 
     _la = _input->LA(1);
     if ((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & ((1ULL << MxParser::Int)
-      | (1ULL << MxParser::Void)
-      | (1ULL << MxParser::Bool)
-      | (1ULL << MxParser::String)
-      | (1ULL << MxParser::Identifier))) != 0)) {
+      ((1ULL << _la) & 2305843009213701184) != 0)) {
       setState(95);
       type();
       setState(96);
@@ -661,7 +895,8 @@ size_t MxParser::ConsDefContext::getRuleIndex() const {
   return MxParser::RuleConsDef;
 }
 
-antlrcpp::Any MxParser::ConsDefContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::ConsDefContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitConsDef(this);
   else
@@ -672,7 +907,11 @@ MxParser::ConsDefContext* MxParser::consDef() {
   ConsDefContext *_localctx = _tracker.createInstance<ConsDefContext>(_ctx, getState());
   enterRule(_localctx, 10, MxParser::RuleConsDef);
 
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
   auto onExit = finally([=] {
+#endif
     exitRule();
   });
   try {
@@ -723,7 +962,8 @@ size_t MxParser::SuiteContext::getRuleIndex() const {
   return MxParser::RuleSuite;
 }
 
-antlrcpp::Any MxParser::SuiteContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::SuiteContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitSuite(this);
   else
@@ -735,7 +975,11 @@ MxParser::SuiteContext* MxParser::suite() {
   enterRule(_localctx, 12, MxParser::RuleSuite);
   size_t _la = 0;
 
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
   auto onExit = finally([=] {
+#endif
     exitRule();
   });
   try {
@@ -746,33 +990,7 @@ MxParser::SuiteContext* MxParser::suite() {
     _errHandler->sync(this);
     _la = _input->LA(1);
     while ((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & ((1ULL << MxParser::FormatString1)
-      | (1ULL << MxParser::FormatString2)
-      | (1ULL << MxParser::Int)
-      | (1ULL << MxParser::If)
-      | (1ULL << MxParser::Return)
-      | (1ULL << MxParser::Void)
-      | (1ULL << MxParser::Bool)
-      | (1ULL << MxParser::String)
-      | (1ULL << MxParser::New)
-      | (1ULL << MxParser::Null)
-      | (1ULL << MxParser::This)
-      | (1ULL << MxParser::For)
-      | (1ULL << MxParser::While)
-      | (1ULL << MxParser::Break)
-      | (1ULL << MxParser::Continue)
-      | (1ULL << MxParser::LeftParen)
-      | (1ULL << MxParser::LeftBrace)
-      | (1ULL << MxParser::Minus)
-      | (1ULL << MxParser::Not)
-      | (1ULL << MxParser::Tilde)
-      | (1ULL << MxParser::Semi)
-      | (1ULL << MxParser::SelfPlus)
-      | (1ULL << MxParser::SelfMinus)
-      | (1ULL << MxParser::IntegerConst)
-      | (1ULL << MxParser::BoolConst)
-      | (1ULL << MxParser::StringConst)
-      | (1ULL << MxParser::Identifier))) != 0)) {
+      ((1ULL << _la) & 4378167409744068300) != 0)) {
       setState(124);
       statement();
       setState(129);
@@ -815,7 +1033,8 @@ MxParser::ForstmtContext* MxParser::ForStmtContext::forstmt() {
 
 MxParser::ForStmtContext::ForStmtContext(StatementContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::ForStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::ForStmtContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitForStmt(this);
   else
@@ -829,7 +1048,8 @@ MxParser::WhilestmtContext* MxParser::WhileStmtContext::whilestmt() {
 
 MxParser::WhileStmtContext::WhileStmtContext(StatementContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::WhileStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::WhileStmtContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitWhileStmt(this);
   else
@@ -843,7 +1063,8 @@ MxParser::IfstmtContext* MxParser::IfStmtContext::ifstmt() {
 
 MxParser::IfStmtContext::IfStmtContext(StatementContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::IfStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::IfStmtContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitIfStmt(this);
   else
@@ -857,7 +1078,8 @@ tree::TerminalNode* MxParser::EmptyExprStmtContext::Semi() {
 
 MxParser::EmptyExprStmtContext::EmptyExprStmtContext(StatementContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::EmptyExprStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::EmptyExprStmtContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitEmptyExprStmt(this);
   else
@@ -875,7 +1097,8 @@ tree::TerminalNode* MxParser::BreakStmtContext::Semi() {
 
 MxParser::BreakStmtContext::BreakStmtContext(StatementContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::BreakStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::BreakStmtContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitBreakStmt(this);
   else
@@ -889,7 +1112,8 @@ MxParser::SuiteContext* MxParser::BlockContext::suite() {
 
 MxParser::BlockContext::BlockContext(StatementContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::BlockContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::BlockContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitBlock(this);
   else
@@ -911,7 +1135,8 @@ MxParser::ExpressionContext* MxParser::ReturnStmtContext::expression() {
 
 MxParser::ReturnStmtContext::ReturnStmtContext(StatementContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::ReturnStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::ReturnStmtContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitReturnStmt(this);
   else
@@ -929,7 +1154,8 @@ tree::TerminalNode* MxParser::ContinueStmtContext::Semi() {
 
 MxParser::ContinueStmtContext::ContinueStmtContext(StatementContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::ContinueStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::ContinueStmtContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitContinueStmt(this);
   else
@@ -943,7 +1169,8 @@ MxParser::VarDefContext* MxParser::VardefStmtContext::varDef() {
 
 MxParser::VardefStmtContext::VardefStmtContext(StatementContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::VardefStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::VardefStmtContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitVardefStmt(this);
   else
@@ -961,7 +1188,8 @@ tree::TerminalNode* MxParser::PureExprStmtContext::Semi() {
 
 MxParser::PureExprStmtContext::PureExprStmtContext(StatementContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::PureExprStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::PureExprStmtContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitPureExprStmt(this);
   else
@@ -972,7 +1200,11 @@ MxParser::StatementContext* MxParser::statement() {
   enterRule(_localctx, 14, MxParser::RuleStatement);
   size_t _la = 0;
 
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
   auto onExit = finally([=] {
+#endif
     exitRule();
   });
   try {
@@ -980,7 +1212,7 @@ MxParser::StatementContext* MxParser::statement() {
     _errHandler->sync(this);
     switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 15, _ctx)) {
     case 1: {
-      _localctx = dynamic_cast<StatementContext *>(_tracker.createInstance<MxParser::BlockContext>(_localctx));
+      _localctx = _tracker.createInstance<MxParser::BlockContext>(_localctx);
       enterOuterAlt(_localctx, 1);
       setState(132);
       suite();
@@ -988,7 +1220,7 @@ MxParser::StatementContext* MxParser::statement() {
     }
 
     case 2: {
-      _localctx = dynamic_cast<StatementContext *>(_tracker.createInstance<MxParser::VardefStmtContext>(_localctx));
+      _localctx = _tracker.createInstance<MxParser::VardefStmtContext>(_localctx);
       enterOuterAlt(_localctx, 2);
       setState(133);
       varDef();
@@ -996,7 +1228,7 @@ MxParser::StatementContext* MxParser::statement() {
     }
 
     case 3: {
-      _localctx = dynamic_cast<StatementContext *>(_tracker.createInstance<MxParser::IfStmtContext>(_localctx));
+      _localctx = _tracker.createInstance<MxParser::IfStmtContext>(_localctx);
       enterOuterAlt(_localctx, 3);
       setState(134);
       ifstmt();
@@ -1004,7 +1236,7 @@ MxParser::StatementContext* MxParser::statement() {
     }
 
     case 4: {
-      _localctx = dynamic_cast<StatementContext *>(_tracker.createInstance<MxParser::WhileStmtContext>(_localctx));
+      _localctx = _tracker.createInstance<MxParser::WhileStmtContext>(_localctx);
       enterOuterAlt(_localctx, 4);
       setState(135);
       whilestmt();
@@ -1012,7 +1244,7 @@ MxParser::StatementContext* MxParser::statement() {
     }
 
     case 5: {
-      _localctx = dynamic_cast<StatementContext *>(_tracker.createInstance<MxParser::ForStmtContext>(_localctx));
+      _localctx = _tracker.createInstance<MxParser::ForStmtContext>(_localctx);
       enterOuterAlt(_localctx, 5);
       setState(136);
       forstmt();
@@ -1020,7 +1252,7 @@ MxParser::StatementContext* MxParser::statement() {
     }
 
     case 6: {
-      _localctx = dynamic_cast<StatementContext *>(_tracker.createInstance<MxParser::BreakStmtContext>(_localctx));
+      _localctx = _tracker.createInstance<MxParser::BreakStmtContext>(_localctx);
       enterOuterAlt(_localctx, 6);
       setState(137);
       match(MxParser::Break);
@@ -1030,7 +1262,7 @@ MxParser::StatementContext* MxParser::statement() {
     }
 
     case 7: {
-      _localctx = dynamic_cast<StatementContext *>(_tracker.createInstance<MxParser::ContinueStmtContext>(_localctx));
+      _localctx = _tracker.createInstance<MxParser::ContinueStmtContext>(_localctx);
       enterOuterAlt(_localctx, 7);
       setState(139);
       match(MxParser::Continue);
@@ -1040,7 +1272,7 @@ MxParser::StatementContext* MxParser::statement() {
     }
 
     case 8: {
-      _localctx = dynamic_cast<StatementContext *>(_tracker.createInstance<MxParser::ReturnStmtContext>(_localctx));
+      _localctx = _tracker.createInstance<MxParser::ReturnStmtContext>(_localctx);
       enterOuterAlt(_localctx, 8);
       setState(141);
       match(MxParser::Return);
@@ -1049,22 +1281,7 @@ MxParser::StatementContext* MxParser::statement() {
 
       _la = _input->LA(1);
       if ((((_la & ~ 0x3fULL) == 0) &&
-        ((1ULL << _la) & ((1ULL << MxParser::FormatString1)
-        | (1ULL << MxParser::FormatString2)
-        | (1ULL << MxParser::New)
-        | (1ULL << MxParser::Null)
-        | (1ULL << MxParser::This)
-        | (1ULL << MxParser::LeftParen)
-        | (1ULL << MxParser::LeftBrace)
-        | (1ULL << MxParser::Minus)
-        | (1ULL << MxParser::Not)
-        | (1ULL << MxParser::Tilde)
-        | (1ULL << MxParser::SelfPlus)
-        | (1ULL << MxParser::SelfMinus)
-        | (1ULL << MxParser::IntegerConst)
-        | (1ULL << MxParser::BoolConst)
-        | (1ULL << MxParser::StringConst)
-        | (1ULL << MxParser::Identifier))) != 0)) {
+        ((1ULL << _la) & 4377604459782774796) != 0)) {
         setState(142);
         expression(0);
       }
@@ -1074,7 +1291,7 @@ MxParser::StatementContext* MxParser::statement() {
     }
 
     case 9: {
-      _localctx = dynamic_cast<StatementContext *>(_tracker.createInstance<MxParser::PureExprStmtContext>(_localctx));
+      _localctx = _tracker.createInstance<MxParser::PureExprStmtContext>(_localctx);
       enterOuterAlt(_localctx, 9);
       setState(146);
       exprlist();
@@ -1084,13 +1301,15 @@ MxParser::StatementContext* MxParser::statement() {
     }
 
     case 10: {
-      _localctx = dynamic_cast<StatementContext *>(_tracker.createInstance<MxParser::EmptyExprStmtContext>(_localctx));
+      _localctx = _tracker.createInstance<MxParser::EmptyExprStmtContext>(_localctx);
       enterOuterAlt(_localctx, 10);
       setState(149);
       match(MxParser::Semi);
       break;
     }
 
+    default:
+      break;
     }
    
   }
@@ -1130,7 +1349,8 @@ size_t MxParser::ExprlistContext::getRuleIndex() const {
   return MxParser::RuleExprlist;
 }
 
-antlrcpp::Any MxParser::ExprlistContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::ExprlistContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitExprlist(this);
   else
@@ -1142,7 +1362,11 @@ MxParser::ExprlistContext* MxParser::exprlist() {
   enterRule(_localctx, 16, MxParser::RuleExprlist);
   size_t _la = 0;
 
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
   auto onExit = finally([=] {
+#endif
     exitRule();
   });
   try {
@@ -1211,7 +1435,8 @@ size_t MxParser::IfstmtContext::getRuleIndex() const {
   return MxParser::RuleIfstmt;
 }
 
-antlrcpp::Any MxParser::IfstmtContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::IfstmtContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitIfstmt(this);
   else
@@ -1222,7 +1447,11 @@ MxParser::IfstmtContext* MxParser::ifstmt() {
   IfstmtContext *_localctx = _tracker.createInstance<IfstmtContext>(_ctx, getState());
   enterRule(_localctx, 18, MxParser::RuleIfstmt);
 
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
   auto onExit = finally([=] {
+#endif
     exitRule();
   });
   try {
@@ -1236,7 +1465,7 @@ MxParser::IfstmtContext* MxParser::ifstmt() {
     setState(163);
     match(MxParser::RightParen);
     setState(164);
-    dynamic_cast<IfstmtContext *>(_localctx)->trueStmt = statement();
+    antlrcpp::downCast<IfstmtContext *>(_localctx)->trueStmt = statement();
     setState(167);
     _errHandler->sync(this);
 
@@ -1245,10 +1474,12 @@ MxParser::IfstmtContext* MxParser::ifstmt() {
       setState(165);
       match(MxParser::Else);
       setState(166);
-      dynamic_cast<IfstmtContext *>(_localctx)->falseStmt = statement();
+      antlrcpp::downCast<IfstmtContext *>(_localctx)->falseStmt = statement();
       break;
     }
 
+    default:
+      break;
     }
    
   }
@@ -1292,7 +1523,8 @@ size_t MxParser::WhilestmtContext::getRuleIndex() const {
   return MxParser::RuleWhilestmt;
 }
 
-antlrcpp::Any MxParser::WhilestmtContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::WhilestmtContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitWhilestmt(this);
   else
@@ -1303,7 +1535,11 @@ MxParser::WhilestmtContext* MxParser::whilestmt() {
   WhilestmtContext *_localctx = _tracker.createInstance<WhilestmtContext>(_ctx, getState());
   enterRule(_localctx, 20, MxParser::RuleWhilestmt);
 
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
   auto onExit = finally([=] {
+#endif
     exitRule();
   });
   try {
@@ -1372,7 +1608,8 @@ size_t MxParser::ForstmtContext::getRuleIndex() const {
   return MxParser::RuleForstmt;
 }
 
-antlrcpp::Any MxParser::ForstmtContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::ForstmtContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitForstmt(this);
   else
@@ -1383,7 +1620,11 @@ MxParser::ForstmtContext* MxParser::forstmt() {
   ForstmtContext *_localctx = _tracker.createInstance<ForstmtContext>(_ctx, getState());
   enterRule(_localctx, 22, MxParser::RuleForstmt);
 
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
   auto onExit = finally([=] {
+#endif
     exitRule();
   });
   try {
@@ -1393,15 +1634,15 @@ MxParser::ForstmtContext* MxParser::forstmt() {
     setState(176);
     match(MxParser::LeftParen);
     setState(177);
-    dynamic_cast<ForstmtContext *>(_localctx)->initializeStmt = expression(0);
+    antlrcpp::downCast<ForstmtContext *>(_localctx)->initializeStmt = expression(0);
     setState(178);
     match(MxParser::Semi);
     setState(179);
-    dynamic_cast<ForstmtContext *>(_localctx)->condiStmt = expression(0);
+    antlrcpp::downCast<ForstmtContext *>(_localctx)->condiStmt = expression(0);
     setState(180);
     match(MxParser::Semi);
     setState(181);
-    dynamic_cast<ForstmtContext *>(_localctx)->stepStmt = expression(0);
+    antlrcpp::downCast<ForstmtContext *>(_localctx)->stepStmt = expression(0);
     setState(182);
     match(MxParser::RightParen);
     setState(183);
@@ -1472,7 +1713,8 @@ size_t MxParser::TypeContext::getRuleIndex() const {
   return MxParser::RuleType;
 }
 
-antlrcpp::Any MxParser::TypeContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::TypeContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitType(this);
   else
@@ -1484,7 +1726,11 @@ MxParser::TypeContext* MxParser::type() {
   enterRule(_localctx, 24, MxParser::RuleType);
   size_t _la = 0;
 
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
   auto onExit = finally([=] {
+#endif
     exitRule();
   });
   try {
@@ -1493,11 +1739,7 @@ MxParser::TypeContext* MxParser::type() {
     setState(185);
     _la = _input->LA(1);
     if (!((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & ((1ULL << MxParser::Int)
-      | (1ULL << MxParser::Void)
-      | (1ULL << MxParser::Bool)
-      | (1ULL << MxParser::String)
-      | (1ULL << MxParser::Identifier))) != 0))) {
+      ((1ULL << _la) & 2305843009213701184) != 0))) {
     _errHandler->recoverInline(this);
     }
     else {
@@ -1592,7 +1834,8 @@ tree::TerminalNode* MxParser::BitExprContext::Or() {
 
 MxParser::BitExprContext::BitExprContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::BitExprContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::BitExprContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitBitExpr(this);
   else
@@ -1626,7 +1869,8 @@ tree::TerminalNode* MxParser::OneExprContext::Minus() {
 
 MxParser::OneExprContext::OneExprContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::OneExprContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::OneExprContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitOneExpr(this);
   else
@@ -1652,7 +1896,8 @@ tree::TerminalNode* MxParser::ArrayAccessExprContext::RightBracket() {
 
 MxParser::ArrayAccessExprContext::ArrayAccessExprContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::ArrayAccessExprContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::ArrayAccessExprContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitArrayAccessExpr(this);
   else
@@ -1678,7 +1923,8 @@ tree::TerminalNode* MxParser::LogicExprContext::OrOr() {
 
 MxParser::LogicExprContext::LogicExprContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::LogicExprContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::LogicExprContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitLogicExpr(this);
   else
@@ -1692,7 +1938,8 @@ MxParser::PrimaryContext* MxParser::AtomExprContext::primary() {
 
 MxParser::AtomExprContext::AtomExprContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::AtomExprContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::AtomExprContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitAtomExpr(this);
   else
@@ -1730,7 +1977,8 @@ tree::TerminalNode* MxParser::BinaryExprContext::Minus() {
 
 MxParser::BinaryExprContext::BinaryExprContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::BinaryExprContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::BinaryExprContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitBinaryExpr(this);
   else
@@ -1768,7 +2016,8 @@ tree::TerminalNode* MxParser::FormatExprContext::FormatString3(size_t i) {
 
 MxParser::FormatExprContext::FormatExprContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::FormatExprContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::FormatExprContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitFormatExpr(this);
   else
@@ -1790,17 +2039,14 @@ tree::TerminalNode* MxParser::AssignExprContext::Assign() {
 
 MxParser::AssignExprContext::AssignExprContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::AssignExprContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::AssignExprContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitAssignExpr(this);
   else
     return visitor->visitChildren(this);
 }
 //----------------- UsefuncContext ------------------------------------------------------------------
-
-MxParser::ExpressionContext* MxParser::UsefuncContext::expression() {
-  return getRuleContext<MxParser::ExpressionContext>(0);
-}
 
 tree::TerminalNode* MxParser::UsefuncContext::LeftParen() {
   return getToken(MxParser::LeftParen, 0);
@@ -1810,13 +2056,26 @@ tree::TerminalNode* MxParser::UsefuncContext::RightParen() {
   return getToken(MxParser::RightParen, 0);
 }
 
+tree::TerminalNode* MxParser::UsefuncContext::Identifier() {
+  return getToken(MxParser::Identifier, 0);
+}
+
 MxParser::ExprlistContext* MxParser::UsefuncContext::exprlist() {
   return getRuleContext<MxParser::ExprlistContext>(0);
 }
 
+tree::TerminalNode* MxParser::UsefuncContext::Belong() {
+  return getToken(MxParser::Belong, 0);
+}
+
+MxParser::ExpressionContext* MxParser::UsefuncContext::expression() {
+  return getRuleContext<MxParser::ExpressionContext>(0);
+}
+
 MxParser::UsefuncContext::UsefuncContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::UsefuncContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::UsefuncContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitUsefunc(this);
   else
@@ -1858,7 +2117,8 @@ tree::TerminalNode* MxParser::CompareExprContext::Equal() {
 
 MxParser::CompareExprContext::CompareExprContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::CompareExprContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::CompareExprContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitCompareExpr(this);
   else
@@ -1884,7 +2144,8 @@ tree::TerminalNode* MxParser::ThreeExprContext::Colon() {
 
 MxParser::ThreeExprContext::ThreeExprContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::ThreeExprContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::ThreeExprContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitThreeExpr(this);
   else
@@ -1906,7 +2167,8 @@ tree::TerminalNode* MxParser::PointExprContext::Identifier() {
 
 MxParser::PointExprContext::PointExprContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::PointExprContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::PointExprContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitPointExpr(this);
   else
@@ -1928,148 +2190,159 @@ MxParser::ExpressionContext* MxParser::expression(int precedence) {
 
     size_t _la = 0;
 
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
   auto onExit = finally([=] {
+#endif
     unrollRecursionContexts(parentContext);
   });
   try {
     size_t alt;
     enterOuterAlt(_localctx, 1);
-    setState(220);
+    setState(226);
     _errHandler->sync(this);
-    switch (_input->LA(1)) {
-      case MxParser::New:
-      case MxParser::Null:
-      case MxParser::This:
-      case MxParser::LeftParen:
-      case MxParser::LeftBrace:
-      case MxParser::IntegerConst:
-      case MxParser::BoolConst:
-      case MxParser::StringConst:
-      case MxParser::Identifier: {
-        _localctx = _tracker.createInstance<AtomExprContext>(_localctx);
-        _ctx = _localctx;
-        previousContext = _localctx;
+    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 22, _ctx)) {
+    case 1: {
+      _localctx = _tracker.createInstance<AtomExprContext>(_localctx);
+      _ctx = _localctx;
+      previousContext = _localctx;
 
-        setState(203);
-        primary();
-        break;
-      }
+      setState(203);
+      primary();
+      break;
+    }
 
-      case MxParser::FormatString1: {
-        _localctx = _tracker.createInstance<FormatExprContext>(_localctx);
-        _ctx = _localctx;
-        previousContext = _localctx;
-        setState(204);
-        match(MxParser::FormatString1);
-        break;
-      }
+    case 2: {
+      _localctx = _tracker.createInstance<FormatExprContext>(_localctx);
+      _ctx = _localctx;
+      previousContext = _localctx;
+      setState(204);
+      match(MxParser::FormatString1);
+      break;
+    }
 
-      case MxParser::FormatString2: {
-        _localctx = _tracker.createInstance<FormatExprContext>(_localctx);
-        _ctx = _localctx;
-        previousContext = _localctx;
-        setState(205);
-        match(MxParser::FormatString2);
-        setState(206);
+    case 3: {
+      _localctx = _tracker.createInstance<FormatExprContext>(_localctx);
+      _ctx = _localctx;
+      previousContext = _localctx;
+      setState(205);
+      match(MxParser::FormatString2);
+      setState(206);
+      expression(0);
+      setState(211);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+      while (_la == MxParser::FormatString3) {
+        setState(207);
+        match(MxParser::FormatString3);
+        setState(208);
         expression(0);
-        setState(211);
+        setState(213);
         _errHandler->sync(this);
         _la = _input->LA(1);
-        while (_la == MxParser::FormatString3) {
-          setState(207);
-          match(MxParser::FormatString3);
-          setState(208);
-          expression(0);
-          setState(213);
-          _errHandler->sync(this);
-          _la = _input->LA(1);
-        }
-        setState(214);
-        match(MxParser::FormatString4);
-        break;
       }
+      setState(214);
+      match(MxParser::FormatString4);
+      break;
+    }
 
-      case MxParser::SelfPlus:
-      case MxParser::SelfMinus: {
-        _localctx = _tracker.createInstance<OneExprContext>(_localctx);
-        _ctx = _localctx;
-        previousContext = _localctx;
-        setState(216);
-        _la = _input->LA(1);
-        if (!(_la == MxParser::SelfPlus
+    case 4: {
+      _localctx = _tracker.createInstance<OneExprContext>(_localctx);
+      _ctx = _localctx;
+      previousContext = _localctx;
+      setState(216);
+      _la = _input->LA(1);
+      if (!(_la == MxParser::SelfPlus
 
-        || _la == MxParser::SelfMinus)) {
-        _errHandler->recoverInline(this);
-        }
-        else {
-          _errHandler->reportMatch(this);
-          consume();
-        }
-        setState(217);
-        expression(17);
-        break;
+      || _la == MxParser::SelfMinus)) {
+      _errHandler->recoverInline(this);
       }
-
-      case MxParser::Minus:
-      case MxParser::Not:
-      case MxParser::Tilde: {
-        _localctx = _tracker.createInstance<OneExprContext>(_localctx);
-        _ctx = _localctx;
-        previousContext = _localctx;
-        setState(218);
-        _la = _input->LA(1);
-        if (!((((_la & ~ 0x3fULL) == 0) &&
-          ((1ULL << _la) & ((1ULL << MxParser::Minus)
-          | (1ULL << MxParser::Not)
-          | (1ULL << MxParser::Tilde))) != 0))) {
-        _errHandler->recoverInline(this);
-        }
-        else {
-          _errHandler->reportMatch(this);
-          consume();
-        }
-        setState(219);
-        expression(16);
-        break;
+      else {
+        _errHandler->reportMatch(this);
+        consume();
       }
+      setState(217);
+      expression(18);
+      break;
+    }
+
+    case 5: {
+      _localctx = _tracker.createInstance<OneExprContext>(_localctx);
+      _ctx = _localctx;
+      previousContext = _localctx;
+      setState(218);
+      _la = _input->LA(1);
+      if (!((((_la & ~ 0x3fULL) == 0) &&
+        ((1ULL << _la) & 105621835743232) != 0))) {
+      _errHandler->recoverInline(this);
+      }
+      else {
+        _errHandler->reportMatch(this);
+        consume();
+      }
+      setState(219);
+      expression(17);
+      break;
+    }
+
+    case 6: {
+      _localctx = _tracker.createInstance<UsefuncContext>(_localctx);
+      _ctx = _localctx;
+      previousContext = _localctx;
+      setState(220);
+      antlrcpp::downCast<UsefuncContext *>(_localctx)->name = match(MxParser::Identifier);
+      setState(221);
+      match(MxParser::LeftParen);
+      setState(223);
+      _errHandler->sync(this);
+
+      _la = _input->LA(1);
+      if ((((_la & ~ 0x3fULL) == 0) &&
+        ((1ULL << _la) & 4377604459782774796) != 0)) {
+        setState(222);
+        exprlist();
+      }
+      setState(225);
+      match(MxParser::RightParen);
+      break;
+    }
 
     default:
-      throw NoViableAltException(this);
+      break;
     }
     _ctx->stop = _input->LT(-1);
-    setState(279);
+    setState(287);
     _errHandler->sync(this);
-    alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 24, _ctx);
+    alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 25, _ctx);
     while (alt != 2 && alt != atn::ATN::INVALID_ALT_NUMBER) {
       if (alt == 1) {
         if (!_parseListeners.empty())
           triggerExitRuleEvent();
         previousContext = _localctx;
-        setState(277);
+        setState(285);
         _errHandler->sync(this);
-        switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 23, _ctx)) {
+        switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 24, _ctx)) {
         case 1: {
           auto newContext = _tracker.createInstance<BinaryExprContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
-          setState(222);
+          setState(228);
 
-          if (!(precpred(_ctx, 15))) throw FailedPredicateException(this, "precpred(_ctx, 15)");
-          setState(223);
-          dynamic_cast<BinaryExprContext *>(_localctx)->op = _input->LT(1);
+          if (!(precpred(_ctx, 16))) throw FailedPredicateException(this, "precpred(_ctx, 16)");
+          setState(229);
+          antlrcpp::downCast<BinaryExprContext *>(_localctx)->op = _input->LT(1);
           _la = _input->LA(1);
           if (!((((_la & ~ 0x3fULL) == 0) &&
-            ((1ULL << _la) & ((1ULL << MxParser::Mul)
-            | (1ULL << MxParser::Div)
-            | (1ULL << MxParser::Mod))) != 0))) {
-            dynamic_cast<BinaryExprContext *>(_localctx)->op = _errHandler->recoverInline(this);
+            ((1ULL << _la) & 962072674304) != 0))) {
+            antlrcpp::downCast<BinaryExprContext *>(_localctx)->op = _errHandler->recoverInline(this);
           }
           else {
             _errHandler->reportMatch(this);
             consume();
           }
-          setState(224);
-          expression(16);
+          setState(230);
+          expression(17);
           break;
         }
 
@@ -2077,23 +2350,23 @@ MxParser::ExpressionContext* MxParser::expression(int precedence) {
           auto newContext = _tracker.createInstance<BinaryExprContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
-          setState(225);
+          setState(231);
 
-          if (!(precpred(_ctx, 14))) throw FailedPredicateException(this, "precpred(_ctx, 14)");
-          setState(226);
-          dynamic_cast<BinaryExprContext *>(_localctx)->op = _input->LT(1);
+          if (!(precpred(_ctx, 15))) throw FailedPredicateException(this, "precpred(_ctx, 15)");
+          setState(232);
+          antlrcpp::downCast<BinaryExprContext *>(_localctx)->op = _input->LT(1);
           _la = _input->LA(1);
           if (!(_la == MxParser::Plus
 
           || _la == MxParser::Minus)) {
-            dynamic_cast<BinaryExprContext *>(_localctx)->op = _errHandler->recoverInline(this);
+            antlrcpp::downCast<BinaryExprContext *>(_localctx)->op = _errHandler->recoverInline(this);
           }
           else {
             _errHandler->reportMatch(this);
             consume();
           }
-          setState(227);
-          expression(15);
+          setState(233);
+          expression(16);
           break;
         }
 
@@ -2101,23 +2374,23 @@ MxParser::ExpressionContext* MxParser::expression(int precedence) {
           auto newContext = _tracker.createInstance<BitExprContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
-          setState(228);
+          setState(234);
 
-          if (!(precpred(_ctx, 13))) throw FailedPredicateException(this, "precpred(_ctx, 13)");
-          setState(229);
-          dynamic_cast<BitExprContext *>(_localctx)->op = _input->LT(1);
+          if (!(precpred(_ctx, 14))) throw FailedPredicateException(this, "precpred(_ctx, 14)");
+          setState(235);
+          antlrcpp::downCast<BitExprContext *>(_localctx)->op = _input->LT(1);
           _la = _input->LA(1);
           if (!(_la == MxParser::LeftShift
 
           || _la == MxParser::RightShift)) {
-            dynamic_cast<BitExprContext *>(_localctx)->op = _errHandler->recoverInline(this);
+            antlrcpp::downCast<BitExprContext *>(_localctx)->op = _errHandler->recoverInline(this);
           }
           else {
             _errHandler->reportMatch(this);
             consume();
           }
-          setState(230);
-          expression(14);
+          setState(236);
+          expression(15);
           break;
         }
 
@@ -2125,25 +2398,22 @@ MxParser::ExpressionContext* MxParser::expression(int precedence) {
           auto newContext = _tracker.createInstance<CompareExprContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
-          setState(231);
+          setState(237);
 
-          if (!(precpred(_ctx, 12))) throw FailedPredicateException(this, "precpred(_ctx, 12)");
-          setState(232);
-          dynamic_cast<CompareExprContext *>(_localctx)->op = _input->LT(1);
+          if (!(precpred(_ctx, 13))) throw FailedPredicateException(this, "precpred(_ctx, 13)");
+          setState(238);
+          antlrcpp::downCast<CompareExprContext *>(_localctx)->op = _input->LT(1);
           _la = _input->LA(1);
           if (!((((_la & ~ 0x3fULL) == 0) &&
-            ((1ULL << _la) & ((1ULL << MxParser::Less)
-            | (1ULL << MxParser::LessEqual)
-            | (1ULL << MxParser::Greater)
-            | (1ULL << MxParser::GreaterEqual))) != 0))) {
-            dynamic_cast<CompareExprContext *>(_localctx)->op = _errHandler->recoverInline(this);
+            ((1ULL << _la) & 8053063680) != 0))) {
+            antlrcpp::downCast<CompareExprContext *>(_localctx)->op = _errHandler->recoverInline(this);
           }
           else {
             _errHandler->reportMatch(this);
             consume();
           }
-          setState(233);
-          expression(13);
+          setState(239);
+          expression(14);
           break;
         }
 
@@ -2151,23 +2421,23 @@ MxParser::ExpressionContext* MxParser::expression(int precedence) {
           auto newContext = _tracker.createInstance<CompareExprContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
-          setState(234);
+          setState(240);
 
-          if (!(precpred(_ctx, 11))) throw FailedPredicateException(this, "precpred(_ctx, 11)");
-          setState(235);
-          dynamic_cast<CompareExprContext *>(_localctx)->op = _input->LT(1);
+          if (!(precpred(_ctx, 12))) throw FailedPredicateException(this, "precpred(_ctx, 12)");
+          setState(241);
+          antlrcpp::downCast<CompareExprContext *>(_localctx)->op = _input->LT(1);
           _la = _input->LA(1);
           if (!(_la == MxParser::Equal
 
           || _la == MxParser::NotEqual)) {
-            dynamic_cast<CompareExprContext *>(_localctx)->op = _errHandler->recoverInline(this);
+            antlrcpp::downCast<CompareExprContext *>(_localctx)->op = _errHandler->recoverInline(this);
           }
           else {
             _errHandler->reportMatch(this);
             consume();
           }
-          setState(236);
-          expression(12);
+          setState(242);
+          expression(13);
           break;
         }
 
@@ -2175,13 +2445,13 @@ MxParser::ExpressionContext* MxParser::expression(int precedence) {
           auto newContext = _tracker.createInstance<BitExprContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
-          setState(237);
+          setState(243);
 
-          if (!(precpred(_ctx, 10))) throw FailedPredicateException(this, "precpred(_ctx, 10)");
-          setState(238);
-          dynamic_cast<BitExprContext *>(_localctx)->op = match(MxParser::And);
-          setState(239);
-          expression(11);
+          if (!(precpred(_ctx, 11))) throw FailedPredicateException(this, "precpred(_ctx, 11)");
+          setState(244);
+          antlrcpp::downCast<BitExprContext *>(_localctx)->op = match(MxParser::And);
+          setState(245);
+          expression(12);
           break;
         }
 
@@ -2189,13 +2459,13 @@ MxParser::ExpressionContext* MxParser::expression(int precedence) {
           auto newContext = _tracker.createInstance<BitExprContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
-          setState(240);
+          setState(246);
 
-          if (!(precpred(_ctx, 9))) throw FailedPredicateException(this, "precpred(_ctx, 9)");
-          setState(241);
-          dynamic_cast<BitExprContext *>(_localctx)->op = match(MxParser::Caret);
-          setState(242);
-          expression(10);
+          if (!(precpred(_ctx, 10))) throw FailedPredicateException(this, "precpred(_ctx, 10)");
+          setState(247);
+          antlrcpp::downCast<BitExprContext *>(_localctx)->op = match(MxParser::Caret);
+          setState(248);
+          expression(11);
           break;
         }
 
@@ -2203,13 +2473,13 @@ MxParser::ExpressionContext* MxParser::expression(int precedence) {
           auto newContext = _tracker.createInstance<BitExprContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
-          setState(243);
+          setState(249);
 
-          if (!(precpred(_ctx, 8))) throw FailedPredicateException(this, "precpred(_ctx, 8)");
-          setState(244);
-          dynamic_cast<BitExprContext *>(_localctx)->op = match(MxParser::Or);
-          setState(245);
-          expression(9);
+          if (!(precpred(_ctx, 9))) throw FailedPredicateException(this, "precpred(_ctx, 9)");
+          setState(250);
+          antlrcpp::downCast<BitExprContext *>(_localctx)->op = match(MxParser::Or);
+          setState(251);
+          expression(10);
           break;
         }
 
@@ -2217,13 +2487,13 @@ MxParser::ExpressionContext* MxParser::expression(int precedence) {
           auto newContext = _tracker.createInstance<LogicExprContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
-          setState(246);
+          setState(252);
 
-          if (!(precpred(_ctx, 7))) throw FailedPredicateException(this, "precpred(_ctx, 7)");
-          setState(247);
-          dynamic_cast<LogicExprContext *>(_localctx)->op = match(MxParser::AndAnd);
-          setState(248);
-          expression(8);
+          if (!(precpred(_ctx, 8))) throw FailedPredicateException(this, "precpred(_ctx, 8)");
+          setState(253);
+          antlrcpp::downCast<LogicExprContext *>(_localctx)->op = match(MxParser::AndAnd);
+          setState(254);
+          expression(9);
           break;
         }
 
@@ -2231,13 +2501,13 @@ MxParser::ExpressionContext* MxParser::expression(int precedence) {
           auto newContext = _tracker.createInstance<LogicExprContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
-          setState(249);
+          setState(255);
 
-          if (!(precpred(_ctx, 6))) throw FailedPredicateException(this, "precpred(_ctx, 6)");
-          setState(250);
-          dynamic_cast<LogicExprContext *>(_localctx)->op = match(MxParser::OrOr);
-          setState(251);
-          expression(7);
+          if (!(precpred(_ctx, 7))) throw FailedPredicateException(this, "precpred(_ctx, 7)");
+          setState(256);
+          antlrcpp::downCast<LogicExprContext *>(_localctx)->op = match(MxParser::OrOr);
+          setState(257);
+          expression(8);
           break;
         }
 
@@ -2245,17 +2515,17 @@ MxParser::ExpressionContext* MxParser::expression(int precedence) {
           auto newContext = _tracker.createInstance<ThreeExprContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
-          setState(252);
+          setState(258);
 
-          if (!(precpred(_ctx, 5))) throw FailedPredicateException(this, "precpred(_ctx, 5)");
-          setState(253);
+          if (!(precpred(_ctx, 6))) throw FailedPredicateException(this, "precpred(_ctx, 6)");
+          setState(259);
           match(MxParser::Question);
-          setState(254);
+          setState(260);
           expression(0);
-          setState(255);
+          setState(261);
           match(MxParser::Colon);
-          setState(256);
-          expression(5);
+          setState(262);
+          expression(6);
           break;
         }
 
@@ -2263,13 +2533,13 @@ MxParser::ExpressionContext* MxParser::expression(int precedence) {
           auto newContext = _tracker.createInstance<AssignExprContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
-          setState(258);
+          setState(264);
 
-          if (!(precpred(_ctx, 4))) throw FailedPredicateException(this, "precpred(_ctx, 4)");
-          setState(259);
+          if (!(precpred(_ctx, 5))) throw FailedPredicateException(this, "precpred(_ctx, 5)");
+          setState(265);
           match(MxParser::Assign);
-          setState(260);
-          expression(4);
+          setState(266);
+          expression(5);
           break;
         }
 
@@ -2277,10 +2547,10 @@ MxParser::ExpressionContext* MxParser::expression(int precedence) {
           auto newContext = _tracker.createInstance<OneExprContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
-          setState(261);
+          setState(267);
 
-          if (!(precpred(_ctx, 18))) throw FailedPredicateException(this, "precpred(_ctx, 18)");
-          setState(262);
+          if (!(precpred(_ctx, 19))) throw FailedPredicateException(this, "precpred(_ctx, 19)");
+          setState(268);
           _la = _input->LA(1);
           if (!(_la == MxParser::SelfPlus
 
@@ -2298,12 +2568,12 @@ MxParser::ExpressionContext* MxParser::expression(int precedence) {
           auto newContext = _tracker.createInstance<PointExprContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
-          setState(263);
+          setState(269);
 
-          if (!(precpred(_ctx, 3))) throw FailedPredicateException(this, "precpred(_ctx, 3)");
-          setState(264);
+          if (!(precpred(_ctx, 4))) throw FailedPredicateException(this, "precpred(_ctx, 4)");
+          setState(270);
           match(MxParser::Belong);
-          setState(265);
+          setState(271);
           match(MxParser::Identifier);
           break;
         }
@@ -2311,37 +2581,27 @@ MxParser::ExpressionContext* MxParser::expression(int precedence) {
         case 15: {
           auto newContext = _tracker.createInstance<UsefuncContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
+          newContext->classname = previousContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
-          setState(266);
+          setState(272);
 
           if (!(precpred(_ctx, 2))) throw FailedPredicateException(this, "precpred(_ctx, 2)");
-          setState(267);
+          setState(273);
+          match(MxParser::Belong);
+          setState(274);
+          antlrcpp::downCast<UsefuncContext *>(_localctx)->name = match(MxParser::Identifier);
+          setState(275);
           match(MxParser::LeftParen);
-          setState(269);
+          setState(277);
           _errHandler->sync(this);
 
           _la = _input->LA(1);
           if ((((_la & ~ 0x3fULL) == 0) &&
-            ((1ULL << _la) & ((1ULL << MxParser::FormatString1)
-            | (1ULL << MxParser::FormatString2)
-            | (1ULL << MxParser::New)
-            | (1ULL << MxParser::Null)
-            | (1ULL << MxParser::This)
-            | (1ULL << MxParser::LeftParen)
-            | (1ULL << MxParser::LeftBrace)
-            | (1ULL << MxParser::Minus)
-            | (1ULL << MxParser::Not)
-            | (1ULL << MxParser::Tilde)
-            | (1ULL << MxParser::SelfPlus)
-            | (1ULL << MxParser::SelfMinus)
-            | (1ULL << MxParser::IntegerConst)
-            | (1ULL << MxParser::BoolConst)
-            | (1ULL << MxParser::StringConst)
-            | (1ULL << MxParser::Identifier))) != 0)) {
-            setState(268);
+            ((1ULL << _la) & 4377604459782774796) != 0)) {
+            setState(276);
             exprlist();
           }
-          setState(271);
+          setState(279);
           match(MxParser::RightParen);
           break;
         }
@@ -2350,23 +2610,25 @@ MxParser::ExpressionContext* MxParser::expression(int precedence) {
           auto newContext = _tracker.createInstance<ArrayAccessExprContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
-          setState(272);
+          setState(280);
 
           if (!(precpred(_ctx, 1))) throw FailedPredicateException(this, "precpred(_ctx, 1)");
-          setState(273);
+          setState(281);
           match(MxParser::LeftBracket);
-          setState(274);
+          setState(282);
           expression(0);
-          setState(275);
+          setState(283);
           match(MxParser::RightBracket);
           break;
         }
 
+        default:
+          break;
         } 
       }
-      setState(281);
+      setState(289);
       _errHandler->sync(this);
-      alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 24, _ctx);
+      alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 25, _ctx);
     }
   }
   catch (RecognitionException &e) {
@@ -2400,7 +2662,8 @@ tree::TerminalNode* MxParser::ThisPrimaryContext::This() {
 
 MxParser::ThisPrimaryContext::ThisPrimaryContext(PrimaryContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::ThisPrimaryContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::ThisPrimaryContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitThisPrimary(this);
   else
@@ -2422,7 +2685,8 @@ tree::TerminalNode* MxParser::ParenPrimaryContext::RightParen() {
 
 MxParser::ParenPrimaryContext::ParenPrimaryContext(PrimaryContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::ParenPrimaryContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::ParenPrimaryContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitParenPrimary(this);
   else
@@ -2436,7 +2700,8 @@ tree::TerminalNode* MxParser::IndentifierPrimaryContext::Identifier() {
 
 MxParser::IndentifierPrimaryContext::IndentifierPrimaryContext(PrimaryContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::IndentifierPrimaryContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::IndentifierPrimaryContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitIndentifierPrimary(this);
   else
@@ -2450,7 +2715,8 @@ MxParser::MxconstContext* MxParser::ConstPrimaryContext::mxconst() {
 
 MxParser::ConstPrimaryContext::ConstPrimaryContext(PrimaryContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::ConstPrimaryContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::ConstPrimaryContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitConstPrimary(this);
   else
@@ -2480,7 +2746,8 @@ tree::TerminalNode* MxParser::NewPrimaryContext::RightParen() {
 
 MxParser::NewPrimaryContext::NewPrimaryContext(PrimaryContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::NewPrimaryContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::NewPrimaryContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitNewPrimary(this);
   else
@@ -2490,84 +2757,92 @@ MxParser::PrimaryContext* MxParser::primary() {
   PrimaryContext *_localctx = _tracker.createInstance<PrimaryContext>(_ctx, getState());
   enterRule(_localctx, 28, MxParser::RulePrimary);
 
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
   auto onExit = finally([=] {
+#endif
     exitRule();
   });
   try {
-    setState(299);
+    setState(307);
     _errHandler->sync(this);
-    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 26, _ctx)) {
+    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 27, _ctx)) {
     case 1: {
-      _localctx = dynamic_cast<PrimaryContext *>(_tracker.createInstance<MxParser::ParenPrimaryContext>(_localctx));
+      _localctx = _tracker.createInstance<MxParser::ParenPrimaryContext>(_localctx);
       enterOuterAlt(_localctx, 1);
-      setState(282);
+      setState(290);
       match(MxParser::LeftParen);
-      setState(283);
+      setState(291);
       expression(0);
-      setState(284);
+      setState(292);
       match(MxParser::RightParen);
       break;
     }
 
     case 2: {
-      _localctx = dynamic_cast<PrimaryContext *>(_tracker.createInstance<MxParser::IndentifierPrimaryContext>(_localctx));
+      _localctx = _tracker.createInstance<MxParser::IndentifierPrimaryContext>(_localctx);
       enterOuterAlt(_localctx, 2);
-      setState(286);
+      setState(294);
       match(MxParser::Identifier);
       break;
     }
 
     case 3: {
-      _localctx = dynamic_cast<PrimaryContext *>(_tracker.createInstance<MxParser::ConstPrimaryContext>(_localctx));
+      _localctx = _tracker.createInstance<MxParser::ConstPrimaryContext>(_localctx);
       enterOuterAlt(_localctx, 3);
-      setState(287);
+      setState(295);
       mxconst();
       break;
     }
 
     case 4: {
-      _localctx = dynamic_cast<PrimaryContext *>(_tracker.createInstance<MxParser::ThisPrimaryContext>(_localctx));
+      _localctx = _tracker.createInstance<MxParser::ThisPrimaryContext>(_localctx);
       enterOuterAlt(_localctx, 4);
-      setState(288);
+      setState(296);
       match(MxParser::This);
       break;
     }
 
     case 5: {
-      _localctx = dynamic_cast<PrimaryContext *>(_tracker.createInstance<MxParser::NewPrimaryContext>(_localctx));
+      _localctx = _tracker.createInstance<MxParser::NewPrimaryContext>(_localctx);
       enterOuterAlt(_localctx, 5);
-      setState(289);
+      setState(297);
       match(MxParser::New);
-      setState(290);
+      setState(298);
       type();
-      setState(291);
+      setState(299);
       array();
       break;
     }
 
     case 6: {
-      _localctx = dynamic_cast<PrimaryContext *>(_tracker.createInstance<MxParser::NewPrimaryContext>(_localctx));
+      _localctx = _tracker.createInstance<MxParser::NewPrimaryContext>(_localctx);
       enterOuterAlt(_localctx, 6);
-      setState(293);
+      setState(301);
       match(MxParser::New);
-      setState(294);
+      setState(302);
       type();
-      setState(297);
+      setState(305);
       _errHandler->sync(this);
 
-      switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 25, _ctx)) {
+      switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 26, _ctx)) {
       case 1: {
-        setState(295);
+        setState(303);
         match(MxParser::LeftParen);
-        setState(296);
+        setState(304);
         match(MxParser::RightParen);
         break;
       }
 
+      default:
+        break;
       }
       break;
     }
 
+    default:
+      break;
     }
    
   }
@@ -2603,7 +2878,8 @@ tree::TerminalNode* MxParser::BoolConstContext::BoolConst() {
 
 MxParser::BoolConstContext::BoolConstContext(MxconstContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::BoolConstContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::BoolConstContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitBoolConst(this);
   else
@@ -2617,7 +2893,8 @@ MxParser::ArrayContext* MxParser::ArrayConstContext::array() {
 
 MxParser::ArrayConstContext::ArrayConstContext(MxconstContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::ArrayConstContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::ArrayConstContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitArrayConst(this);
   else
@@ -2631,7 +2908,8 @@ tree::TerminalNode* MxParser::IntConstContext::IntegerConst() {
 
 MxParser::IntConstContext::IntConstContext(MxconstContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::IntConstContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::IntConstContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitIntConst(this);
   else
@@ -2645,7 +2923,8 @@ tree::TerminalNode* MxParser::NullConstContext::Null() {
 
 MxParser::NullConstContext::NullConstContext(MxconstContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::NullConstContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::NullConstContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitNullConst(this);
   else
@@ -2659,7 +2938,8 @@ tree::TerminalNode* MxParser::StringConstContext::StringConst() {
 
 MxParser::StringConstContext::StringConstContext(MxconstContext *ctx) { copyFrom(ctx); }
 
-antlrcpp::Any MxParser::StringConstContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::StringConstContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitStringConst(this);
   else
@@ -2669,49 +2949,53 @@ MxParser::MxconstContext* MxParser::mxconst() {
   MxconstContext *_localctx = _tracker.createInstance<MxconstContext>(_ctx, getState());
   enterRule(_localctx, 30, MxParser::RuleMxconst);
 
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
   auto onExit = finally([=] {
+#endif
     exitRule();
   });
   try {
-    setState(306);
+    setState(314);
     _errHandler->sync(this);
     switch (_input->LA(1)) {
       case MxParser::IntegerConst: {
-        _localctx = dynamic_cast<MxconstContext *>(_tracker.createInstance<MxParser::IntConstContext>(_localctx));
+        _localctx = _tracker.createInstance<MxParser::IntConstContext>(_localctx);
         enterOuterAlt(_localctx, 1);
-        setState(301);
+        setState(309);
         match(MxParser::IntegerConst);
         break;
       }
 
       case MxParser::StringConst: {
-        _localctx = dynamic_cast<MxconstContext *>(_tracker.createInstance<MxParser::StringConstContext>(_localctx));
+        _localctx = _tracker.createInstance<MxParser::StringConstContext>(_localctx);
         enterOuterAlt(_localctx, 2);
-        setState(302);
+        setState(310);
         match(MxParser::StringConst);
         break;
       }
 
       case MxParser::BoolConst: {
-        _localctx = dynamic_cast<MxconstContext *>(_tracker.createInstance<MxParser::BoolConstContext>(_localctx));
+        _localctx = _tracker.createInstance<MxParser::BoolConstContext>(_localctx);
         enterOuterAlt(_localctx, 3);
-        setState(303);
+        setState(311);
         match(MxParser::BoolConst);
         break;
       }
 
       case MxParser::Null: {
-        _localctx = dynamic_cast<MxconstContext *>(_tracker.createInstance<MxParser::NullConstContext>(_localctx));
+        _localctx = _tracker.createInstance<MxParser::NullConstContext>(_localctx);
         enterOuterAlt(_localctx, 4);
-        setState(304);
+        setState(312);
         match(MxParser::Null);
         break;
       }
 
       case MxParser::LeftBrace: {
-        _localctx = dynamic_cast<MxconstContext *>(_tracker.createInstance<MxParser::ArrayConstContext>(_localctx));
+        _localctx = _tracker.createInstance<MxParser::ArrayConstContext>(_localctx);
         enterOuterAlt(_localctx, 5);
-        setState(305);
+        setState(313);
         array();
         break;
       }
@@ -2773,7 +3057,8 @@ size_t MxParser::ArrayContext::getRuleIndex() const {
   return MxParser::RuleArray;
 }
 
-antlrcpp::Any MxParser::ArrayContext::accept(tree::ParseTreeVisitor *visitor) {
+
+std::any MxParser::ArrayContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<MxVisitor*>(visitor))
     return parserVisitor->visitArray(this);
   else
@@ -2785,68 +3070,74 @@ MxParser::ArrayContext* MxParser::array() {
   enterRule(_localctx, 32, MxParser::RuleArray);
   size_t _la = 0;
 
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
   auto onExit = finally([=] {
+#endif
     exitRule();
   });
   try {
-    setState(332);
+    setState(340);
     _errHandler->sync(this);
-    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 30, _ctx)) {
+    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 31, _ctx)) {
     case 1: {
       enterOuterAlt(_localctx, 1);
-      setState(308);
+      setState(316);
       match(MxParser::LeftBrace);
-      setState(309);
+      setState(317);
       match(MxParser::RightBrace);
       break;
     }
 
     case 2: {
       enterOuterAlt(_localctx, 2);
-      setState(310);
+      setState(318);
       match(MxParser::LeftBrace);
-      setState(311);
+      setState(319);
       array();
-      setState(316);
+      setState(324);
       _errHandler->sync(this);
       _la = _input->LA(1);
       while (_la == MxParser::Comma) {
-        setState(312);
+        setState(320);
         match(MxParser::Comma);
-        setState(313);
+        setState(321);
         array();
-        setState(318);
+        setState(326);
         _errHandler->sync(this);
         _la = _input->LA(1);
       }
-      setState(319);
+      setState(327);
       match(MxParser::RightBrace);
       break;
     }
 
     case 3: {
       enterOuterAlt(_localctx, 3);
-      setState(321);
+      setState(329);
       match(MxParser::LeftBrace);
-      setState(322);
+      setState(330);
       mxconst();
-      setState(327);
+      setState(335);
       _errHandler->sync(this);
       _la = _input->LA(1);
       while (_la == MxParser::Comma) {
-        setState(323);
+        setState(331);
         match(MxParser::Comma);
-        setState(324);
+        setState(332);
         mxconst();
-        setState(329);
+        setState(337);
         _errHandler->sync(this);
         _la = _input->LA(1);
       }
-      setState(330);
+      setState(338);
       match(MxParser::RightBrace);
       break;
     }
 
+    default:
+      break;
     }
    
   }
@@ -2861,7 +3152,7 @@ MxParser::ArrayContext* MxParser::array() {
 
 bool MxParser::sempred(RuleContext *context, size_t ruleIndex, size_t predicateIndex) {
   switch (ruleIndex) {
-    case 13: return expressionSempred(dynamic_cast<ExpressionContext *>(context), predicateIndex);
+    case 13: return expressionSempred(antlrcpp::downCast<ExpressionContext *>(context), predicateIndex);
 
   default:
     break;
@@ -2871,20 +3162,20 @@ bool MxParser::sempred(RuleContext *context, size_t ruleIndex, size_t predicateI
 
 bool MxParser::expressionSempred(ExpressionContext *_localctx, size_t predicateIndex) {
   switch (predicateIndex) {
-    case 0: return precpred(_ctx, 15);
-    case 1: return precpred(_ctx, 14);
-    case 2: return precpred(_ctx, 13);
-    case 3: return precpred(_ctx, 12);
-    case 4: return precpred(_ctx, 11);
-    case 5: return precpred(_ctx, 10);
-    case 6: return precpred(_ctx, 9);
-    case 7: return precpred(_ctx, 8);
-    case 8: return precpred(_ctx, 7);
-    case 9: return precpred(_ctx, 6);
-    case 10: return precpred(_ctx, 5);
-    case 11: return precpred(_ctx, 4);
-    case 12: return precpred(_ctx, 18);
-    case 13: return precpred(_ctx, 3);
+    case 0: return precpred(_ctx, 16);
+    case 1: return precpred(_ctx, 15);
+    case 2: return precpred(_ctx, 14);
+    case 3: return precpred(_ctx, 13);
+    case 4: return precpred(_ctx, 12);
+    case 5: return precpred(_ctx, 11);
+    case 6: return precpred(_ctx, 10);
+    case 7: return precpred(_ctx, 9);
+    case 8: return precpred(_ctx, 8);
+    case 9: return precpred(_ctx, 7);
+    case 10: return precpred(_ctx, 6);
+    case 11: return precpred(_ctx, 5);
+    case 12: return precpred(_ctx, 19);
+    case 13: return precpred(_ctx, 4);
     case 14: return precpred(_ctx, 2);
     case 15: return precpred(_ctx, 1);
 
@@ -2894,314 +3185,10 @@ bool MxParser::expressionSempred(ExpressionContext *_localctx, size_t predicateI
   return true;
 }
 
-// Static vars and initialization.
-std::vector<dfa::DFA> MxParser::_decisionToDFA;
-atn::PredictionContextCache MxParser::_sharedContextCache;
-
-// We own the ATN which in turn owns the ATN states.
-atn::ATN MxParser::_atn;
-std::vector<uint16_t> MxParser::_serializedATN;
-
-std::vector<std::string> MxParser::_ruleNames = {
-  "program", "main", "classDef", "varDef", "funcDef", "consDef", "suite", 
-  "statement", "exprlist", "ifstmt", "whilestmt", "forstmt", "type", "expression", 
-  "primary", "mxconst", "array"
-};
-
-std::vector<std::string> MxParser::_literalNames = {
-  "", "'main'", "", "", "", "", "'int'", "'if'", "'else'", "'return'", "'void'", 
-  "'bool'", "'string'", "'new'", "'class'", "'null'", "'true'", "'false'", 
-  "'this'", "'for'", "'while'", "'break'", "'continue'", "'('", "')'", "'['", 
-  "']'", "'{'", "'}'", "'<'", "'<='", "'>'", "'>='", "'<<'", "'>>'", "'+'", 
-  "'-'", "'*'", "'/'", "'%'", "'&'", "'|'", "'&&'", "'||'", "'^'", "'!'", 
-  "'~'", "'?'", "':'", "';'", "','", "'='", "'=='", "'!='", "'++'", "'--'", 
-  "'.'", "'\"'"
-};
-
-std::vector<std::string> MxParser::_symbolicNames = {
-  "", "", "FormatString1", "FormatString2", "FormatString3", "FormatString4", 
-  "Int", "If", "Else", "Return", "Void", "Bool", "String", "New", "Class", 
-  "Null", "True", "False", "This", "For", "While", "Break", "Continue", 
-  "LeftParen", "RightParen", "LeftBracket", "RightBracket", "LeftBrace", 
-  "RightBrace", "Less", "LessEqual", "Greater", "GreaterEqual", "LeftShift", 
-  "RightShift", "Plus", "Minus", "Mul", "Div", "Mod", "And", "Or", "AndAnd", 
-  "OrOr", "Caret", "Not", "Tilde", "Question", "Colon", "Semi", "Comma", 
-  "Assign", "Equal", "NotEqual", "SelfPlus", "SelfMinus", "Belong", "Yinghao", 
-  "IntegerConst", "BoolConst", "StringConst", "Identifier", "Whitespace", 
-  "Newline", "BlockComment", "LineComment"
-};
-
-dfa::Vocabulary MxParser::_vocabulary(_literalNames, _symbolicNames);
-
-std::vector<std::string> MxParser::_tokenNames;
-
-MxParser::Initializer::Initializer() {
-	for (size_t i = 0; i < _symbolicNames.size(); ++i) {
-		std::string name = _vocabulary.getLiteralName(i);
-		if (name.empty()) {
-			name = _vocabulary.getSymbolicName(i);
-		}
-
-		if (name.empty()) {
-			_tokenNames.push_back("<INVALID>");
-		} else {
-      _tokenNames.push_back(name);
-    }
-	}
-
-  _serializedATN = {
-    0x3, 0x608b, 0xa72a, 0x8133, 0xb9ed, 0x417c, 0x3be7, 0x7786, 0x5964, 
-    0x3, 0x43, 0x151, 0x4, 0x2, 0x9, 0x2, 0x4, 0x3, 0x9, 0x3, 0x4, 0x4, 
-    0x9, 0x4, 0x4, 0x5, 0x9, 0x5, 0x4, 0x6, 0x9, 0x6, 0x4, 0x7, 0x9, 0x7, 
-    0x4, 0x8, 0x9, 0x8, 0x4, 0x9, 0x9, 0x9, 0x4, 0xa, 0x9, 0xa, 0x4, 0xb, 
-    0x9, 0xb, 0x4, 0xc, 0x9, 0xc, 0x4, 0xd, 0x9, 0xd, 0x4, 0xe, 0x9, 0xe, 
-    0x4, 0xf, 0x9, 0xf, 0x4, 0x10, 0x9, 0x10, 0x4, 0x11, 0x9, 0x11, 0x4, 
-    0x12, 0x9, 0x12, 0x3, 0x2, 0x3, 0x2, 0x3, 0x2, 0x7, 0x2, 0x28, 0xa, 
-    0x2, 0xc, 0x2, 0xe, 0x2, 0x2b, 0xb, 0x2, 0x3, 0x2, 0x3, 0x2, 0x3, 0x2, 
-    0x3, 0x2, 0x7, 0x2, 0x31, 0xa, 0x2, 0xc, 0x2, 0xe, 0x2, 0x34, 0xb, 0x2, 
-    0x3, 0x2, 0x3, 0x2, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 
-    0x3, 0x3, 0x3, 0x4, 0x3, 0x4, 0x3, 0x4, 0x3, 0x4, 0x3, 0x4, 0x3, 0x4, 
-    0x7, 0x4, 0x44, 0xa, 0x4, 0xc, 0x4, 0xe, 0x4, 0x47, 0xb, 0x4, 0x3, 0x4, 
-    0x3, 0x4, 0x3, 0x4, 0x3, 0x5, 0x3, 0x5, 0x3, 0x5, 0x3, 0x5, 0x5, 0x5, 
-    0x50, 0xa, 0x5, 0x3, 0x5, 0x3, 0x5, 0x3, 0x5, 0x3, 0x5, 0x5, 0x5, 0x56, 
-    0xa, 0x5, 0x7, 0x5, 0x58, 0xa, 0x5, 0xc, 0x5, 0xe, 0x5, 0x5b, 0xb, 0x5, 
-    0x3, 0x5, 0x3, 0x5, 0x3, 0x6, 0x3, 0x6, 0x3, 0x6, 0x3, 0x6, 0x3, 0x6, 
-    0x3, 0x6, 0x3, 0x6, 0x5, 0x6, 0x66, 0xa, 0x6, 0x3, 0x6, 0x3, 0x6, 0x3, 
-    0x6, 0x3, 0x6, 0x3, 0x6, 0x5, 0x6, 0x6d, 0xa, 0x6, 0x7, 0x6, 0x6f, 0xa, 
-    0x6, 0xc, 0x6, 0xe, 0x6, 0x72, 0xb, 0x6, 0x5, 0x6, 0x74, 0xa, 0x6, 0x3, 
-    0x6, 0x3, 0x6, 0x3, 0x6, 0x3, 0x7, 0x3, 0x7, 0x3, 0x7, 0x3, 0x7, 0x3, 
-    0x7, 0x3, 0x8, 0x3, 0x8, 0x7, 0x8, 0x80, 0xa, 0x8, 0xc, 0x8, 0xe, 0x8, 
-    0x83, 0xb, 0x8, 0x3, 0x8, 0x3, 0x8, 0x3, 0x9, 0x3, 0x9, 0x3, 0x9, 0x3, 
-    0x9, 0x3, 0x9, 0x3, 0x9, 0x3, 0x9, 0x3, 0x9, 0x3, 0x9, 0x3, 0x9, 0x3, 
-    0x9, 0x5, 0x9, 0x92, 0xa, 0x9, 0x3, 0x9, 0x3, 0x9, 0x3, 0x9, 0x3, 0x9, 
-    0x3, 0x9, 0x5, 0x9, 0x99, 0xa, 0x9, 0x3, 0xa, 0x3, 0xa, 0x3, 0xa, 0x7, 
-    0xa, 0x9e, 0xa, 0xa, 0xc, 0xa, 0xe, 0xa, 0xa1, 0xb, 0xa, 0x3, 0xb, 0x3, 
-    0xb, 0x3, 0xb, 0x3, 0xb, 0x3, 0xb, 0x3, 0xb, 0x3, 0xb, 0x5, 0xb, 0xaa, 
-    0xa, 0xb, 0x3, 0xc, 0x3, 0xc, 0x3, 0xc, 0x3, 0xc, 0x3, 0xc, 0x3, 0xc, 
-    0x3, 0xd, 0x3, 0xd, 0x3, 0xd, 0x3, 0xd, 0x3, 0xd, 0x3, 0xd, 0x3, 0xd, 
-    0x3, 0xd, 0x3, 0xd, 0x3, 0xd, 0x3, 0xe, 0x3, 0xe, 0x3, 0xe, 0x3, 0xe, 
-    0x3, 0xe, 0x7, 0xe, 0xc1, 0xa, 0xe, 0xc, 0xe, 0xe, 0xe, 0xc4, 0xb, 0xe, 
-    0x3, 0xe, 0x3, 0xe, 0x7, 0xe, 0xc8, 0xa, 0xe, 0xc, 0xe, 0xe, 0xe, 0xcb, 
-    0xb, 0xe, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 
-    0x3, 0xf, 0x7, 0xf, 0xd4, 0xa, 0xf, 0xc, 0xf, 0xe, 0xf, 0xd7, 0xb, 0xf, 
-    0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x5, 0xf, 
-    0xdf, 0xa, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 
-    0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 
-    0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 
-    0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 
-    0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 
-    0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 
-    0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x5, 
-    0xf, 0x110, 0xa, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 
-    0x3, 0xf, 0x7, 0xf, 0x118, 0xa, 0xf, 0xc, 0xf, 0xe, 0xf, 0x11b, 0xb, 
-    0xf, 0x3, 0x10, 0x3, 0x10, 0x3, 0x10, 0x3, 0x10, 0x3, 0x10, 0x3, 0x10, 
-    0x3, 0x10, 0x3, 0x10, 0x3, 0x10, 0x3, 0x10, 0x3, 0x10, 0x3, 0x10, 0x3, 
-    0x10, 0x3, 0x10, 0x3, 0x10, 0x5, 0x10, 0x12c, 0xa, 0x10, 0x5, 0x10, 
-    0x12e, 0xa, 0x10, 0x3, 0x11, 0x3, 0x11, 0x3, 0x11, 0x3, 0x11, 0x3, 0x11, 
-    0x5, 0x11, 0x135, 0xa, 0x11, 0x3, 0x12, 0x3, 0x12, 0x3, 0x12, 0x3, 0x12, 
-    0x3, 0x12, 0x3, 0x12, 0x7, 0x12, 0x13d, 0xa, 0x12, 0xc, 0x12, 0xe, 0x12, 
-    0x140, 0xb, 0x12, 0x3, 0x12, 0x3, 0x12, 0x3, 0x12, 0x3, 0x12, 0x3, 0x12, 
-    0x3, 0x12, 0x7, 0x12, 0x148, 0xa, 0x12, 0xc, 0x12, 0xe, 0x12, 0x14b, 
-    0xb, 0x12, 0x3, 0x12, 0x3, 0x12, 0x5, 0x12, 0x14f, 0xa, 0x12, 0x3, 0x12, 
-    0x2, 0x3, 0x1c, 0x13, 0x2, 0x4, 0x6, 0x8, 0xa, 0xc, 0xe, 0x10, 0x12, 
-    0x14, 0x16, 0x18, 0x1a, 0x1c, 0x1e, 0x20, 0x22, 0x2, 0xa, 0x5, 0x2, 
-    0x8, 0x8, 0xc, 0xe, 0x3f, 0x3f, 0x3, 0x2, 0x38, 0x39, 0x4, 0x2, 0x26, 
-    0x26, 0x2f, 0x30, 0x3, 0x2, 0x27, 0x29, 0x3, 0x2, 0x25, 0x26, 0x3, 0x2, 
-    0x23, 0x24, 0x3, 0x2, 0x1f, 0x22, 0x3, 0x2, 0x36, 0x37, 0x2, 0x182, 
-    0x2, 0x29, 0x3, 0x2, 0x2, 0x2, 0x4, 0x37, 0x3, 0x2, 0x2, 0x2, 0x6, 0x3d, 
-    0x3, 0x2, 0x2, 0x2, 0x8, 0x4b, 0x3, 0x2, 0x2, 0x2, 0xa, 0x5e, 0x3, 0x2, 
-    0x2, 0x2, 0xc, 0x78, 0x3, 0x2, 0x2, 0x2, 0xe, 0x7d, 0x3, 0x2, 0x2, 0x2, 
-    0x10, 0x98, 0x3, 0x2, 0x2, 0x2, 0x12, 0x9a, 0x3, 0x2, 0x2, 0x2, 0x14, 
-    0xa2, 0x3, 0x2, 0x2, 0x2, 0x16, 0xab, 0x3, 0x2, 0x2, 0x2, 0x18, 0xb1, 
-    0x3, 0x2, 0x2, 0x2, 0x1a, 0xbb, 0x3, 0x2, 0x2, 0x2, 0x1c, 0xde, 0x3, 
-    0x2, 0x2, 0x2, 0x1e, 0x12d, 0x3, 0x2, 0x2, 0x2, 0x20, 0x134, 0x3, 0x2, 
-    0x2, 0x2, 0x22, 0x14e, 0x3, 0x2, 0x2, 0x2, 0x24, 0x28, 0x5, 0x6, 0x4, 
-    0x2, 0x25, 0x28, 0x5, 0xa, 0x6, 0x2, 0x26, 0x28, 0x5, 0x8, 0x5, 0x2, 
-    0x27, 0x24, 0x3, 0x2, 0x2, 0x2, 0x27, 0x25, 0x3, 0x2, 0x2, 0x2, 0x27, 
-    0x26, 0x3, 0x2, 0x2, 0x2, 0x28, 0x2b, 0x3, 0x2, 0x2, 0x2, 0x29, 0x27, 
-    0x3, 0x2, 0x2, 0x2, 0x29, 0x2a, 0x3, 0x2, 0x2, 0x2, 0x2a, 0x2c, 0x3, 
-    0x2, 0x2, 0x2, 0x2b, 0x29, 0x3, 0x2, 0x2, 0x2, 0x2c, 0x32, 0x5, 0x4, 
-    0x3, 0x2, 0x2d, 0x31, 0x5, 0x6, 0x4, 0x2, 0x2e, 0x31, 0x5, 0xa, 0x6, 
-    0x2, 0x2f, 0x31, 0x5, 0x8, 0x5, 0x2, 0x30, 0x2d, 0x3, 0x2, 0x2, 0x2, 
-    0x30, 0x2e, 0x3, 0x2, 0x2, 0x2, 0x30, 0x2f, 0x3, 0x2, 0x2, 0x2, 0x31, 
-    0x34, 0x3, 0x2, 0x2, 0x2, 0x32, 0x30, 0x3, 0x2, 0x2, 0x2, 0x32, 0x33, 
-    0x3, 0x2, 0x2, 0x2, 0x33, 0x35, 0x3, 0x2, 0x2, 0x2, 0x34, 0x32, 0x3, 
-    0x2, 0x2, 0x2, 0x35, 0x36, 0x7, 0x2, 0x2, 0x3, 0x36, 0x3, 0x3, 0x2, 
-    0x2, 0x2, 0x37, 0x38, 0x7, 0x8, 0x2, 0x2, 0x38, 0x39, 0x7, 0x3, 0x2, 
-    0x2, 0x39, 0x3a, 0x7, 0x19, 0x2, 0x2, 0x3a, 0x3b, 0x7, 0x1a, 0x2, 0x2, 
-    0x3b, 0x3c, 0x5, 0xe, 0x8, 0x2, 0x3c, 0x5, 0x3, 0x2, 0x2, 0x2, 0x3d, 
-    0x3e, 0x7, 0x10, 0x2, 0x2, 0x3e, 0x3f, 0x7, 0x3f, 0x2, 0x2, 0x3f, 0x45, 
-    0x7, 0x1d, 0x2, 0x2, 0x40, 0x44, 0x5, 0x8, 0x5, 0x2, 0x41, 0x44, 0x5, 
-    0xa, 0x6, 0x2, 0x42, 0x44, 0x5, 0xc, 0x7, 0x2, 0x43, 0x40, 0x3, 0x2, 
-    0x2, 0x2, 0x43, 0x41, 0x3, 0x2, 0x2, 0x2, 0x43, 0x42, 0x3, 0x2, 0x2, 
-    0x2, 0x44, 0x47, 0x3, 0x2, 0x2, 0x2, 0x45, 0x43, 0x3, 0x2, 0x2, 0x2, 
-    0x45, 0x46, 0x3, 0x2, 0x2, 0x2, 0x46, 0x48, 0x3, 0x2, 0x2, 0x2, 0x47, 
-    0x45, 0x3, 0x2, 0x2, 0x2, 0x48, 0x49, 0x7, 0x1e, 0x2, 0x2, 0x49, 0x4a, 
-    0x7, 0x33, 0x2, 0x2, 0x4a, 0x7, 0x3, 0x2, 0x2, 0x2, 0x4b, 0x4c, 0x5, 
-    0x1a, 0xe, 0x2, 0x4c, 0x4f, 0x7, 0x3f, 0x2, 0x2, 0x4d, 0x4e, 0x7, 0x35, 
-    0x2, 0x2, 0x4e, 0x50, 0x5, 0x1c, 0xf, 0x2, 0x4f, 0x4d, 0x3, 0x2, 0x2, 
-    0x2, 0x4f, 0x50, 0x3, 0x2, 0x2, 0x2, 0x50, 0x59, 0x3, 0x2, 0x2, 0x2, 
-    0x51, 0x52, 0x7, 0x34, 0x2, 0x2, 0x52, 0x55, 0x7, 0x3f, 0x2, 0x2, 0x53, 
-    0x54, 0x7, 0x35, 0x2, 0x2, 0x54, 0x56, 0x5, 0x1c, 0xf, 0x2, 0x55, 0x53, 
-    0x3, 0x2, 0x2, 0x2, 0x55, 0x56, 0x3, 0x2, 0x2, 0x2, 0x56, 0x58, 0x3, 
-    0x2, 0x2, 0x2, 0x57, 0x51, 0x3, 0x2, 0x2, 0x2, 0x58, 0x5b, 0x3, 0x2, 
-    0x2, 0x2, 0x59, 0x57, 0x3, 0x2, 0x2, 0x2, 0x59, 0x5a, 0x3, 0x2, 0x2, 
-    0x2, 0x5a, 0x5c, 0x3, 0x2, 0x2, 0x2, 0x5b, 0x59, 0x3, 0x2, 0x2, 0x2, 
-    0x5c, 0x5d, 0x7, 0x33, 0x2, 0x2, 0x5d, 0x9, 0x3, 0x2, 0x2, 0x2, 0x5e, 
-    0x5f, 0x5, 0x1a, 0xe, 0x2, 0x5f, 0x60, 0x7, 0x3f, 0x2, 0x2, 0x60, 0x73, 
-    0x7, 0x19, 0x2, 0x2, 0x61, 0x62, 0x5, 0x1a, 0xe, 0x2, 0x62, 0x65, 0x7, 
-    0x3f, 0x2, 0x2, 0x63, 0x64, 0x7, 0x35, 0x2, 0x2, 0x64, 0x66, 0x5, 0x1c, 
-    0xf, 0x2, 0x65, 0x63, 0x3, 0x2, 0x2, 0x2, 0x65, 0x66, 0x3, 0x2, 0x2, 
-    0x2, 0x66, 0x70, 0x3, 0x2, 0x2, 0x2, 0x67, 0x68, 0x7, 0x34, 0x2, 0x2, 
-    0x68, 0x69, 0x5, 0x1a, 0xe, 0x2, 0x69, 0x6c, 0x7, 0x3f, 0x2, 0x2, 0x6a, 
-    0x6b, 0x7, 0x35, 0x2, 0x2, 0x6b, 0x6d, 0x5, 0x1c, 0xf, 0x2, 0x6c, 0x6a, 
-    0x3, 0x2, 0x2, 0x2, 0x6c, 0x6d, 0x3, 0x2, 0x2, 0x2, 0x6d, 0x6f, 0x3, 
-    0x2, 0x2, 0x2, 0x6e, 0x67, 0x3, 0x2, 0x2, 0x2, 0x6f, 0x72, 0x3, 0x2, 
-    0x2, 0x2, 0x70, 0x6e, 0x3, 0x2, 0x2, 0x2, 0x70, 0x71, 0x3, 0x2, 0x2, 
-    0x2, 0x71, 0x74, 0x3, 0x2, 0x2, 0x2, 0x72, 0x70, 0x3, 0x2, 0x2, 0x2, 
-    0x73, 0x61, 0x3, 0x2, 0x2, 0x2, 0x73, 0x74, 0x3, 0x2, 0x2, 0x2, 0x74, 
-    0x75, 0x3, 0x2, 0x2, 0x2, 0x75, 0x76, 0x7, 0x1a, 0x2, 0x2, 0x76, 0x77, 
-    0x5, 0xe, 0x8, 0x2, 0x77, 0xb, 0x3, 0x2, 0x2, 0x2, 0x78, 0x79, 0x7, 
-    0x3f, 0x2, 0x2, 0x79, 0x7a, 0x7, 0x19, 0x2, 0x2, 0x7a, 0x7b, 0x7, 0x1a, 
-    0x2, 0x2, 0x7b, 0x7c, 0x5, 0xe, 0x8, 0x2, 0x7c, 0xd, 0x3, 0x2, 0x2, 
-    0x2, 0x7d, 0x81, 0x7, 0x1d, 0x2, 0x2, 0x7e, 0x80, 0x5, 0x10, 0x9, 0x2, 
-    0x7f, 0x7e, 0x3, 0x2, 0x2, 0x2, 0x80, 0x83, 0x3, 0x2, 0x2, 0x2, 0x81, 
-    0x7f, 0x3, 0x2, 0x2, 0x2, 0x81, 0x82, 0x3, 0x2, 0x2, 0x2, 0x82, 0x84, 
-    0x3, 0x2, 0x2, 0x2, 0x83, 0x81, 0x3, 0x2, 0x2, 0x2, 0x84, 0x85, 0x7, 
-    0x1e, 0x2, 0x2, 0x85, 0xf, 0x3, 0x2, 0x2, 0x2, 0x86, 0x99, 0x5, 0xe, 
-    0x8, 0x2, 0x87, 0x99, 0x5, 0x8, 0x5, 0x2, 0x88, 0x99, 0x5, 0x14, 0xb, 
-    0x2, 0x89, 0x99, 0x5, 0x16, 0xc, 0x2, 0x8a, 0x99, 0x5, 0x18, 0xd, 0x2, 
-    0x8b, 0x8c, 0x7, 0x17, 0x2, 0x2, 0x8c, 0x99, 0x7, 0x33, 0x2, 0x2, 0x8d, 
-    0x8e, 0x7, 0x18, 0x2, 0x2, 0x8e, 0x99, 0x7, 0x33, 0x2, 0x2, 0x8f, 0x91, 
-    0x7, 0xb, 0x2, 0x2, 0x90, 0x92, 0x5, 0x1c, 0xf, 0x2, 0x91, 0x90, 0x3, 
-    0x2, 0x2, 0x2, 0x91, 0x92, 0x3, 0x2, 0x2, 0x2, 0x92, 0x93, 0x3, 0x2, 
-    0x2, 0x2, 0x93, 0x99, 0x7, 0x33, 0x2, 0x2, 0x94, 0x95, 0x5, 0x12, 0xa, 
-    0x2, 0x95, 0x96, 0x7, 0x33, 0x2, 0x2, 0x96, 0x99, 0x3, 0x2, 0x2, 0x2, 
-    0x97, 0x99, 0x7, 0x33, 0x2, 0x2, 0x98, 0x86, 0x3, 0x2, 0x2, 0x2, 0x98, 
-    0x87, 0x3, 0x2, 0x2, 0x2, 0x98, 0x88, 0x3, 0x2, 0x2, 0x2, 0x98, 0x89, 
-    0x3, 0x2, 0x2, 0x2, 0x98, 0x8a, 0x3, 0x2, 0x2, 0x2, 0x98, 0x8b, 0x3, 
-    0x2, 0x2, 0x2, 0x98, 0x8d, 0x3, 0x2, 0x2, 0x2, 0x98, 0x8f, 0x3, 0x2, 
-    0x2, 0x2, 0x98, 0x94, 0x3, 0x2, 0x2, 0x2, 0x98, 0x97, 0x3, 0x2, 0x2, 
-    0x2, 0x99, 0x11, 0x3, 0x2, 0x2, 0x2, 0x9a, 0x9f, 0x5, 0x1c, 0xf, 0x2, 
-    0x9b, 0x9c, 0x7, 0x34, 0x2, 0x2, 0x9c, 0x9e, 0x5, 0x1c, 0xf, 0x2, 0x9d, 
-    0x9b, 0x3, 0x2, 0x2, 0x2, 0x9e, 0xa1, 0x3, 0x2, 0x2, 0x2, 0x9f, 0x9d, 
-    0x3, 0x2, 0x2, 0x2, 0x9f, 0xa0, 0x3, 0x2, 0x2, 0x2, 0xa0, 0x13, 0x3, 
-    0x2, 0x2, 0x2, 0xa1, 0x9f, 0x3, 0x2, 0x2, 0x2, 0xa2, 0xa3, 0x7, 0x9, 
-    0x2, 0x2, 0xa3, 0xa4, 0x7, 0x19, 0x2, 0x2, 0xa4, 0xa5, 0x5, 0x1c, 0xf, 
-    0x2, 0xa5, 0xa6, 0x7, 0x1a, 0x2, 0x2, 0xa6, 0xa9, 0x5, 0x10, 0x9, 0x2, 
-    0xa7, 0xa8, 0x7, 0xa, 0x2, 0x2, 0xa8, 0xaa, 0x5, 0x10, 0x9, 0x2, 0xa9, 
-    0xa7, 0x3, 0x2, 0x2, 0x2, 0xa9, 0xaa, 0x3, 0x2, 0x2, 0x2, 0xaa, 0x15, 
-    0x3, 0x2, 0x2, 0x2, 0xab, 0xac, 0x7, 0x16, 0x2, 0x2, 0xac, 0xad, 0x7, 
-    0x19, 0x2, 0x2, 0xad, 0xae, 0x5, 0x1c, 0xf, 0x2, 0xae, 0xaf, 0x7, 0x1a, 
-    0x2, 0x2, 0xaf, 0xb0, 0x5, 0x10, 0x9, 0x2, 0xb0, 0x17, 0x3, 0x2, 0x2, 
-    0x2, 0xb1, 0xb2, 0x7, 0x15, 0x2, 0x2, 0xb2, 0xb3, 0x7, 0x19, 0x2, 0x2, 
-    0xb3, 0xb4, 0x5, 0x1c, 0xf, 0x2, 0xb4, 0xb5, 0x7, 0x33, 0x2, 0x2, 0xb5, 
-    0xb6, 0x5, 0x1c, 0xf, 0x2, 0xb6, 0xb7, 0x7, 0x33, 0x2, 0x2, 0xb7, 0xb8, 
-    0x5, 0x1c, 0xf, 0x2, 0xb8, 0xb9, 0x7, 0x1a, 0x2, 0x2, 0xb9, 0xba, 0x5, 
-    0x10, 0x9, 0x2, 0xba, 0x19, 0x3, 0x2, 0x2, 0x2, 0xbb, 0xc2, 0x9, 0x2, 
-    0x2, 0x2, 0xbc, 0xbd, 0x7, 0x1b, 0x2, 0x2, 0xbd, 0xbe, 0x5, 0x1c, 0xf, 
-    0x2, 0xbe, 0xbf, 0x7, 0x1c, 0x2, 0x2, 0xbf, 0xc1, 0x3, 0x2, 0x2, 0x2, 
-    0xc0, 0xbc, 0x3, 0x2, 0x2, 0x2, 0xc1, 0xc4, 0x3, 0x2, 0x2, 0x2, 0xc2, 
-    0xc0, 0x3, 0x2, 0x2, 0x2, 0xc2, 0xc3, 0x3, 0x2, 0x2, 0x2, 0xc3, 0xc9, 
-    0x3, 0x2, 0x2, 0x2, 0xc4, 0xc2, 0x3, 0x2, 0x2, 0x2, 0xc5, 0xc6, 0x7, 
-    0x1b, 0x2, 0x2, 0xc6, 0xc8, 0x7, 0x1c, 0x2, 0x2, 0xc7, 0xc5, 0x3, 0x2, 
-    0x2, 0x2, 0xc8, 0xcb, 0x3, 0x2, 0x2, 0x2, 0xc9, 0xc7, 0x3, 0x2, 0x2, 
-    0x2, 0xc9, 0xca, 0x3, 0x2, 0x2, 0x2, 0xca, 0x1b, 0x3, 0x2, 0x2, 0x2, 
-    0xcb, 0xc9, 0x3, 0x2, 0x2, 0x2, 0xcc, 0xcd, 0x8, 0xf, 0x1, 0x2, 0xcd, 
-    0xdf, 0x5, 0x1e, 0x10, 0x2, 0xce, 0xdf, 0x7, 0x4, 0x2, 0x2, 0xcf, 0xd0, 
-    0x7, 0x5, 0x2, 0x2, 0xd0, 0xd5, 0x5, 0x1c, 0xf, 0x2, 0xd1, 0xd2, 0x7, 
-    0x6, 0x2, 0x2, 0xd2, 0xd4, 0x5, 0x1c, 0xf, 0x2, 0xd3, 0xd1, 0x3, 0x2, 
-    0x2, 0x2, 0xd4, 0xd7, 0x3, 0x2, 0x2, 0x2, 0xd5, 0xd3, 0x3, 0x2, 0x2, 
-    0x2, 0xd5, 0xd6, 0x3, 0x2, 0x2, 0x2, 0xd6, 0xd8, 0x3, 0x2, 0x2, 0x2, 
-    0xd7, 0xd5, 0x3, 0x2, 0x2, 0x2, 0xd8, 0xd9, 0x7, 0x7, 0x2, 0x2, 0xd9, 
-    0xdf, 0x3, 0x2, 0x2, 0x2, 0xda, 0xdb, 0x9, 0x3, 0x2, 0x2, 0xdb, 0xdf, 
-    0x5, 0x1c, 0xf, 0x13, 0xdc, 0xdd, 0x9, 0x4, 0x2, 0x2, 0xdd, 0xdf, 0x5, 
-    0x1c, 0xf, 0x12, 0xde, 0xcc, 0x3, 0x2, 0x2, 0x2, 0xde, 0xce, 0x3, 0x2, 
-    0x2, 0x2, 0xde, 0xcf, 0x3, 0x2, 0x2, 0x2, 0xde, 0xda, 0x3, 0x2, 0x2, 
-    0x2, 0xde, 0xdc, 0x3, 0x2, 0x2, 0x2, 0xdf, 0x119, 0x3, 0x2, 0x2, 0x2, 
-    0xe0, 0xe1, 0xc, 0x11, 0x2, 0x2, 0xe1, 0xe2, 0x9, 0x5, 0x2, 0x2, 0xe2, 
-    0x118, 0x5, 0x1c, 0xf, 0x12, 0xe3, 0xe4, 0xc, 0x10, 0x2, 0x2, 0xe4, 
-    0xe5, 0x9, 0x6, 0x2, 0x2, 0xe5, 0x118, 0x5, 0x1c, 0xf, 0x11, 0xe6, 0xe7, 
-    0xc, 0xf, 0x2, 0x2, 0xe7, 0xe8, 0x9, 0x7, 0x2, 0x2, 0xe8, 0x118, 0x5, 
-    0x1c, 0xf, 0x10, 0xe9, 0xea, 0xc, 0xe, 0x2, 0x2, 0xea, 0xeb, 0x9, 0x8, 
-    0x2, 0x2, 0xeb, 0x118, 0x5, 0x1c, 0xf, 0xf, 0xec, 0xed, 0xc, 0xd, 0x2, 
-    0x2, 0xed, 0xee, 0x9, 0x9, 0x2, 0x2, 0xee, 0x118, 0x5, 0x1c, 0xf, 0xe, 
-    0xef, 0xf0, 0xc, 0xc, 0x2, 0x2, 0xf0, 0xf1, 0x7, 0x2a, 0x2, 0x2, 0xf1, 
-    0x118, 0x5, 0x1c, 0xf, 0xd, 0xf2, 0xf3, 0xc, 0xb, 0x2, 0x2, 0xf3, 0xf4, 
-    0x7, 0x2e, 0x2, 0x2, 0xf4, 0x118, 0x5, 0x1c, 0xf, 0xc, 0xf5, 0xf6, 0xc, 
-    0xa, 0x2, 0x2, 0xf6, 0xf7, 0x7, 0x2b, 0x2, 0x2, 0xf7, 0x118, 0x5, 0x1c, 
-    0xf, 0xb, 0xf8, 0xf9, 0xc, 0x9, 0x2, 0x2, 0xf9, 0xfa, 0x7, 0x2c, 0x2, 
-    0x2, 0xfa, 0x118, 0x5, 0x1c, 0xf, 0xa, 0xfb, 0xfc, 0xc, 0x8, 0x2, 0x2, 
-    0xfc, 0xfd, 0x7, 0x2d, 0x2, 0x2, 0xfd, 0x118, 0x5, 0x1c, 0xf, 0x9, 0xfe, 
-    0xff, 0xc, 0x7, 0x2, 0x2, 0xff, 0x100, 0x7, 0x31, 0x2, 0x2, 0x100, 0x101, 
-    0x5, 0x1c, 0xf, 0x2, 0x101, 0x102, 0x7, 0x32, 0x2, 0x2, 0x102, 0x103, 
-    0x5, 0x1c, 0xf, 0x7, 0x103, 0x118, 0x3, 0x2, 0x2, 0x2, 0x104, 0x105, 
-    0xc, 0x6, 0x2, 0x2, 0x105, 0x106, 0x7, 0x35, 0x2, 0x2, 0x106, 0x118, 
-    0x5, 0x1c, 0xf, 0x6, 0x107, 0x108, 0xc, 0x14, 0x2, 0x2, 0x108, 0x118, 
-    0x9, 0x3, 0x2, 0x2, 0x109, 0x10a, 0xc, 0x5, 0x2, 0x2, 0x10a, 0x10b, 
-    0x7, 0x3a, 0x2, 0x2, 0x10b, 0x118, 0x7, 0x3f, 0x2, 0x2, 0x10c, 0x10d, 
-    0xc, 0x4, 0x2, 0x2, 0x10d, 0x10f, 0x7, 0x19, 0x2, 0x2, 0x10e, 0x110, 
-    0x5, 0x12, 0xa, 0x2, 0x10f, 0x10e, 0x3, 0x2, 0x2, 0x2, 0x10f, 0x110, 
-    0x3, 0x2, 0x2, 0x2, 0x110, 0x111, 0x3, 0x2, 0x2, 0x2, 0x111, 0x118, 
-    0x7, 0x1a, 0x2, 0x2, 0x112, 0x113, 0xc, 0x3, 0x2, 0x2, 0x113, 0x114, 
-    0x7, 0x1b, 0x2, 0x2, 0x114, 0x115, 0x5, 0x1c, 0xf, 0x2, 0x115, 0x116, 
-    0x7, 0x1c, 0x2, 0x2, 0x116, 0x118, 0x3, 0x2, 0x2, 0x2, 0x117, 0xe0, 
-    0x3, 0x2, 0x2, 0x2, 0x117, 0xe3, 0x3, 0x2, 0x2, 0x2, 0x117, 0xe6, 0x3, 
-    0x2, 0x2, 0x2, 0x117, 0xe9, 0x3, 0x2, 0x2, 0x2, 0x117, 0xec, 0x3, 0x2, 
-    0x2, 0x2, 0x117, 0xef, 0x3, 0x2, 0x2, 0x2, 0x117, 0xf2, 0x3, 0x2, 0x2, 
-    0x2, 0x117, 0xf5, 0x3, 0x2, 0x2, 0x2, 0x117, 0xf8, 0x3, 0x2, 0x2, 0x2, 
-    0x117, 0xfb, 0x3, 0x2, 0x2, 0x2, 0x117, 0xfe, 0x3, 0x2, 0x2, 0x2, 0x117, 
-    0x104, 0x3, 0x2, 0x2, 0x2, 0x117, 0x107, 0x3, 0x2, 0x2, 0x2, 0x117, 
-    0x109, 0x3, 0x2, 0x2, 0x2, 0x117, 0x10c, 0x3, 0x2, 0x2, 0x2, 0x117, 
-    0x112, 0x3, 0x2, 0x2, 0x2, 0x118, 0x11b, 0x3, 0x2, 0x2, 0x2, 0x119, 
-    0x117, 0x3, 0x2, 0x2, 0x2, 0x119, 0x11a, 0x3, 0x2, 0x2, 0x2, 0x11a, 
-    0x1d, 0x3, 0x2, 0x2, 0x2, 0x11b, 0x119, 0x3, 0x2, 0x2, 0x2, 0x11c, 0x11d, 
-    0x7, 0x19, 0x2, 0x2, 0x11d, 0x11e, 0x5, 0x1c, 0xf, 0x2, 0x11e, 0x11f, 
-    0x7, 0x1a, 0x2, 0x2, 0x11f, 0x12e, 0x3, 0x2, 0x2, 0x2, 0x120, 0x12e, 
-    0x7, 0x3f, 0x2, 0x2, 0x121, 0x12e, 0x5, 0x20, 0x11, 0x2, 0x122, 0x12e, 
-    0x7, 0x14, 0x2, 0x2, 0x123, 0x124, 0x7, 0xf, 0x2, 0x2, 0x124, 0x125, 
-    0x5, 0x1a, 0xe, 0x2, 0x125, 0x126, 0x5, 0x22, 0x12, 0x2, 0x126, 0x12e, 
-    0x3, 0x2, 0x2, 0x2, 0x127, 0x128, 0x7, 0xf, 0x2, 0x2, 0x128, 0x12b, 
-    0x5, 0x1a, 0xe, 0x2, 0x129, 0x12a, 0x7, 0x19, 0x2, 0x2, 0x12a, 0x12c, 
-    0x7, 0x1a, 0x2, 0x2, 0x12b, 0x129, 0x3, 0x2, 0x2, 0x2, 0x12b, 0x12c, 
-    0x3, 0x2, 0x2, 0x2, 0x12c, 0x12e, 0x3, 0x2, 0x2, 0x2, 0x12d, 0x11c, 
-    0x3, 0x2, 0x2, 0x2, 0x12d, 0x120, 0x3, 0x2, 0x2, 0x2, 0x12d, 0x121, 
-    0x3, 0x2, 0x2, 0x2, 0x12d, 0x122, 0x3, 0x2, 0x2, 0x2, 0x12d, 0x123, 
-    0x3, 0x2, 0x2, 0x2, 0x12d, 0x127, 0x3, 0x2, 0x2, 0x2, 0x12e, 0x1f, 0x3, 
-    0x2, 0x2, 0x2, 0x12f, 0x135, 0x7, 0x3c, 0x2, 0x2, 0x130, 0x135, 0x7, 
-    0x3e, 0x2, 0x2, 0x131, 0x135, 0x7, 0x3d, 0x2, 0x2, 0x132, 0x135, 0x7, 
-    0x11, 0x2, 0x2, 0x133, 0x135, 0x5, 0x22, 0x12, 0x2, 0x134, 0x12f, 0x3, 
-    0x2, 0x2, 0x2, 0x134, 0x130, 0x3, 0x2, 0x2, 0x2, 0x134, 0x131, 0x3, 
-    0x2, 0x2, 0x2, 0x134, 0x132, 0x3, 0x2, 0x2, 0x2, 0x134, 0x133, 0x3, 
-    0x2, 0x2, 0x2, 0x135, 0x21, 0x3, 0x2, 0x2, 0x2, 0x136, 0x137, 0x7, 0x1d, 
-    0x2, 0x2, 0x137, 0x14f, 0x7, 0x1e, 0x2, 0x2, 0x138, 0x139, 0x7, 0x1d, 
-    0x2, 0x2, 0x139, 0x13e, 0x5, 0x22, 0x12, 0x2, 0x13a, 0x13b, 0x7, 0x34, 
-    0x2, 0x2, 0x13b, 0x13d, 0x5, 0x22, 0x12, 0x2, 0x13c, 0x13a, 0x3, 0x2, 
-    0x2, 0x2, 0x13d, 0x140, 0x3, 0x2, 0x2, 0x2, 0x13e, 0x13c, 0x3, 0x2, 
-    0x2, 0x2, 0x13e, 0x13f, 0x3, 0x2, 0x2, 0x2, 0x13f, 0x141, 0x3, 0x2, 
-    0x2, 0x2, 0x140, 0x13e, 0x3, 0x2, 0x2, 0x2, 0x141, 0x142, 0x7, 0x1e, 
-    0x2, 0x2, 0x142, 0x14f, 0x3, 0x2, 0x2, 0x2, 0x143, 0x144, 0x7, 0x1d, 
-    0x2, 0x2, 0x144, 0x149, 0x5, 0x20, 0x11, 0x2, 0x145, 0x146, 0x7, 0x34, 
-    0x2, 0x2, 0x146, 0x148, 0x5, 0x20, 0x11, 0x2, 0x147, 0x145, 0x3, 0x2, 
-    0x2, 0x2, 0x148, 0x14b, 0x3, 0x2, 0x2, 0x2, 0x149, 0x147, 0x3, 0x2, 
-    0x2, 0x2, 0x149, 0x14a, 0x3, 0x2, 0x2, 0x2, 0x14a, 0x14c, 0x3, 0x2, 
-    0x2, 0x2, 0x14b, 0x149, 0x3, 0x2, 0x2, 0x2, 0x14c, 0x14d, 0x7, 0x1e, 
-    0x2, 0x2, 0x14d, 0x14f, 0x3, 0x2, 0x2, 0x2, 0x14e, 0x136, 0x3, 0x2, 
-    0x2, 0x2, 0x14e, 0x138, 0x3, 0x2, 0x2, 0x2, 0x14e, 0x143, 0x3, 0x2, 
-    0x2, 0x2, 0x14f, 0x23, 0x3, 0x2, 0x2, 0x2, 0x21, 0x27, 0x29, 0x30, 0x32, 
-    0x43, 0x45, 0x4f, 0x55, 0x59, 0x65, 0x6c, 0x70, 0x73, 0x81, 0x91, 0x98, 
-    0x9f, 0xa9, 0xc2, 0xc9, 0xd5, 0xde, 0x10f, 0x117, 0x119, 0x12b, 0x12d, 
-    0x134, 0x13e, 0x149, 0x14e, 
-  };
-
-  atn::ATNDeserializer deserializer;
-  _atn = deserializer.deserialize(_serializedATN);
-
-  size_t count = _atn.getNumberOfDecisions();
-  _decisionToDFA.reserve(count);
-  for (size_t i = 0; i < count; i++) { 
-    _decisionToDFA.emplace_back(_atn.getDecisionState(i), i);
-  }
+void MxParser::initialize() {
+#if ANTLR4_USE_THREAD_LOCAL_CACHE
+  mxParserInitialize();
+#else
+  ::antlr4::internal::call_once(mxParserOnceFlag, mxParserInitialize);
+#endif
 }
-
-MxParser::Initializer MxParser::_init;

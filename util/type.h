@@ -33,6 +33,9 @@ public:
 class Typename {
 public:
   const std::string name;
+  std::unordered_map<std::string, const Type &> member;
+  std::unordered_map<std::string, const Function &> func;
+
   Typename() = default;
   Typename(std::string _name) : name(_name) {
     if (name == "int") {
@@ -82,20 +85,20 @@ public:
     return func.count(name) != 0;
   };
 
-  std::pair<bool, const Type &> ask_member(const std::string &name) const {
+  const Type & ask_member(const std::string &name) const {
     auto it = member.find(name);
-    return it == member.end() ? std::pair{false, Type{}}
-                              : std::pair{true, it->second};
+    return it->second;
   }
-  std::pair<bool, const Function &> ask_function(const std::string &name) const ;
+  const Function & ask_function(const std::string &name) const {
+    auto it = func.find(name);
+    return it->second;
+  }
 
   bool operator==(const Typename &other) const { return name == other.name; };
   bool operator!=(const Typename &other) const { return name == other.name; };
 
 private:
   MyType type_info = MyType::Unknown;
-  std::unordered_map<std::string, const Type &> member;
-  std::unordered_map<std::string, const Function &> func;
 };
 
 std::shared_ptr<Typename> GetStringTypename();

@@ -51,7 +51,11 @@ class varPrimaryNode : public PrimaryNode {
 };
 class newPrimaryNode : public PrimaryNode {
  public:
-  enum class NewType : int { Unknown = 0, NewVar, NewArray, NewArrayLiteral };
+  enum class NewType : int { Unknown = 0, NewVar, NewArray };
+  NewType new_type=NewType::Unknown;
+  std::shared_ptr<TypeNode> type_name;
+  std::shared_ptr<ArrayNode> array=nullptr;
+
   newPrimaryNode() = delete;
   newPrimaryNode(position pos, std::shared_ptr<TypeNode> _type_name)
       : PrimaryNode(std::move(pos)), new_type(NewType::NewVar), type_name(std::move(_type_name)) {
@@ -60,18 +64,13 @@ class newPrimaryNode : public PrimaryNode {
   }
   newPrimaryNode(position pos, std::shared_ptr<TypeNode> _type_name, std::shared_ptr<ArrayNode> _array)
       : PrimaryNode(std::move(pos)),
-        new_type(NewType::NewArrayLiteral),
+        new_type(NewType::NewArray),
         type_name(std::move(_type_name)),
         array(std::move(_array)) {
     isnull = false;
     assignable = false;
   }
   void accept(ASTVisitor *visitor) final { visitor->visit(this); }
-
- private:
-  NewType new_type=NewType::Unknown;
-  std::shared_ptr<TypeNode> type_name;
-  std::shared_ptr<ArrayNode> array=nullptr;
 };
 class constPrimaryNode : public PrimaryNode {
  public:

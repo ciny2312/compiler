@@ -3,7 +3,7 @@
 #include "AST/ASTVisitor.h"
 #include "AST/DefNode/varDefNode.h"
 #include "DefNode.h"
-#include "../StmtNode/classStmtNode.h"
+#include "../StmtNode/constructorStmtNode.h"
 #include "../../util/position.h"
 #include "vector"
 #include <memory>

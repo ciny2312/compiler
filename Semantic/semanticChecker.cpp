@@ -1,5 +1,5 @@
-#include "collecters.h"
 #include "semanticChecker.h"
+#include "collecters.h"
 #include "util/error.h"
 
 #include "../AST/ArrayNode.h"
@@ -24,7 +24,7 @@
 #include "../AST/ExprNode/threeExprNode.h"
 
 #include "../AST/StmtNode/StmtNode.h"
-#include "../AST/StmtNode/classStmtNode.h"
+#include "../AST/StmtNode/constructorStmtNode.h"
 #include "../AST/StmtNode/emptyStmtNode.h"
 #include "../AST/StmtNode/exprStmtNode.h"
 #include "../AST/StmtNode/forStmtNode.h"
@@ -438,7 +438,6 @@ void semanticChecker::visit(arrayAccessExprNode *node) {
   node->updata_null(false);
 }
 
-
 void semanticChecker::visit(emptyStmtNode *node) {}
 
 void semanticChecker::visit(suiteStmtNode *node) {
@@ -466,7 +465,7 @@ void semanticChecker::visit(ifStmtNode *node) {
 }
 
 void semanticChecker::visit(exprStmtNode *node) {
-  for(auto it :node->expr){
+  for (auto it : node->expr) {
     it->accept(this);
   }
 }
@@ -489,8 +488,10 @@ void semanticChecker::visit(varDefStmtNode *node) {
 }
 
 void semanticChecker::visit(varDefNode *node) {
-  auto type_name= node->type_name->name;
-  auto dim=node->type_name->dim;
+  node->type_name->accept(this);
+
+  auto type_name = node->type_name->name;
+  auto dim = node->type_name->dim;
   if (type_name == "void") {
     throw invalid_type(node->pos);
   }
@@ -517,6 +518,8 @@ void semanticChecker::visit(varDefNode *node) {
 }
 
 void semanticChecker::visit(funcDefNode *node) {
+  node->return_type->accept(this);
+
   auto &func_name = node->func_name;
   if (!global_scope.is_function(func_name)) {
     throw std::runtime_error("Unidentified function name");
@@ -529,7 +532,11 @@ void semanticChecker::visit(funcDefNode *node) {
     main_func = true;
   }
   for (const auto &arg : node->arguments) {
-    auto &[arg_type, arg_name] = arg;
+    auto arg_type = arg.first;
+    auto arg_name = arg.second;
+
+    arg_type.accept(this);
+
     if (!global_scope.is_type(arg_type.name)) {
       throw std::runtime_error("Unidentified arg type");
     }
@@ -605,165 +612,137 @@ void semanticChecker::visit(RootNode *node) {
     def->accept(this);
   }
 }
-/*
+
 void semanticChecker::visit(classDefNode *node) {
-  auto &type_name = node->GetClassName();
-  auto type = global_scope.get_type(type_name);
-  if (type == std::nullopt) {
+  auto &type_name = node->name;
+  if (!global_scope.is_type(type_name)) {
     throw std::runtime_error("Unidentified class name");
   }
-  current_class_ = std::move(type.value());
+  auto type = global_scope.ask_type(type_name);
+  current_class = std::move(type);
+
   scope = {std::make_unique<Scope>(std::move(scope))};
-  scope.DefineVar("this", CreateType(current_class_, 0), node->pos);
-  for (const auto &member : current_class_->GetMembers()) {
-    scope.DefineVar(member.first, *member.second, node->pos);
+  scope.define_var("this", Type(current_class, 0), node->pos);
+
+  for (const auto &member : current_class->member) {
+    scope.define_var(member.first, member.second, node->pos);
   }
-  for (auto &stmt : node->GetClassStmt()) {
-    stmt->accept(this);
+  for (auto &it : node->consDef) {
+    it->accept(this);
+  }
+  for (auto &it : node->funcDef) {
+    it->accept(this);
+  }
+  for (auto &it : node->varDef) {
+    it->accept(this);
   }
   scope = std::move(*scope.ask_parent());
-  current_class_ = nullptr;
+  current_class = nullptr;
 }
 
-void semanticChecker::visit(VarDefClassStmtNode *node) {}
-
-void semanticChecker::visit(ConstructorClassStmtNode *node) {
-  return_type = std::make_shared<Type>(kVoidType);
-  node->GetFunctionBody()->accept(this);
+void semanticChecker::visit(constructorClassStmtNode *node) {
+  return_type = std::make_shared<Type>(VoidType);
+  node->ask_func()->accept(this);
   return_type = nullptr;
 }
-
-void semanticChecker::visit(FunctionDefClassStmtNode *node) {
-  scope = {std::make_unique<Scope>(std::move(scope))};
-  auto func = current_class_->GetFunction(node->GetFuncName());
-  if (func == std::nullopt) {
-    throw std::runtime_error("Unidentified method name");
+void semanticChecker::visit(TypeNode *node) {
+  for (auto it : node->arraySize) {
+    it->accept(this);
+    if (*it->get_type() != IntType)
+      throw invalid_type(node->pos);
   }
-  is_return = false;
-  for (auto &it : node->GetArguments()) {
-    auto &[type_name, var_name] = it;
-    auto type_opt = global_scope.get_type(type_name.first);
-    if (type_opt == std::nullopt) {
-      throw std::runtime_error("Invalid arg type");
-    }
-    auto type = CreateType(std::move(type_opt.value()), type_name.second);
-    scope.DefineVar(var_name, std::move(type), node->pos);
-  }
-  return_type = std::make_shared<Type>(func->GetReturnType());
-  node->GetFunctionBody()->accept(this);
-  if (*return_type != kVoidType && !is_return) {
-    throw NoReturn(node->pos);
-  }
-  scope = std::move(*scope.ask_parent());
 }
-
 void semanticChecker::visit(newPrimaryNode *node) {
-  auto &type_name = node->typename;
-  auto type = global_scope.get_type(type_name);
-  if (type == std::nullopt) {
+  node->type_name->accept(this);
+
+  auto &type_name = node->type_name->name;
+  if (!global_scope.is_type(type_name)) {
     throw undefined_identifier(node->pos);
   }
-  if (*type.value() == *kVoidTypename) {
+  auto type = global_scope.ask_type(type_name);
+  if (*type == *VoidTypename) {
     throw invalid_type(node->pos);
   }
-  switch (node->GetNewType()) {
-  case NewPrimaryNode::NewType::kNewVar: {
-    node->updata_type(
-        std::make_shared<Type>(CreateType(std::move(type.value()))));
+
+  switch (node->new_type) {
+  case newPrimaryNode::NewType::NewVar: {
+    node->updata_type(std::make_shared<Type>(Type(std::move(type))));
     break;
   }
-  case NewPrimaryNode::NewType::kNewArray: {
-    auto &expr = node->GetExpressions();
-    for (const auto &it : expr) {
-      it->accept(this);
-      if (*it->get_type() != kIntType) {
-        throw invalid_type(node->pos);
-      }
-    }
-    node->updata_type(
-        std::make_shared<Type>(CreateType(std::move(type.value()), node->dim)));
-    break;
-  }
-  case NewPrimaryNode::NewType::kNewArrayLiteral: {
-    auto &array = node->GetArrayLiteral();
+  case newPrimaryNode::NewType::NewArray: {
+    auto &array = node->array;
     array->accept(this);
-    auto node_type = CreateType(std::move(type.value()), node->dim);
-    if (node_type != *array->get_type()) {
+    auto node_type = Type(std::move(type), node->type_name->dim);
+    if (node_type != *array->ask_type()) {
       throw type_wrong({node->pos});
     }
     node->updata_type(std::make_shared<Type>(std::move(node_type)));
     break;
   }
-  case NewPrimaryNode::NewType::kUnknown: {
+  case newPrimaryNode::NewType::Unknown: {
     throw std::runtime_error("Invalid new type");
   }
   }
 }
 
 void semanticChecker::visit(functionCallExprNode *node) {
-  auto &base = node->GetBaseExpr();
-  auto &func_name = node->GetFuncName();
-  auto &arguments = node->GetArguments();
+  auto &base = node->classname;
+  auto &func_name = node->name;
+  auto &arguments = node->arguments;
   std::shared_ptr<Function> func(nullptr);
   if (base != nullptr) {
     base->accept(this);
-    auto &base_type = base->get_type();
+    auto base_type = base->get_type();
     if (base_type == nullptr) {
       throw invalid_type(node->pos);
     }
     if (base_type->dim > 0) {
       if (func_name == "size" && arguments.empty()) {
-        node->updata_type(std::make_shared<Type>(kIntType));
+        node->updata_type(std::make_shared<Type>(IntType));
         node->updata_assignable(false);
         node->updata_null(false);
         return;
       }
       throw invalid_type(node->pos);
     }
-    auto func_opt = base_type->typename->GetFunction(func_name);
-    if (func_opt == std::nullopt) {
+    if (!base_type->type_name->is_function(func_name)) {
       throw invalid_class_member(node->pos);
     }
-    if (func_opt.value().GetReturnType().typename == nullptr) {
+    auto func_opt = base_type->type_name->ask_function(func_name);
+    if (func_opt.return_type.type_name == nullptr) {
       assert(false);
     }
-    func = std::make_shared<Function>(std::move(func_opt.value()));
+    func = std::make_shared<Function>(std::move(func_opt));
   } else {
-    auto func_opt = global_scope.GetFunction(func_name);
-    if (func_opt != std::nullopt) {
-      func = std::make_shared<Function>(std::move(func_opt.value()));
+    if (!global_scope.is_function(func_name)) {
+      func = std::make_shared<Function>(
+          std::move(global_scope.ask_function(func_name)));
     }
-    if (current_class_ != nullptr) {
-      auto method_opt = current_class_->GetFunction(func_name);
-      if (method_opt != std::nullopt) {
-        func = std::make_shared<Function>(std::move(method_opt.value()));
+    if (current_class != nullptr) {
+      if (!current_class->is_function(func_name)) {
+        func = std::make_shared<Function>(
+            std::move(current_class->ask_function(func_name)));
       }
     }
     if (func == nullptr) {
       throw undefined_identifier(node->pos);
     }
   }
-  if (arguments.size() != func->GetArgNum()) {
-    throw InvalidArgs(node->pos);
+  if (arguments.size() != func->arguments.size()) {
+    throw argument_wrong(node->pos);
   }
-  auto func_args = func->GetArguments();
+  auto func_args = func->arguments;
   for (int i = 0; i < arguments.size(); ++i) {
     arguments[i]->accept(this);
     auto type = arguments[i]->get_type();
     if (type == nullptr &&
-            (func_args[i] == kIntType || func_args[i] == kBoolType) ||
+            (func_args[i] == IntType || func_args[i] == BoolType) ||
         type != nullptr && *type != func_args[i]) {
-#ifndef OJ
-      throw InvalidArgs(node->pos);
-#else
-      throw type_wrong(node->pos);
-#endif
+      throw argument_wrong(node->pos);
     }
   }
-  node->updata_type(std::make_shared<Type>(func->GetReturnType()));
+  node->updata_type(std::make_shared<Type>(func->return_type));
   node->updata_assignable(false);
   node->updata_null(false);
-  assert(node->get_type()->typename != nullptr);
+  assert(node->get_type()->type_name != nullptr);
 }
-
-*/
