@@ -17,6 +17,7 @@ class oneExprNode;
 class constPrimaryNode;
 class newPrimaryNode;
 class thisPrimaryNode;
+class parenPrimaryNode;
 class varPrimaryNode;
 class controlStmtNode;
 class exprStmtNode;
@@ -51,6 +52,7 @@ class ASTVisitor {
   virtual void visit(constPrimaryNode *node) = 0;
   virtual void visit(newPrimaryNode *node) = 0;
   virtual void visit(thisPrimaryNode *node) = 0;
+  virtual void visit(parenPrimaryNode *node) = 0;
   virtual void visit(varPrimaryNode *node) = 0;
   virtual void visit(controlStmtNode *node) = 0;
   virtual void visit(exprStmtNode *node) = 0;

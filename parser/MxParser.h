@@ -248,6 +248,15 @@ public:
     virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
 
+  class  BlockStmtContext : public StatementContext {
+  public:
+    BlockStmtContext(StatementContext *ctx);
+
+    SuiteContext *suite();
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
   class  EmptyExprStmtContext : public StatementContext {
   public:
     EmptyExprStmtContext(StatementContext *ctx);
@@ -263,15 +272,6 @@ public:
 
     antlr4::tree::TerminalNode *Break();
     antlr4::tree::TerminalNode *Semi();
-
-    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-  };
-
-  class  BlockContext : public StatementContext {
-  public:
-    BlockContext(StatementContext *ctx);
-
-    SuiteContext *suite();
 
     virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
@@ -374,17 +374,17 @@ public:
 
   class  ForstmtContext : public antlr4::ParserRuleContext {
   public:
-    MxParser::ExpressionContext *initializeStmt = nullptr;
-    MxParser::ExpressionContext *condiStmt = nullptr;
-    MxParser::ExpressionContext *stepStmt = nullptr;
+    MxParser::StatementContext *initializeStmt = nullptr;
+    MxParser::ExpressionContext *condiExpr = nullptr;
+    MxParser::ExpressionContext *stepExpr = nullptr;
     ForstmtContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *For();
     antlr4::tree::TerminalNode *LeftParen();
-    std::vector<antlr4::tree::TerminalNode *> Semi();
-    antlr4::tree::TerminalNode* Semi(size_t i);
+    antlr4::tree::TerminalNode *Semi();
     antlr4::tree::TerminalNode *RightParen();
-    StatementContext *statement();
+    std::vector<StatementContext *> statement();
+    StatementContext* statement(size_t i);
     std::vector<ExpressionContext *> expression();
     ExpressionContext* expression(size_t i);
 
@@ -397,6 +397,7 @@ public:
 
   class  TypeContext : public antlr4::ParserRuleContext {
   public:
+    MxParser::ExpressionContext *size_after_empty = nullptr;
     TypeContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *Int();

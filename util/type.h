@@ -95,7 +95,7 @@ public:
   }
 
   bool operator==(const Typename &other) const { return name == other.name; };
-  bool operator!=(const Typename &other) const { return name == other.name; };
+  bool operator!=(const Typename &other) const { return name != other.name; };
 
 private:
   MyType type_info = MyType::Unknown;

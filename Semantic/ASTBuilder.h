@@ -18,7 +18,7 @@ public:
 
   std::any visitSuite(MxParser::SuiteContext *ctx) override ;
 
-  std::any visitBlock(MxParser::BlockContext *ctx) override ;
+  std::any visitBlockStmt(MxParser::BlockStmtContext *ctx) override ;
 
   std::any visitVardefStmt(MxParser::VardefStmtContext *ctx) override ;
 

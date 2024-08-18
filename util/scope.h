@@ -37,20 +37,20 @@ public:
   void add_type(std::string name, std::shared_ptr<Typename> ty,
                 const position &pos) {
     if (func.contains(name)) {
-      throw multiple_def(pos);
+      throw semanticError("Multiple Definitions",pos);
     }
     auto result = type.emplace(std::move(name), std::move(ty)).second;
     if (!result) {
-      throw multiple_def(pos);
+      throw semanticError("Multiple Definitions",pos);
     }
   };
   void add_function(std::string name, Function function, const position &pos) {
     if (type.contains(name)) {
-      throw multiple_def(pos);
+      throw semanticError("Multiple Definitions",pos);
     }
     auto result = func.emplace(std::move(name), std::move(function)).second;
     if (!result) {
-      throw multiple_def(pos);
+      throw semanticError("Multiple Definitions",pos);
     }
   };
 
@@ -89,10 +89,16 @@ public:
   void define_var(std::string name, Type type, const position &pos) {
     auto result = local.emplace(std::move(name), std::move(type)).second;
     if (!result) {
-      throw multiple_def(pos);
+      throw semanticError("Multiple Definitions",pos);
     }
   };
-  bool is_var(const std::string &name) const { return local.count(name) != 0; };
+  bool is_var(const std::string &name) const {
+    if (local.count(name) != 0) {
+      return true;
+    }
+    if(parent==nullptr) return false;
+    return parent->is_var(name);
+  };
   Type ask_var(const std::string &name) const {
     auto it = local.find(name);
     if (it != local.end()) {

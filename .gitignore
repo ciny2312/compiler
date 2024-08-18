@@ -1,4 +1,7 @@
 .vscode/
+.antlr/
 Compiler-Design*/
 build/
 .cache/
+a.g4
+a.txt

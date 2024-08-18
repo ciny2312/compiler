@@ -22,7 +22,7 @@ consDef: Identifier '(' ')' suite;
 
 suite: '{' statement* '}';
 statement:
-	suite						# block
+	suite						# blockStmt
 	| varDef					# vardefStmt
 	| ifstmt					# ifStmt
 	| whilestmt					# whileStmt
@@ -40,12 +40,10 @@ ifstmt:
 	)?;
 whilestmt: While '(' expression ')' statement;
 forstmt:
-	For '(' initializeStmt = expression ';' condiStmt = expression ';' stepStmt = expression ')'
+	For '(' initializeStmt = statement condiExpr = expression? ';' stepExpr = expression? ')'
 		statement;
 
-type: (Int | String | Bool | Void | Identifier) (
-		'[' expression ']'
-	)* ('[' ']')*;
+type: (Int | String | Bool | Void | Identifier) ('[' expression ']')* ('[' ']')*('[' size_after_empty=expression ']')*;
 
 FormatString1:
 	'f"' ('\\n' | '\\\\' | '\\"' | '$$' | [ !#%-[\]-~])* '"';
@@ -61,6 +59,10 @@ expression:
 	| FormatString1															# formatExpr
 	| FormatString2 expression (FormatString3 expression)* FormatString4	# formatExpr
 	| <assoc = right> expression (SelfPlus | SelfMinus)						# oneExpr
+	| name = Identifier '(' exprlist? ')'									# usefunc
+	| classname = expression '.' name = Identifier '(' exprlist? ')'		# usefunc
+	| expression '[' expression ']'											# arrayAccessExpr
+	| expression '.' Identifier												# pointExpr
 	| <assoc = right> (SelfPlus | SelfMinus) expression						# oneExpr
 	| <assoc = right> ('!' | '~' | '-') expression							# oneExpr
 	| expression op = ('*' | '/' | '%') expression							# binaryExpr
@@ -74,11 +76,7 @@ expression:
 	| expression op = '&&' expression										# logicExpr
 	| expression op = '||' expression										# logicExpr
 	| <assoc = right> expression '?' expression ':' expression				# threeExpr
-	| <assoc = right> expression '=' expression								# assignExpr
-	| expression '.' Identifier												# pointExpr
-	| name = Identifier '(' exprlist? ')'									# usefunc
-	| classname = expression '.' name = Identifier '(' exprlist? ')'		# usefunc
-	| expression '[' expression ']'											# arrayAccessExpr;
+	| <assoc = right> expression '=' expression								# assignExpr;
 
 primary:
 	'(' expression ')'		# parenPrimary

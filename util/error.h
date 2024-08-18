@@ -4,9 +4,6 @@
 
 #include "util/position.h"
 
-/**
- * A class used to regulate and report errors in Mx Compiler.
- */
 class compilerError : public std::exception {
  public:
   compilerError() = delete;
@@ -30,7 +27,7 @@ class semanticError : public compilerError {
  public:
   semanticError() = delete;
   semanticError(const std::string &error_detail, const position &pos)
-      : compilerError("Semantic Error", error_detail, pos) {}
+      : compilerError("Semantic Error",std::move(error_detail), std::move(pos)) {}
 };
 
 class type_wrong : public semanticError {
@@ -42,19 +39,19 @@ class type_wrong : public semanticError {
 class dim_wrong : public semanticError {
  public:
   dim_wrong() = delete;
-  dim_wrong(const position &pos) : semanticError("Dimension Out Of Bound", pos) {}
+  dim_wrong(const position &pos) : semanticError("Dim Wrong", pos) {}
 };
 
 class argument_wrong : public semanticError {
  public:
   argument_wrong() = delete;
-  argument_wrong(const position &pos) : semanticError("Invalid Function Argument", pos) {}
+  argument_wrong(const position &pos) : semanticError("Argument Wrong", pos) {}
 };
 
 class flow_wrong : public semanticError {
  public:
   flow_wrong() = delete;
-  flow_wrong(const position &pos) : semanticError("Invalid Control Flow", pos) {}
+  flow_wrong(const position &pos) : semanticError("Constrol Flow Wrong", pos) {}
 };
 
 class multiple_def : public semanticError {
@@ -84,19 +81,19 @@ class invalid_contructor : public semanticError {
 class assign_disassign : public semanticError {
  public:
   assign_disassign() = delete;
-  assign_disassign(const position &pos) : semanticError("Value Is Not Assignable", pos) {}
+  assign_disassign(const position &pos) : semanticError("Assign Wrong Value", pos) {}
 };
 
 class miss_return : public semanticError {
  public:
   miss_return() = delete;
-  miss_return(const position &pos) : semanticError("Missing Return Statement", pos) {}
+  miss_return(const position &pos) : semanticError("No Return", pos) {}
 };
 
 class invalid_class_member : public semanticError {
  public:
   invalid_class_member() = delete;
-  invalid_class_member(const position &pos) : semanticError("Class Member/Method Is Invalid", pos) {}
+  invalid_class_member(const position &pos) : semanticError("Invalid Class Member", pos) {}
 };
 
 class unknown_error : public semanticError {

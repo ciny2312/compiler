@@ -30,12 +30,12 @@ public:
   std::shared_ptr<ExprNode> lhs, rhs;
   OpType opCode;
 
-  binaryExprNode(position pos, OpType opCode, std::shared_ptr<ExprNode> lhs,
-                 std::shared_ptr<ExprNode> rhs)
+  binaryExprNode(position pos, OpType _opCode, std::shared_ptr<ExprNode> _lhs,
+                 std::shared_ptr<ExprNode> _rhs)
       : ExprNode(std::move(pos)) {
-    lhs = std::move(lhs);
-    rhs = std::move(rhs);
-    opCode = opCode;
+    lhs = std::move(_lhs);
+    rhs = std::move(_rhs);
+    opCode = _opCode;
   }
 
   void accept(ASTVisitor *visitor) { visitor->visit(this); }

@@ -11,10 +11,10 @@ class ifStmtNode:public StmtNode {
     std::shared_ptr<ExprNode> condition;
     std::shared_ptr<StmtNode> thenStmt, elseStmt;
     
-    ifStmtNode(position pos,std::shared_ptr<ExprNode> condition, std::shared_ptr<StmtNode> thenStmt, std::shared_ptr<StmtNode> elseStmt):StmtNode(pos) {
-        condition = std::move(condition);
-        thenStmt = std::move(thenStmt);
-        elseStmt = std::move(elseStmt);
+    ifStmtNode(position pos,std::shared_ptr<ExprNode> _condition, std::shared_ptr<StmtNode> _thenStmt, std::shared_ptr<StmtNode> _elseStmt):StmtNode(pos) {
+        condition = std::move(_condition);
+        thenStmt = std::move(_thenStmt);
+        elseStmt = std::move(_elseStmt);
     }
 
     void accept(ASTVisitor* visitor) {

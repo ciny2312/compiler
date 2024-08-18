@@ -14,9 +14,9 @@ public:
 
   controlStmtNode(position pos,StmtType t)
       : StmtNode(std::move(pos)), stmt_type(t) {}
-  controlStmtNode(position pos, StmtType t,std::shared_ptr<ExprNode> value)
+  controlStmtNode(position pos, StmtType t,std::shared_ptr<ExprNode> _value)
       : StmtNode(std::move(pos)), stmt_type(t) {
-    value = std::move(value);
+    value = std::move(_value);
   }
   void accept(ASTVisitor *visitor) { visitor->visit(this); }
 };

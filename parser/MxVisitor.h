@@ -33,7 +33,7 @@ public:
 
     virtual std::any visitSuite(MxParser::SuiteContext *context) = 0;
 
-    virtual std::any visitBlock(MxParser::BlockContext *context) = 0;
+    virtual std::any visitBlockStmt(MxParser::BlockStmtContext *context) = 0;
 
     virtual std::any visitVardefStmt(MxParser::VardefStmtContext *context) = 0;
 

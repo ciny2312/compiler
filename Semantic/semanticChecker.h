@@ -3,7 +3,7 @@
 #include "AST/ASTVisitor.h"
 #include "util/scope.h"
 
-void CheckSemantic(RootNode *node);
+void check_semantic(RootNode *node);
 
 class semanticChecker : public ASTVisitor {
 public:
@@ -31,6 +31,7 @@ private:
   void visit(constPrimaryNode *node) final ;
   void visit(newPrimaryNode *node) final ;
   void visit(thisPrimaryNode *node) final ;
+  void visit(parenPrimaryNode *node) final ;
   void visit(varPrimaryNode *node) final ;
 
   void visit(controlStmtNode *node) final ;

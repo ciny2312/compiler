@@ -10,7 +10,7 @@ class functionCallExprNode : public ExprNode {
   std::vector<std::shared_ptr<ExprNode>> arguments;
 
   functionCallExprNode() = delete;
-  functionCallExprNode(position pos,std::shared_ptr<ExprNode> _classname, const std::string _name, std::vector<std::shared_ptr<ExprNode>> arguments)
-      : ExprNode(std::move(pos)),classname(_classname), name(std::move(_name)), arguments(std::move(arguments)) {}
+  functionCallExprNode(position pos,std::shared_ptr<ExprNode> _classname, const std::string _name, std::vector<std::shared_ptr<ExprNode>> _arguments)
+      : ExprNode(std::move(pos)),classname(_classname), name(std::move(_name)), arguments(std::move(_arguments)) {}
   void accept(ASTVisitor *visitor) final { visitor->visit(this); }
 };

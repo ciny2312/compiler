@@ -12,8 +12,8 @@ class TypeNode : public ASTNode {
 	std::vector<std::shared_ptr<ExprNode> > arraySize;
     
     TypeNode(position pos,std::string _name,int _dim,std::vector<std::shared_ptr<ExprNode> > _arraysize)
-    :ASTNode(std::move(pos)), name(std::move(_name)),arraySize(std::move(_arraysize)){}
+    :ASTNode(std::move(pos)), name(std::move(_name)),dim(_dim),arraySize(std::move(_arraysize)){}
     TypeNode(position pos,std::string _name,int _dim)
-    :ASTNode(std::move(pos)), name(std::move(_name)),arraySize({}){}
+    :ASTNode(std::move(pos)), name(std::move(_name)),dim(_dim),arraySize({}){}
 	void accept(ASTVisitor *visitor) override { return visitor->visit(this); }
 };

@@ -43,7 +43,7 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual std::any visitBlock(MxParser::BlockContext *ctx) override {
+  virtual std::any visitBlockStmt(MxParser::BlockStmtContext *ctx) override {
     return visitChildren(ctx);
   }
 

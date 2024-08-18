@@ -40,6 +40,7 @@ private:
   void visit(constPrimaryNode *node) final {}
   void visit(newPrimaryNode *node) final {}
   void visit(thisPrimaryNode *node) final {}
+  void visit(parenPrimaryNode *node) final {}
   void visit(varPrimaryNode *node) final {}
   void visit(controlStmtNode *node) final {}
   void visit(exprStmtNode *node) final {}
@@ -98,16 +99,16 @@ private:
   void get_class_func(std::shared_ptr<funcDefNode> node) {
     auto &name = node->func_name;
     if (name == current_class->name) {
-      throw invalid_contructor(node->pos);
+      throw semanticError("Invalid Class Constructor",node->pos);
     }
     if (current_class->is_function(name)) {
-      throw multiple_def(node->pos);
+      throw semanticError("Multiple Definitions",node->pos);
     }
     auto return_name=node->return_type->name;
     auto return_dim=node->return_type->dim;
 
     if (!global_scope.is_type(return_name)) {
-      throw invalid_type(node->pos);
+      throw semanticError("Invalid Type",node->pos);
     }
     auto return_typename = global_scope.ask_type(return_name);
     auto return_type =Type(std::move(return_typename), return_dim);
@@ -117,7 +118,7 @@ private:
       auto arg_name = it.first.name;
       auto arg_dim = it.first.dim;
       if (!global_scope.is_type(arg_name)) {
-        throw invalid_type(node->pos);
+        throw semanticError("Invalid Type",node->pos);
       }
       auto arg_typename = global_scope.ask_type(arg_name);
       auto arg_type =Type(std::move(arg_typename), arg_dim);
@@ -131,14 +132,14 @@ private:
     auto type_str= node->type_name->name;
     auto dim=node->type_name->dim;
     if (!global_scope.is_type(type_str)) {
-      throw invalid_type(node->pos);
+      throw semanticError("Invalid Type",node->pos);
     }
     auto type_name = global_scope.ask_type(type_str);
     auto type = Type(std::move(type_name), dim);
     auto &var_name = node->var_name;
     for (const auto &it : var_name) {
       if (current_class->is_member(it)) {
-        throw multiple_def({node->pos});
+        throw semanticError("Invalid Type",node->pos);
       }
       current_class->add_member(it, type);
     }
@@ -148,7 +149,7 @@ private:
     auto ret_name = node->return_type->name;
     auto dim = node->return_type->dim;
     if (!global_scope.is_type(ret_name)) {
-      throw undefined_identifier(node->pos);
+      throw semanticError("Undefined Identifier",node->pos);
     }
     auto return_typename = global_scope.ask_type(ret_name);
     auto return_type = Type(std::move(return_typename), dim);
@@ -157,7 +158,7 @@ private:
       auto arg_name = it.first.name;
       auto arg_dim = it.first.dim;
       if (!global_scope.is_type(arg_name)) {
-        throw undefined_identifier(node->pos);
+        throw semanticError("Undefined Identifier",node->pos);
       }
       auto arg_typename = global_scope.ask_type(arg_name);
       auto arg_type = Type(std::move(arg_typename), arg_dim);
@@ -165,7 +166,7 @@ private:
     }
     Function func(std::move(return_type), std::move(args));
     if (scope.is_var(func_name)) {
-      throw multiple_def(node->pos);
+      throw semanticError("Multiple Definitions",node->pos);
     }
     global_scope.add_function(func_name, func, {node->pos});
   }
@@ -182,6 +183,7 @@ private:
   void visit(constPrimaryNode *node) final {}
   void visit(newPrimaryNode *node) final {}
   void visit(thisPrimaryNode *node) final {}
+  void visit(parenPrimaryNode *node) final {}
   void visit(varPrimaryNode *node) final {}
   void visit(controlStmtNode *node) final {}
   void visit(exprStmtNode *node) final {}
@@ -194,10 +196,10 @@ private:
   void visit(constructorClassStmtNode *node) final {
     auto &name = node->type;
     if (name != current_class->name) {
-      throw invalid_contructor(node->pos);
+      throw semanticError("Invalid Class Constructor",node->pos);
     }
     if (current_class->is_function(name)) {
-      throw multiple_def(node->pos);
+      throw semanticError("Multiple Definitions",node->pos);
     }
     Function constructor(VoidType, {});
     current_class->add_function(name, std::move(constructor));

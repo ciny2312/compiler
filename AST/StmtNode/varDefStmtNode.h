@@ -10,9 +10,9 @@
 
 class varDefStmtNode :public StmtNode {
     public:
-    std::shared_ptr<DefNode> var_def;
+    std::shared_ptr<varDefNode> var_def;
 
-    varDefStmtNode(position pos,std::shared_ptr<DefNode> _var_def)
+    varDefStmtNode(position pos,std::shared_ptr<varDefNode> _var_def)
     :StmtNode(std::move(pos)),var_def(std::move(_var_def)) {}
 
     void accept(ASTVisitor *visitor) {

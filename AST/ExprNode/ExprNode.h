@@ -10,7 +10,6 @@ class ExprNode: public ASTNode {
     public:
     bool assignable=false,isnull=false;
     ExprNode(position _pos):ASTNode(std::move(_pos)) {
-        //super(pos);
     }
     void updata_type(std::shared_ptr<Type> t){
         type=std::move(t);
