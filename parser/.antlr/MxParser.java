@@ -1136,7 +1136,8 @@ public class MxParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class TypeContext extends ParserRuleContext {
-		public ExpressionContext size_after_empty;
+		public ExpressionContext expression;
+		public List<ExpressionContext> size_after_empty = new ArrayList<ExpressionContext>();
 		public TerminalNode Int() { return getToken(MxParser.Int, 0); }
 		public TerminalNode String() { return getToken(MxParser.String, 0); }
 		public TerminalNode Bool() { return getToken(MxParser.Bool, 0); }
@@ -1228,7 +1229,8 @@ public class MxParser extends Parser {
 					setState(205);
 					match(LeftBracket);
 					setState(206);
-					((TypeContext)_localctx).size_after_empty = expression(0);
+					((TypeContext)_localctx).expression = expression(0);
+					((TypeContext)_localctx).size_after_empty.add(((TypeContext)_localctx).expression);
 					setState(207);
 					match(RightBracket);
 					}

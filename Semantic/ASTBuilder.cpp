@@ -38,6 +38,7 @@
 #include "../AST/StmtNode/suiteStmtNode.h"
 #include "../AST/StmtNode/varDefStmtNode.h"
 #include "../AST/StmtNode/whileStmtNode.h"
+#include "util/error.h"
 
 std::any ASTBuilder::visitProgram(MxParser::ProgramContext *ctx) {
   std::cerr << "start visitProgram\n";
@@ -609,6 +610,8 @@ std::any ASTBuilder::visitArray(MxParser::ArrayContext *ctx) {
 
 std::any ASTBuilder::visitType(MxParser::TypeContext *ctx) {
   std::cerr << "start visitType\n";
+  if (!ctx->size_after_empty.empty())
+		throw semanticError("Invaild Array Size Init",ctx);
   std::string identifier;
   auto iden = ctx->Identifier();
   if (iden) {

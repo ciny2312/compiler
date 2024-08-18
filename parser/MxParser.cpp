@@ -1802,7 +1802,8 @@ MxParser::TypeContext* MxParser::type() {
         setState(205);
         match(MxParser::LeftBracket);
         setState(206);
-        antlrcpp::downCast<TypeContext *>(_localctx)->size_after_empty = expression(0);
+        antlrcpp::downCast<TypeContext *>(_localctx)->expressionContext = expression(0);
+        antlrcpp::downCast<TypeContext *>(_localctx)->size_after_empty.push_back(antlrcpp::downCast<TypeContext *>(_localctx)->expressionContext);
         setState(207);
         match(MxParser::RightBracket); 
       }

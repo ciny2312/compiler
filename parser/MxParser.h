@@ -397,7 +397,8 @@ public:
 
   class  TypeContext : public antlr4::ParserRuleContext {
   public:
-    MxParser::ExpressionContext *size_after_empty = nullptr;
+    MxParser::ExpressionContext *expressionContext = nullptr;
+    std::vector<ExpressionContext *> size_after_empty;
     TypeContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *Int();

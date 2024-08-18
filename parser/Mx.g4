@@ -43,7 +43,7 @@ forstmt:
 	For '(' initializeStmt = statement condiExpr = expression? ';' stepExpr = expression? ')'
 		statement;
 
-type: (Int | String | Bool | Void | Identifier) ('[' expression ']')* ('[' ']')*('[' size_after_empty=expression ']')*;
+type: (Int | String | Bool | Void | Identifier) ('[' expression ']')* ('[' ']')*('[' size_after_empty+=expression ']')*;
 
 FormatString1:
 	'f"' ('\\n' | '\\\\' | '\\"' | '$$' | [ !#%-[\]-~])* '"';
