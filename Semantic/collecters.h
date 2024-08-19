@@ -111,21 +111,23 @@ private:
       throw semanticError("Invalid Type",node->pos);
     }
     auto return_typename = global_scope.ask_type(return_name);
-    auto return_type =Type(std::move(return_typename), return_dim);
+    auto return_type =std::make_shared<Type>(std::move(return_typename), return_dim);
     auto &args = node->arguments;
-    std::vector<Type> ret_args;
+    std::vector<std::shared_ptr<Type> > ret_args;
     for (const auto &it : args) {
-      auto arg_name = it.first.name;
-      auto arg_dim = it.first.dim;
+      auto arg_name = it.first->name;
+      auto arg_dim = it.first->dim;
       if (!global_scope.is_type(arg_name)) {
         throw semanticError("Invalid Type",node->pos);
       }
       auto arg_typename = global_scope.ask_type(arg_name);
-      auto arg_type =Type(std::move(arg_typename), arg_dim);
+      auto arg_type =std::make_shared<Type>(std::move(arg_typename), arg_dim);
       ret_args.push_back(std::move(arg_type));
     }
     Function func(std::move(return_type), std::move(ret_args));
+    std::cerr<<"collect func"<<func.return_type->type_name<<'\n';
     current_class->add_function(name, func);
+    std::cerr<<"collect func"<<name<<' '<<current_class->ask_function(name).return_type->type_name<<'\n';
   }
 
   void get_class_var(std::shared_ptr<varDefNode> node) {
@@ -152,16 +154,16 @@ private:
       throw semanticError("Undefined Identifier",node->pos);
     }
     auto return_typename = global_scope.ask_type(ret_name);
-    auto return_type = Type(std::move(return_typename), dim);
-    std::vector<Type> args;
+    auto return_type = std::make_shared<Type>(std::move(return_typename), dim);
+    std::vector<std::shared_ptr<Type> > args;
     for (const auto &it : node->arguments) {
-      auto arg_name = it.first.name;
-      auto arg_dim = it.first.dim;
+      auto arg_name = it.first->name;
+      auto arg_dim = it.first->dim;
       if (!global_scope.is_type(arg_name)) {
         throw semanticError("Undefined Identifier",node->pos);
       }
       auto arg_typename = global_scope.ask_type(arg_name);
-      auto arg_type = Type(std::move(arg_typename), arg_dim);
+      auto arg_type = std::make_shared<Type>(std::move(arg_typename), arg_dim);
       args.push_back(std::move(arg_type));
     }
     Function func(std::move(return_type), std::move(args));

@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include <map>
 #include <memory>
 #include <stdexcept>
@@ -13,7 +14,7 @@ class Type {
 public:
   int dim=0;
   const std::shared_ptr<Typename> type_name;
-  Type();
+  Type():type_name({}), dim(0){};
   Type(std::shared_ptr<Typename> _type_name, int _dim = 0)
       : type_name(std::move(_type_name)) {
     dim = _dim;
@@ -32,9 +33,9 @@ public:
 
 class Typename {
 public:
-  const std::string name;
-  std::unordered_map<std::string, const Type &> member;
-  std::unordered_map<std::string, const Function &> func;
+  const std::string name{};
+  std::unordered_map<std::string, Type> member{};
+  std::unordered_map<std::string, std::shared_ptr<Function> > func{};
 
   Typename() = default;
   Typename(std::string _name) : name(_name) {
@@ -59,40 +60,22 @@ public:
       throw std::runtime_error(
           "add_ multiple members " + member_name + " for class " + name +
           ", it should be handled in VarDef procedure in classes");
-      //    throw UnhandledErr("add_ multiple members " + member_name + " for
-      //    class " + name +
-      //                    ", it should be handled in VarDef procedure in
-      //                    classes");
     }
   };
-  void add_function(const std::string &function_name,
-                               const Function &function) {
-  auto flag = func.emplace(function_name, function).second;
-  if (!flag) {
-    throw std::runtime_error(
-        "add_ multiple functions " + function_name + " for class " + name +
-        ", it should be handled in FuncDef procedure in classes");
- //   throw UnhandledErr(
-  //      "add_ multiple functions " + function_name + " for class " + name +
-    //    ", it should be handled in FuncDef procedure in classes");
-  }
-}
+  void add_function(const std::string &function_name, Function function) ;
 
-  bool is_member(const std::string &name) const {
-    return member.count(name) != 0;
+  bool is_member(const std::string &mem_name) const {
+    return member.count(mem_name) != 0;
   };
-  bool is_function(const std::string &name) const {
-    return func.count(name) != 0;
+  bool is_function(const std::string &func_name) const {
+    return func.count(func_name) != 0;
   };
 
-  const Type & ask_member(const std::string &name) const {
-    auto it = member.find(name);
+  Type ask_member(const std::string &mem_name) const {
+    auto it = member.find(mem_name);
     return it->second;
   }
-  const Function & ask_function(const std::string &name) const {
-    auto it = func.find(name);
-    return it->second;
-  }
+  Function ask_function(const std::string &func_name) const ;
 
   bool operator==(const Typename &other) const { return name == other.name; };
   bool operator!=(const Typename &other) const { return name != other.name; };
@@ -101,7 +84,7 @@ private:
   MyType type_info = MyType::Unknown;
 };
 
-std::shared_ptr<Typename> GetStringTypename();
+std::shared_ptr<Typename> init_StringTypename();
 
 const std::shared_ptr<Typename> IntTypename =
     std::make_shared<Typename>("int");
@@ -109,10 +92,26 @@ const std::shared_ptr<Typename> BoolTypename =
     std::make_shared<Typename>("bool");
 const std::shared_ptr<Typename> VoidTypename =
     std::make_shared<Typename>("void");
-const std::shared_ptr<Typename> StringTypename =
-    std::move(GetStringTypename());
 
-const Type IntType(IntTypename, 0);
-const Type BoolType(BoolTypename, 0);
-const Type VoidType(VoidTypename, 0);
-const Type StringType(StringTypename, 0);
+const std::shared_ptr<Type> IntType=std::make_shared<Type>(IntTypename, 0);
+const std::shared_ptr<Type> BoolType=std::make_shared<Type>(BoolTypename, 0);
+const std::shared_ptr<Type> VoidType=std::make_shared<Type>(VoidTypename, 0);
+
+const std::shared_ptr<Typename> StringTypename =
+    std::move(init_StringTypename());
+
+const std::shared_ptr<Type> StringType=std::make_shared<Type>(StringTypename, 0);
+
+
+
+/*
+extern const std::shared_ptr<Typename> IntTypename;
+extern const std::shared_ptr<Typename> BoolTypename;
+extern const std::shared_ptr<Typename> VoidTypename;
+extern const std::shared_ptr<Typename> StringTypename;
+
+extern const Type IntType;
+extern const Type BoolType;
+extern const Type VoidType;
+extern const Type StringType;
+*/

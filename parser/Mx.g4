@@ -43,7 +43,9 @@ forstmt:
 	For '(' initializeStmt = statement condiExpr = expression? ';' stepExpr = expression? ')'
 		statement;
 
-type: (Int | String | Bool | Void | Identifier) ('[' expression ']')* ('[' ']')*('[' size_after_empty+=expression ']')*;
+type: (Int | String | Bool | Void | Identifier) (
+		'[' expression ']'
+	)* ('[' ']')* ('[' size_after_empty += expression ']')*;
 
 FormatString1:
 	'f"' ('\\n' | '\\\\' | '\\"' | '$$' | [ !#%-[\]-~])* '"';
@@ -58,9 +60,9 @@ expression:
 	primary																	# atomExpr
 	| FormatString1															# formatExpr
 	| FormatString2 expression (FormatString3 expression)* FormatString4	# formatExpr
-	| <assoc = right> expression (SelfPlus | SelfMinus)						# oneExpr
 	| name = Identifier '(' exprlist? ')'									# usefunc
 	| classname = expression '.' name = Identifier '(' exprlist? ')'		# usefunc
+	| expression (SelfPlus | SelfMinus)										# oneExpr
 	| expression '[' expression ']'											# arrayAccessExpr
 	| expression '.' Identifier												# pointExpr
 	| <assoc = right> (SelfPlus | SelfMinus) expression						# oneExpr
@@ -89,7 +91,8 @@ primary:
 mxconst:
 	IntegerConst	# intConst
 	| StringConst	# stringConst
-	| BoolConst		# boolConst
+	| True			# boolConst
+	| False			# boolConst
 	| Null			# nullConst
 	| array			# arrayConst;
 

@@ -680,7 +680,8 @@ public:
   public:
     BoolConstContext(MxconstContext *ctx);
 
-    antlr4::tree::TerminalNode *BoolConst();
+    antlr4::tree::TerminalNode *True();
+    antlr4::tree::TerminalNode *False();
 
     virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };

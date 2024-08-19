@@ -12,14 +12,22 @@
 
 #include "AST/RootNode.h"
 
+#include "util/ErrorListener.h"
+
 using namespace antlr4;
 
 int main() {
   ANTLRInputStream input(std::cin);
   MxLexer lexer(&input);
+  
+	MxParserErrorListener errorListener;
+	lexer.removeErrorListeners();
+	lexer.addErrorListener(&errorListener);
+
   CommonTokenStream tokens(&lexer);
-  tokens.fill();
   MxParser parser(&tokens);
+	parser.removeErrorListeners();
+	parser.addErrorListener(&errorListener);
 
   auto tree = parser.program();
   try {
@@ -32,6 +40,7 @@ int main() {
     std::cerr << error.what() << std::endl;
     return 1;
   } catch (std::runtime_error &) {
+    std::cerr << "runtime error"<< std::endl;
     throw;
   }
   return 0;

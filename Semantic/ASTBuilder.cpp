@@ -42,33 +42,57 @@
 
 std::any ASTBuilder::visitProgram(MxParser::ProgramContext *ctx) {
   std::cerr << "start visitProgram\n";
+  bool flag = false;
+  auto main_func = ctx->main();
+  auto funcStmt =
+      std::any_cast<std::shared_ptr<StmtNode>>(main_func->accept(this));
+  auto main_type = TypeNode({main_func}, "int", 0);
+  auto main = std::shared_ptr<funcDefNode>(
+      new funcDefNode({main_func}, "main",
+                      std::make_shared<TypeNode>(main_type), {}, funcStmt));
+
   std::vector<std::shared_ptr<DefNode>> definitions;
   auto func_def = ctx->funcDef();
-  for (const auto &it : func_def) {
-    auto ret = std::any_cast<std::shared_ptr<funcDefNode>>(it->accept(this));
-    definitions.push_back(std::move(ret));
-  }
   auto var_def = ctx->varDef();
+  auto class_def = ctx->classDef();
+  int i = 0, j = 0;
   for (const auto &it : var_def) {
+    while (i < func_def.size() &&
+           func_def[i]->getSourceInterval().a < it->getSourceInterval().a) {
+      auto func = std::any_cast<std::shared_ptr<funcDefNode>>(
+          func_def[i]->accept(this));
+      definitions.push_back(std::move(func));
+      i++;
+    }
+    while (j < class_def.size() &&
+           class_def[j]->getSourceInterval().a < it->getSourceInterval().a) {
+      auto clas = std::any_cast<std::shared_ptr<classDefNode>>(
+          class_def[j]->accept(this));
+      definitions.push_back(std::move(clas));
+      j++;
+    }
+    if (main_func->getSourceInterval().a < it->getSourceInterval().a && !flag) {
+      definitions.push_back(std::move(main));
+      flag = true;
+    }
     auto ret = std::any_cast<std::shared_ptr<varDefNode>>(it->accept(this));
     definitions.push_back(std::move(ret));
   }
-  auto class_def = ctx->classDef();
-  for (const auto &it : class_def) {
-    auto ret = std::any_cast<std::shared_ptr<classDefNode>>(it->accept(this));
-    definitions.push_back(std::move(ret));
+  if (!flag)
+    definitions.push_back(std::move(main));
+  while (i < func_def.size()) {
+    auto func =
+        std::any_cast<std::shared_ptr<funcDefNode>>(func_def[i]->accept(this));
+    definitions.push_back(std::move(func));
+    i++;
   }
-  auto main_func = ctx->main();
-  auto main_func_body =
-      std::any_cast<std::shared_ptr<StmtNode>>(main_func->accept(this));
-  auto main_type = TypeNode({main_func}, "int", 0);
-
-  auto main = std::shared_ptr<funcDefNode>(new funcDefNode(
-      {main_func}, "main", std::make_shared<TypeNode>(main_type), {},
-      main_func_body));
-  definitions.push_back(std::move(main));
-
-  return std::make_shared<RootNode>(position{ctx}, std::move(main_func_body),
+  while (j < class_def.size()) {
+    auto clas =
+        std::any_cast<std::shared_ptr<classDefNode>>(class_def[j]->accept(this));
+    definitions.push_back(std::move(clas));
+    j++;
+  }
+  return std::make_shared<RootNode>(position{ctx}, std::move(funcStmt),
                                     std::move(definitions));
 }
 
@@ -112,6 +136,9 @@ std::any ASTBuilder::visitVarDef(MxParser::VarDefContext *ctx) {
   auto type_name =
       std::any_cast<std::shared_ptr<TypeNode>>(ctx->type()->accept(this));
   auto var_name = ctx->Identifier();
+  if(var_name.size()==0){
+    throw semanticError("Define Nothing",{ctx});
+  }
   auto var_value = ctx->expression();
   int pos = 0;
   std::vector<std::string> ret_name;
@@ -135,22 +162,24 @@ std::any ASTBuilder::visitVarDef(MxParser::VarDefContext *ctx) {
 
 std::any ASTBuilder::visitFuncDef(MxParser::FuncDefContext *ctx) {
   std::cerr << "start visitFunDef\n";
-  auto return_type =
-      std::any_cast<std::shared_ptr<TypeNode>>(ctx->return_type->accept(this));
   auto func_name = ctx->func_name->getText();
   auto arg_type = ctx->type();
   auto arg_name = ctx->Identifier();
-  std::vector<std::pair<TypeNode, std::string>> arguments;
-  if (arg_type.size() != arg_name.size() + 1) {
+  std::vector<std::pair<std::shared_ptr<TypeNode>, std::string>> arguments;
+  if (arg_type.size() != arg_name.size()) {
     throw std::runtime_error(
         "Arg type number does not match arg name number in Method definition");
   }
-  for (int i = 0; i < arg_name.size(); ++i) {
-    arguments.emplace_back(std::any_cast<TypeNode>(arg_type[i]->accept(this)),
-                           arg_name[i]->getText());
+  auto return_type =
+      std::any_cast<std::shared_ptr<TypeNode>>(ctx->return_type->accept(this));
+  for (int i = 1; i < arg_name.size(); ++i) {
+    arguments.emplace_back(
+        std::any_cast<std::shared_ptr<TypeNode>>(arg_type[i]->accept(this)),
+        arg_name[i]->getText());
   }
   auto func_body =
       std::any_cast<std::shared_ptr<StmtNode>>(ctx->suite()->accept(this));
+  std::cerr << "return visitFunDef\n";
   return std::shared_ptr<funcDefNode>(
       new funcDefNode({ctx}, std::move(func_name), std::move(return_type),
                       std::move(arguments), std::move(func_body)));
@@ -170,11 +199,11 @@ std::any ASTBuilder::visitSuite(MxParser::SuiteContext *ctx) {
   auto stmts = ctx->statement();
   std::vector<std::shared_ptr<StmtNode>> ret_stmts;
   for (const auto &it : stmts) {
-//  std::cerr << "into visitSuite\n";
-  auto st=it->accept(this);
-//  std::cerr << "return visitSuite\n";
+    std::cerr << "into visitSuite\n";
+    auto st = it->accept(this);
+    std::cerr << "return visitSuite\n";
     auto ret = std::any_cast<std::shared_ptr<StmtNode>>(st);
-//  std::cerr << "get return visitSuite\n";
+    std::cerr << "get return visitSuite\n";
     ret_stmts.push_back(std::move(ret));
   }
   return std::shared_ptr<StmtNode>(
@@ -190,8 +219,7 @@ std::any ASTBuilder::visitVardefStmt(MxParser::VardefStmtContext *ctx) {
   auto var =
       std::any_cast<std::shared_ptr<varDefNode>>(ctx->varDef()->accept(this));
   std::cerr << "return visitVardefStmt\n";
-  return std::shared_ptr<StmtNode>(
-      new varDefStmtNode({ctx}, std::move(var)));
+  return std::shared_ptr<StmtNode>(new varDefStmtNode({ctx}, std::move(var)));
 }
 
 std::any ASTBuilder::visitIfStmt(MxParser::IfStmtContext *ctx) {
@@ -224,9 +252,11 @@ std::any ASTBuilder::visitWhilestmt(MxParser::WhilestmtContext *ctx) {
   auto condition = ctx->expression();
   auto condition_ret =
       std::any_cast<std::shared_ptr<ExprNode>>(condition->accept(this));
+  std::cerr << "middle visitwhile\n";
   auto suite = ctx->statement();
   auto suite_ret =
       std::any_cast<std::shared_ptr<StmtNode>>(suite->accept(this));
+  std::cerr << "end visitwhile\n";
   return std::shared_ptr<StmtNode>(
       new whileStmtNode({ctx}, std::move(condition_ret), std::move(suite_ret)));
 }
@@ -238,12 +268,24 @@ std::any ASTBuilder::visitForstmt(MxParser::ForstmtContext *ctx) {
   auto initialize_stmt = ctx->initializeStmt;
   auto initialize_ret =
       std::any_cast<std::shared_ptr<StmtNode>>(initialize_stmt->accept(this));
+
+  std::cerr << "middle visitfor\n";
+  std::shared_ptr<ExprNode> condition_ret = nullptr;
   auto condition_expr = ctx->condiExpr;
-  auto condition_ret =
-      std::any_cast<std::shared_ptr<ExprNode>>(condition_expr->accept(this));
+  if (condition_expr) {
+    condition_ret =
+        std::any_cast<std::shared_ptr<ExprNode>>(condition_expr->accept(this));
+  }
+
+  std::cerr << "middle visitfor\n";
+  std::shared_ptr<ExprNode> step_ret = nullptr;
   auto step_expr = ctx->stepExpr;
-  auto step_ret =
-      std::any_cast<std::shared_ptr<ExprNode>>(step_expr->accept(this));
+  if (step_expr) {
+    step_ret =
+        std::any_cast<std::shared_ptr<ExprNode>>(step_expr->accept(this));
+  }
+
+  std::cerr << "middle visitfor\n";
   auto loop_stmt = ctx->statement().back();
   auto loop_ret =
       std::any_cast<std::shared_ptr<StmtNode>>(loop_stmt->accept(this));
@@ -275,14 +317,15 @@ std::any ASTBuilder::visitReturnStmt(MxParser::ReturnStmtContext *ctx) {
       new controlStmtNode({ctx}, controlStmtNode::StmtType::Return, ret));
 }
 std::any ASTBuilder::visitPureExprStmt(MxParser::PureExprStmtContext *ctx) {
-  auto expr=std::any_cast<std::vector<std::shared_ptr<ExprNode>>>(ctx->exprlist()->accept(this));
+  auto expr = std::any_cast<std::vector<std::shared_ptr<ExprNode>>>(
+      ctx->exprlist()->accept(this));
   return std::shared_ptr<StmtNode>(new exprStmtNode({ctx}, std::move(expr)));
 }
 std::any ASTBuilder::visitEmptyExprStmt(MxParser::EmptyExprStmtContext *ctx) {
   return std::shared_ptr<StmtNode>(new emptyStmtNode(position{ctx}));
 }
 std::any ASTBuilder::visitExprlist(MxParser::ExprlistContext *ctx) {
-  std::cerr <<ctx->getText()<< "\nstart visitExprlist\n";
+  std::cerr << ctx->getText() << "\nstart visitExprlist\n";
   auto expr_node = ctx->expression();
   std::vector<std::shared_ptr<ExprNode>> expr;
   for (const auto &it : expr_node) {
@@ -326,13 +369,13 @@ std::any ASTBuilder::visitOneExpr(MxParser::OneExprContext *ctx) {
   } else if (ctx->Not()) {
     op_type = oneExprNode::OpType::Not;
   } else if (ctx->Tilde()) {
-    op_type = oneExprNode::OpType::NotLogic;
+    op_type = oneExprNode::OpType::Tilde;
   } else if (auto increment = ctx->SelfPlus()) {
-    op_type = expr->getSourceInterval().a < increment->getSourceInterval().a
+    op_type = expr->getSourceInterval().a > increment->getSourceInterval().a
                   ? oneExprNode::OpType::PreIncrement
                   : oneExprNode::OpType::SufIncrement;
   } else if (auto decrement = ctx->SelfMinus()) {
-    op_type = expr->getSourceInterval().a < decrement->getSourceInterval().a
+    op_type = expr->getSourceInterval().a > decrement->getSourceInterval().a
                   ? oneExprNode::OpType::PreDecrement
                   : oneExprNode::OpType::SufDecrement;
   } else {
@@ -442,7 +485,7 @@ std::any ASTBuilder::visitAssignExpr(MxParser::AssignExprContext *ctx) {
   auto expr = ctx->expression();
   auto lhs = std::any_cast<std::shared_ptr<ExprNode>>(expr[0]->accept(this));
   auto rhs = std::any_cast<std::shared_ptr<ExprNode>>(expr[1]->accept(this));
-  
+
   std::cerr << "return visitAssignExpr\n";
   return std::shared_ptr<ExprNode>(
       new assignExprNode({ctx}, std::move(lhs), std::move(rhs)));
@@ -555,7 +598,7 @@ std::any ASTBuilder::visitNewPrimary(MxParser::NewPrimaryContext *ctx) {
 
 std::any ASTBuilder::visitBoolConst(MxParser::BoolConstContext *ctx) {
   std::cerr << "start visitBoolConst\n";
-  auto res = ctx->BoolConst()->getText() == "true";
+  auto res = (ctx->True() != nullptr);
   return std::shared_ptr<PrimaryNode>(new constPrimaryNode({ctx}, res));
 }
 
@@ -611,7 +654,7 @@ std::any ASTBuilder::visitArray(MxParser::ArrayContext *ctx) {
 std::any ASTBuilder::visitType(MxParser::TypeContext *ctx) {
   std::cerr << "start visitType\n";
   if (!ctx->size_after_empty.empty())
-		throw semanticError("Invaild Array Size Init",ctx);
+    throw semanticError("Invaild Array Size Init", ctx);
   std::string identifier;
   auto iden = ctx->Identifier();
   if (iden) {
@@ -629,11 +672,14 @@ std::any ASTBuilder::visitType(MxParser::TypeContext *ctx) {
   }
   auto size = ctx->expression();
   if (size.empty()) {
-    return std::shared_ptr<TypeNode>(new TypeNode({ctx}, std::move(identifier), ctx->LeftBracket().size()));
+    return std::shared_ptr<TypeNode>(
+        new TypeNode({ctx}, std::move(identifier), ctx->LeftBracket().size()));
   }
   std::vector<std::shared_ptr<ExprNode>> expr;
   for (auto it : size) {
     expr.push_back(std::any_cast<std::shared_ptr<ExprNode>>(it->accept(this)));
   }
-  return std::shared_ptr<TypeNode>(new TypeNode({ctx}, std::move(identifier), ctx->LeftBracket().size(), expr));
+  std::cerr << "return visitType\n";
+  return std::shared_ptr<TypeNode>(new TypeNode(
+      {ctx}, std::move(identifier), ctx->LeftBracket().size(), expr));
 }

@@ -11,10 +11,7 @@ public:
     SufDecrement,
     PreIncrement,
     PreDecrement,
-    Plus,
-    Minus,
-    Not,
-    NotLogic
+    Minus,Not,Tilde
   };
   std::shared_ptr<ExprNode> expr_node = nullptr;
   const OpType op_type = OpType::Unknown;
