@@ -22,11 +22,11 @@ const std::shared_ptr<Type> StringType=std::make_shared<Type>(StringTypename, 0)
 
 Function Typename::ask_function(const std::string &func_name) const {
   auto it = func.find(func_name);
-  std::cerr << "HERE___" << IntType->type_name << '\n';
-  //  std::cerr
+  //  std::cerr << "HERE___" << IntType->type_name << '\n';
+  //  //  std::cerr
   //  <<"HERE1___"<<StringTypename->ask_function("length").return_type.type_name<<
-  //  '\n'; std::cerr <<"HERE2___"<<(function.return_type==IntType) << '\n';
-  //  std::cerr <<"HERE1___"<<it->second.return_type.type_name << '\n';
+  //  '\n'; //  std::cerr <<"HERE2___"<<(function.return_type==IntType) << '\n';
+  //  //  std::cerr <<"HERE1___"<<it->second.return_type.type_name << '\n';
   return *it->second;
 }
 
@@ -88,9 +88,8 @@ bool Typename::operator!=(const Typename &other) const {
 };
 
 std::shared_ptr<Typename> init_StringTypename() {
-  std::cerr << "when define begin________________ " << IntType << '\n';
-  std::cerr << "when define begin________________ " << IntType->type_name
-            << '\n';
+  //  std::cerr << "when define begin________________ " << IntType << '\n';
+  //  std::cerr << "when define begin________________ " << IntType->type_name<< '\n';
 
   std::shared_ptr<Typename> t = std::make_shared<Typename>("string");
   auto string_type = std::make_shared<Type>(t, 0);
@@ -102,10 +101,10 @@ std::shared_ptr<Typename> init_StringTypename() {
   t->add_function("parseInt", parse_int);
   Function ord(IntType, {IntType});
   t->add_function("ord", ord);
-  //    std::cerr  <<"when define
+  //    //  std::cerr  <<"when define
   //    "<<(t->ask_function("length").return_type==IntType)<< '\n';
   //   if(t->ask_function("length").return_type.type_name)
-  std::cerr << "when define________________ " << IntType << '\n';
-  std::cerr << "when define________________ " << IntType->type_name << '\n';
+  //  std::cerr << "when define________________ " << IntType << '\n';
+  //  std::cerr << "when define________________ " << IntType->type_name << '\n';
   return std::move(t);
 }

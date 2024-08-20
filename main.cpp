@@ -34,13 +34,13 @@ int main() {
     ASTBuilder visitor;
     auto ans =
         std::any_cast<std::shared_ptr<RootNode>>(visitor.visitProgram(tree));
-    std::cerr << "down build\n";
+    //  std::cerr << "down build\n";
     check_semantic(ans.get());
   } catch (const semanticError &error) {
-    std::cerr << error.what() << std::endl;
+    //  std::cerr << error.what() << std::endl;
     return 1;
   } catch (std::runtime_error &) {
-    std::cerr << "runtime error"<< std::endl;
+    //  std::cerr << "runtime error"<< std::endl;
     throw;
   }
   return 0;
