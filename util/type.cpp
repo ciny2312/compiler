@@ -35,11 +35,6 @@ void Typename::add_function(const std::string &function_name,
   auto flag = func.emplace(function_name,
                            std::make_unique<Function>(std::move(function)))
                   .second;
-  if (!flag) {
-    throw std::runtime_error(
-        "add_ multiple functions " + function_name + " for class " + name +
-        ", it should be handled in FuncDef procedure in classes");
-  }
 }
 Type::Type():type_name({}), dim(0){}
 Type::Type(std::shared_ptr<Typename> _type_name, int _dim)
@@ -71,11 +66,6 @@ Typename::Typename(std::string _name) : name(_name) {
 }
 void Typename::add_member(const std::string &member_name, const Type &type) {
   auto flag = member.emplace(member_name, type).second;
-  if (!flag) {
-    throw std::runtime_error(
-        "add_ multiple members " + member_name + " for class " + name +
-        ", it should be handled in VarDef procedure in classes");
-  }
 };
 
 bool Typename::is_member(const std::string &mem_name) const {

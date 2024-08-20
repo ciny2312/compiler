@@ -125,9 +125,9 @@ private:
       ret_args.push_back(std::move(arg_type));
     }
     Function func(std::move(return_type), std::move(ret_args));
-    std::cerr<<"collect func"<<func.return_type->type_name<<'\n';
+    //  std::cerr<<"collect func"<<func.return_type->type_name<<'\n';
     current_class->add_function(name, func);
-    std::cerr<<"collect func"<<name<<' '<<current_class->ask_function(name).return_type->type_name<<'\n';
+    //  std::cerr<<"collect func"<<name<<' '<<current_class->ask_function(name).return_type->type_name<<'\n';
   }
 
   void get_class_var(std::shared_ptr<varDefNode> node) {

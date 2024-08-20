@@ -79,7 +79,7 @@ private:
 class Scope {
 public:
   Scope() = delete;
-  Scope(std::unique_ptr<Scope> parent = nullptr)
+  Scope(std::shared_ptr<Scope> parent = nullptr)
       : parent(std::move(parent)){};
   Scope(const Scope &other) = delete;
   Scope(Scope &&other) noexcept
@@ -117,9 +117,9 @@ public:
     return *this;
   };
 
-  std::unique_ptr<Scope> &ask_parent() { return parent; };
+  std::shared_ptr<Scope> &ask_parent() { return parent; };
 
 private:
   std::unordered_map<std::string, Type> local;
-  std::unique_ptr<Scope> parent;
+  std::shared_ptr<Scope> parent;
 };
