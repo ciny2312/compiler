@@ -8,6 +8,7 @@
 class MxParserErrorListener : public antlr4::BaseErrorListener {
 	void syntaxError(antlr4::Recognizer *recognizer, antlr4::Token *offendingSymbol, size_t line, size_t charPositionInLine,
 					 const std::string &msg, std::exception_ptr e) override {
-		throw compilerError{"fail to build AST","syntaxError: " + msg,position(line,charPositionInLine,"")};
+		std::cout << "Invalid Identifier" << std::endl;exit(1);
+		throw semanticError("Invalid Identifier",position(line,charPositionInLine,""));
 	}
 };

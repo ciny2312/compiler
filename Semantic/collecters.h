@@ -141,7 +141,7 @@ private:
     auto &var_name = node->var_name;
     for (const auto &it : var_name) {
       if (current_class->is_member(it)) {
-        throw semanticError("Invalid Type",node->pos);
+        throw semanticError("Multiple Definitions",node->pos);
       }
       current_class->add_member(it, type);
     }

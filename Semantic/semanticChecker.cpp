@@ -37,7 +37,7 @@
 
 void check_semantic(RootNode *node) {
   auto [scope, global_scope] = CollectSymbol(node);
-  //  std::cerr<<"collect down\n";
+  std::cerr<<"collect down\n";
   semanticChecker checker(std::move(scope), std::move(global_scope));
   checker.visit(node);
 }
@@ -46,14 +46,14 @@ semanticChecker::semanticChecker(Scope _scope, GlobalScope _global_scope)
     : scope(std::move(_scope)), global_scope(std::move(_global_scope)) {}
 
 void semanticChecker::visit(RootNode *node) {
-        //  std::cerr <<(StringTypename->ask_function("length").return_type)<<" __________init\n";
+        std::cerr <<(StringTypename->ask_function("length").return_type)<<" __________init\n";
   for (auto &def : node->def_nodes) {
     def->accept(this);
   }
 }
 
 void semanticChecker::visit(varDefNode *node) {
-  //  std::cerr << "check varDef\n";
+  std::cerr << "check varDef\n";
   node->type_name->accept(this);
 
   auto type_name = node->type_name->name;
@@ -81,15 +81,15 @@ void semanticChecker::visit(varDefNode *node) {
         throw semanticError("Type Mismatch", node->pos);
       }
     }
-    //  std::cerr<<"define var "<<var_name[i]<<'\n';
+    std::cerr<<"define var "<<var_name[i]<<'\n';
     scope.define_var(var_name[i], type, node->pos);
   }
-  //  std::cerr << "return varDef\n";
+  std::cerr << "return varDef\n";
 }
 
 void semanticChecker::visit(funcDefNode *node) {
-  //  std::cerr << "check funcDef\n";
-        //  std::cerr <<StringTypename->ask_function("length").return_type->type_name<<" _________funcDef\n";
+  std::cerr << "check funcDef\n";
+        std::cerr <<StringTypename->ask_function("length").return_type->type_name<<" _________funcDef\n";
   node->return_type->accept(this);
 
   auto func_name = node->func_name;
@@ -98,7 +98,7 @@ void semanticChecker::visit(funcDefNode *node) {
       throw std::runtime_error("Unidentified function name");
     }
     auto func = current_class->ask_function(func_name);
-    //  std::cerr<<"HERE\n"<<func_name<<' '<<current_class->ask_function(func_name).return_type->type_name<<"HERE\n";
+    std::cerr<<"HERE\n"<<func_name<<' '<<current_class->ask_function(func_name).return_type->type_name<<"HERE\n";
     return_type = func.return_type;
   } else {
     if (!global_scope.is_function(func_name)) {
@@ -131,11 +131,11 @@ void semanticChecker::visit(funcDefNode *node) {
   }
   main_func = false;
   scope = std::move(*scope.ask_parent());
-  //  std::cerr << "return funcDef\n";
+  std::cerr << "return funcDef\n";
 }
 
 void semanticChecker::visit(classDefNode *node) {
-  //  std::cerr << "check classDef\n";
+    std::cerr << "check classDef\n";
   auto type_name = node->name;
   if (!global_scope.is_type(type_name)) {
     throw std::runtime_error("Unidentified class name");
@@ -155,24 +155,23 @@ void semanticChecker::visit(classDefNode *node) {
   }
   scope = std::move(*scope.ask_parent());
   current_class = nullptr;
-  //  std::cerr << "return classDef\n";
+  std::cerr << "return classDef\n";
 }
 
 void semanticChecker::visit(constructorClassStmtNode *node) {
-  //  std::cerr << "check constructor\n";
+  std::cerr << "check constructor\n";
   return_type = VoidType;
   node->ask_func()->accept(this);
   return_type = nullptr;
-  //  std::cerr << "return constructor\n";
+  std::cerr << "return constructor\n";
 }
 
 void semanticChecker::visit(simpleArrayNode *node) {
-  //  std::cerr << "check simpleArray\n";
+  std::cerr << "check simpleArray\n";
   auto elements = node->ele;
   for (auto it : elements) {
     it->accept(this);
   }
-  auto type = elements[0]->ask_type();
   for (int i = 0; i + 1 < elements.size(); ++i) {
     if (elements[i]->ask_type() == nullptr ||
         elements[i + 1]->ask_type() == nullptr) {
@@ -185,12 +184,14 @@ void semanticChecker::visit(simpleArrayNode *node) {
   if (elements.empty()) {
     node->updata_type(nullptr);
   } else {
+    auto type = elements[0]->ask_type();
     node->updata_type(std::make_shared<Type>(type->type_name, 1));
   }
+  std::cerr << "return simpleArray\n";
 }
 
 void semanticChecker::visit(complexArrayNode *node) {
-  //  std::cerr << "check complexArray\n";
+  std::cerr << "check complexArray\n";
   auto elements = node->ele;
   for (auto it : elements) {
     it->accept(this);
@@ -214,7 +215,7 @@ void semanticChecker::visit(complexArrayNode *node) {
 }
 
 void semanticChecker::visit(constPrimaryNode *node) {
-  //  std::cerr << "check constPrimary\n";
+  std::cerr << "check constPrimary\n";
   switch (node->const_type) {
   case constPrimaryNode::Bool: {
     node->updata_type(BoolType);
@@ -242,11 +243,11 @@ void semanticChecker::visit(constPrimaryNode *node) {
     throw std::runtime_error("Invalid literal type");
   }
   }
-  //  std::cerr << "return constPrimary\n";
+  std::cerr << "return constPrimary\n";
 }
 
 void semanticChecker::visit(newPrimaryNode *node) {
-  //  std::cerr << "check newPrimary\n";
+  std::cerr << "check newPrimary\n";
   node->type_name->accept(this);
 
   auto type_name = node->type_name->name;
@@ -278,22 +279,22 @@ void semanticChecker::visit(newPrimaryNode *node) {
     throw std::runtime_error("Invalid new type");
   }
   }
-  //  std::cerr << "return newPrimary\n";
+  std::cerr << "return newPrimary\n";
 }
 
 void semanticChecker::visit(varPrimaryNode *node) {
-  //  std::cerr << "check varPrimary\n";
+  std::cerr << "check varPrimary\n";
   auto name = node->name;
   if (!scope.is_var(name)) {
     throw semanticError("Undefined Identifier", node->pos);
   }
   auto var = scope.ask_var(name);
   node->updata_type(std::make_shared<Type>(std::move(var)));
-  //  std::cerr << "return varPrimary\n";
+  std::cerr << "return varPrimary\n";
 }
 
 void semanticChecker::visit(thisPrimaryNode *node) {
-  //  std::cerr << "check thisPrimary\n";
+  std::cerr << "check thisPrimary\n";
   if (!scope.is_var("this")) {
     throw semanticError("Undefined Identifier", node->pos);
   }
@@ -302,7 +303,7 @@ void semanticChecker::visit(thisPrimaryNode *node) {
 }
 
 void semanticChecker::visit(parenPrimaryNode *node) {
-  //  std::cerr << "check parenPrimary\n";
+  std::cerr << "check parenPrimary\n";
   node->expr->accept(this);
   node->updata_type(std::move(node->expr->get_type()));
   node->assignable=node->expr->assignable;
@@ -310,25 +311,25 @@ void semanticChecker::visit(parenPrimaryNode *node) {
 }
 
 void semanticChecker::visit(atomExprNode *node) {
-        //  std::cerr <<StringTypename->ask_function("length").return_type->type_name<<" __________atom\n";
-  //  std::cerr << "check atomExpr\n";
+        std::cerr <<StringTypename->ask_function("length").return_type->type_name<<" __________atom\n";
+  std::cerr << "check atomExpr\n";
   auto primary = node->primary_node;
   primary->accept(this);
   node->updata_type(primary->ask_type());
   node->updata_assignable(primary->assignable);
   node->updata_null(primary->isnull);
-  //  std::cerr << "return atomExpr\n";
+  std::cerr << "return atomExpr\n";
 }
 
 void semanticChecker::visit(assignExprNode *node) {
-  //  std::cerr << "check assignExpr\n";
+  std::cerr << "check assignExpr\n";
   auto lhs = node->lhs;
   auto rhs = node->rhs;
 
   lhs->accept(this);
   rhs->accept(this);
   if (!lhs->assignable) {
-    throw semanticError("Assign Wrong Value", node->pos);
+    throw semanticError("Type Mismatch", node->pos);
   }
   auto left_type = lhs->get_type();
   auto right_type = rhs->get_type();
@@ -342,18 +343,18 @@ void semanticChecker::visit(assignExprNode *node) {
     throw semanticError("Invalid Type", node->pos);
   }
   if (*left_type != *right_type) {
-    //  std::cerr << lhs->pos.toString() << ' ' << left_type->dim << '\n';
-    //  std::cerr << rhs->pos.toString() << ' ' << right_type->dim << '\n';
+    std::cerr << lhs->pos.toString() << ' ' << left_type->dim << '\n';
+    std::cerr << rhs->pos.toString() << ' ' << right_type->dim << '\n';
     throw semanticError("Type Mismatch", node->pos);
   }
   node->updata_type(left_type);
   node->updata_assignable(false);
   node->updata_null(false);
-  //  std::cerr << "return assignExpr\n";
+  std::cerr << "return assignExpr\n";
 }
 
 void semanticChecker::visit(oneExprNode *node) {
-  //  std::cerr << "check oneExpr\n";
+  std::cerr << "check oneExpr\n";
   auto expr = node->expr_node;
   expr->accept(this);
   switch (node->op_type) {
@@ -372,9 +373,9 @@ void semanticChecker::visit(oneExprNode *node) {
     if (expr->get_type() == nullptr || *expr->get_type() != *IntType) {
       throw semanticError("Type Mismatch", node->pos);
     }
-    //  std::cerr<<"HERE2\n";
+    std::cerr<<"HERE2\n";
     if (!expr->assignable) {
-      throw semanticError("Assign Wrong Value", node->pos);
+      throw semanticError("Type Mismatch", node->pos);
     }
     node->updata_type(IntType);
     node->updata_assignable(false);
@@ -386,9 +387,9 @@ void semanticChecker::visit(oneExprNode *node) {
     if (expr->get_type() == nullptr || *expr->get_type() != *IntType) {
       throw semanticError("Type Mismatch", node->pos);
     }
-    //  std::cerr<<"HERE\n";
+    std::cerr<<"HERE\n";
     if (!expr->assignable) {
-      throw semanticError("Assign Wrong Value", node->pos);
+      throw semanticError("Type Mismatch", node->pos);
     }
     node->updata_type(IntType);
     node->updata_assignable(true);
@@ -408,12 +409,12 @@ void semanticChecker::visit(oneExprNode *node) {
     throw std::runtime_error("Invalid unary operator type");
   }
   }
-  //  std::cerr << "return oneExpr\n";
+  std::cerr << "return oneExpr\n";
 }
 
 void semanticChecker::visit(binaryExprNode *node) {
-  //  std::cerr << "check binaryExpr\n";
-        //  std::cerr <<StringTypename->ask_function("length").return_type->type_name<<" __________binary\n";
+  std::cerr << "check binaryExpr\n";
+        std::cerr <<StringTypename->ask_function("length").return_type->type_name<<" __________binary\n";
   auto lhs = node->lhs;
   auto rhs = node->rhs;
   lhs->accept(this);
@@ -516,7 +517,7 @@ void semanticChecker::visit(binaryExprNode *node) {
     throw std::runtime_error("Invalid binary operator type");
   }
   }
-  //  std::cerr << "return binaryExpr\n";
+  std::cerr << "return binaryExpr\n";
 }
 
 void semanticChecker::visit(threeExprNode *node) {
@@ -567,7 +568,7 @@ void semanticChecker::visit(threeExprNode *node) {
 }
 
 void semanticChecker::visit(classMemExprNode *node) {
-  //  std::cerr << "check classMemExpr\n";
+  std::cerr << "check classMemExpr\n";
   auto expr = node->expr_node;
   expr->accept(this);
   auto member_name = node->name;
@@ -585,11 +586,11 @@ void semanticChecker::visit(classMemExprNode *node) {
   node->updata_type(std::make_shared<Type>(std::move(member)));
   node->updata_assignable(true);
   node->updata_null(false);
-  //  std::cerr << "return classMemExpr\n";
+  std::cerr << "return classMemExpr\n";
 }
 
 void semanticChecker::visit(formatStringExprNode *node) {
-  //  std::cerr << "check formatStringExpr\n";
+  std::cerr << "check formatStringExpr\n";
   auto &elements = node->ele;
   for (auto it : elements) {
     if (std::holds_alternative<std::shared_ptr<ExprNode>>(it)) {
@@ -606,11 +607,11 @@ void semanticChecker::visit(formatStringExprNode *node) {
   node->updata_type(StringType);
   node->updata_assignable(false);
   node->updata_null(false);
-  //  std::cerr << "return formatStringExpr\n";
+  std::cerr << "return formatStringExpr\n";
 }
 
 void semanticChecker::visit(arrayAccessExprNode *node) {
-  //  std::cerr << "check arrayAccessExpr\n";
+  std::cerr << "check arrayAccessExpr\n";
   auto a = node->a_expr;
   auto index = node->index_expr;
   a->accept(this);
@@ -628,21 +629,21 @@ void semanticChecker::visit(arrayAccessExprNode *node) {
   node->updata_type(std::make_shared<Type>(a_type->type_name, a_type->dim - index.size()));
   node->updata_assignable(true);
   node->updata_null(false);
-  //  //  std::cerr<<node->get_type()->dim<<' '<<node->pos.toString()<<'\n';
-  //  std::cerr << "return arrayAccessExpr\n";
+  //  std::cerr<<node->get_type()->dim<<' '<<node->pos.toString()<<'\n';
+  std::cerr << "return arrayAccessExpr\n";
 }
 
 void semanticChecker::visit(emptyStmtNode *node) {}
 
 void semanticChecker::visit(suiteStmtNode *node) {
-  //  std::cerr << "check suiteStmt\n";
+  std::cerr << "check suiteStmt\n";
 
   scope = {std::make_shared<Scope>(std::move(scope))};
   for (auto stmt : node->get_stmts()) {
     stmt->accept(this);
   }
   scope = std::move(*scope.ask_parent());
-  //  std::cerr << "return suiteStmt\n";
+  std::cerr << "return suiteStmt\n";
 }
 
 void semanticChecker::visit(ifStmtNode *node) {
@@ -662,11 +663,11 @@ void semanticChecker::visit(ifStmtNode *node) {
 }
 
 void semanticChecker::visit(exprStmtNode *node) {
-  //  std::cerr << "check exprStmt\n";
+  std::cerr << "check exprStmt\n";
   for (auto it : node->expr) {
     it->accept(this);
   }
-  //  std::cerr << "return exprStmt\n";
+  std::cerr << "return exprStmt\n";
 }
 
 void semanticChecker::visit(whileStmtNode *node) {
@@ -683,13 +684,13 @@ void semanticChecker::visit(whileStmtNode *node) {
 }
 
 void semanticChecker::visit(varDefStmtNode *node) {
-  //  std::cerr << "check varDefStmt\n";
+  std::cerr << "check varDefStmt\n";
   node->var_def->accept(this);
-  //  std::cerr << "return varDefStmt\n";
+  std::cerr << "return varDefStmt\n";
 }
 
 void semanticChecker::visit(controlStmtNode *node) {
-  //  std::cerr << "check controlStmt\n";
+  std::cerr << "check controlStmt\n";
   auto control_type = node->stmt_type;
   switch (control_type) {
   case controlStmtNode::StmtType::Continue:
@@ -704,18 +705,18 @@ void semanticChecker::visit(controlStmtNode *node) {
     is_return = true;
     if (expr == nullptr) {
       if (*return_type != *VoidType) {
-        //  std::cerr<<"HERE1\n";
+        std::cerr<<"HERE1\n";
         throw semanticError("Type Mismatch", node->pos);
       }
     } else {
       expr->accept(this);
       if (expr->get_type() != nullptr && *expr->get_type() != *return_type) {
-      //  //  std::cerr<<' '<<return_type->type_name->name<<"HERE2\n";
+      //  std::cerr<<' '<<return_type->type_name->name<<"HERE2\n";
         throw semanticError("Type Mismatch", node->pos);
       }
       if (expr->get_type() == nullptr &&
           (*return_type == *IntType || *return_type == *BoolType)) {
-        //  std::cerr<<"HERE3\n";
+        std::cerr<<"HERE3\n";
         throw semanticError("Type Mismatch", node->pos);
       }
     }
@@ -725,7 +726,7 @@ void semanticChecker::visit(controlStmtNode *node) {
     throw std::runtime_error("Invalid control statement type");
   }
   }
-  //  std::cerr << "return controlStmt\n";
+  std::cerr << "return controlStmt\n";
 }
 
 void semanticChecker::visit(forStmtNode *node) {
@@ -750,15 +751,15 @@ void semanticChecker::visit(forStmtNode *node) {
 }
 
 void semanticChecker::visit(functionCallExprNode *node) {
-  //  std::cerr << "check funcall\n";
-        //  std::cerr <<StringTypename->ask_function("length").return_type->type_name<<" _________funcall\n";
+  std::cerr << "check funcall\n";
+        std::cerr <<StringTypename->ask_function("length").return_type->type_name<<" _________funcall\n";
   auto func_class = node->classname;
   auto func_name = node->name;
   auto arguments = node->arguments;
   std::shared_ptr<Function> func(nullptr);
   if (func_class != nullptr) {
     func_class->accept(this);
-    //  std::cerr << "funcall class1\n";
+    std::cerr << "funcall class1\n";
     auto fun_class_type = func_class->get_type();
     if (fun_class_type == nullptr) {
       throw semanticError("Invalid Type", node->pos);
@@ -775,16 +776,16 @@ void semanticChecker::visit(functionCallExprNode *node) {
     if (!fun_class_type->type_name->is_function(func_name)) {
       throw semanticError("Invalid Class Member", node->pos);
     }
-    //  std::cerr << "funcall class\n";
+    std::cerr << "funcall class\n";
     auto real_func = fun_class_type->type_name->ask_function(func_name);
-        //  std::cerr <<func_name<<' '<< StringTypename->func.size()<<'\n';
-        //  std::cerr <<StringTypename->ask_function("length").return_type->type_name<<" funcall class\n";
+        std::cerr <<func_name<<' '<< StringTypename->func.size()<<'\n';
+        std::cerr <<StringTypename->ask_function("length").return_type->type_name<<" funcall class\n";
     if (real_func.return_type->type_name == nullptr) {
       throw semanticError("Missing Return Statement", node->pos);
     }
-    //  std::cerr << "funcall class\n";
+    std::cerr << "funcall class\n";
     func = std::make_shared<Function>(std::move(real_func));
-    //    //  std::cerr << "funcall class\n";
+    //    std::cerr << "funcall class\n";
   } else {
     if (global_scope.is_function(func_name)) {
       func = std::make_shared<Function>(
@@ -797,11 +798,11 @@ void semanticChecker::visit(functionCallExprNode *node) {
       }
     }
     if (func == nullptr) {
-      //      //  std::cerr<<func_name<<"\n";
+      //      std::cerr<<func_name<<"\n";
       throw semanticError("Undefined Identifier", node->pos);
     }
   }
-  //  std::cerr << "funcall class3\n";
+  std::cerr << "funcall class3\n";
   if (arguments.size() != func->arguments.size()) {
     throw semanticError("Argument Wrong", node->pos);
   }
@@ -819,15 +820,15 @@ void semanticChecker::visit(functionCallExprNode *node) {
   node->updata_assignable(false);
   node->updata_null(false);
   assert(node->get_type()->type_name != nullptr);
-  //  std::cerr << "return funcall\n";
+  std::cerr << "return funcall\n";
 }
 
 void semanticChecker::visit(TypeNode *node) {
-  //  std::cerr << node->pos.toString() << " check Type\n";
+  std::cerr << node->pos.toString() << " check Type\n";
   for (auto it : node->arraySize) {
     it->accept(this);
     if (*it->get_type() != *IntType)
       throw semanticError("Invalid Type", node->pos);
   }
-  //  std::cerr << node->pos.toString() << " return Type\n";
+  std::cerr << node->pos.toString() << " return Type\n";
 }
