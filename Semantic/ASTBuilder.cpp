@@ -167,8 +167,7 @@ std::any ASTBuilder::visitFuncDef(MxParser::FuncDefContext *ctx) {
   auto arg_name = ctx->Identifier();
   std::vector<std::pair<std::shared_ptr<TypeNode>, std::string>> arguments;
   if (arg_type.size() != arg_name.size()) {
-    throw std::runtime_error(
-        "Arg type number does not match arg name number in Method definition");
+    throw std::runtime_error("Arg type number does not match arg name number");
   }
   auto return_type =
       std::any_cast<std::shared_ptr<TypeNode>>(ctx->return_type->accept(this));

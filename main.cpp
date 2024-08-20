@@ -28,7 +28,6 @@ int main() {
   MxParser parser(&tokens);
 	parser.removeErrorListeners();
 	parser.addErrorListener(&errorListener);
-
   auto tree = parser.program();
   try {
     ASTBuilder visitor;
@@ -37,7 +36,7 @@ int main() {
     //  std::cerr << "down build\n";
     check_semantic(ans.get());
   } catch (const semanticError &error) {
-    //  std::cerr << error.what() << std::endl;
+      std::cout << error.what() << std::endl;
     return 1;
   } catch (std::runtime_error &) {
     //  std::cerr << "runtime error"<< std::endl;

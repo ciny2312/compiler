@@ -127,7 +127,7 @@ void semanticChecker::visit(funcDefNode *node) {
   }
   node->func->accept(this);
   if (*return_type != *VoidType && !is_return && !main_func) {
-    throw semanticError("No Return", (node->pos));
+    throw semanticError("Missing Return Statement", (node->pos));
   }
   main_func = false;
   scope = std::move(*scope.ask_parent());
@@ -616,7 +616,7 @@ void semanticChecker::visit(arrayAccessExprNode *node) {
   a->accept(this);
   auto a_type = a->get_type();
   if (a_type == nullptr || a_type->dim < index.size()) {
-    throw semanticError("Dim Wrong", node->pos);
+    throw semanticError("Dimension Out Of Bound", node->pos);
   }
   for (auto it : index) {
     it->accept(this);
@@ -695,7 +695,7 @@ void semanticChecker::visit(controlStmtNode *node) {
   case controlStmtNode::StmtType::Continue:
   case controlStmtNode::StmtType::Break: {
     if (loop_cnt == 0) {
-      throw semanticError("Constrol Flow Wrong", node->pos);
+      throw semanticError("Invalid Control Flow", node->pos);
     }
     break;
   }
@@ -780,7 +780,7 @@ void semanticChecker::visit(functionCallExprNode *node) {
         //  std::cerr <<func_name<<' '<< StringTypename->func.size()<<'\n';
         //  std::cerr <<StringTypename->ask_function("length").return_type->type_name<<" funcall class\n";
     if (real_func.return_type->type_name == nullptr) {
-      throw semanticError("Return Type Null", node->pos);
+      throw semanticError("Missing Return Statement", node->pos);
     }
     //  std::cerr << "funcall class\n";
     func = std::make_shared<Function>(std::move(real_func));
