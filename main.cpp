@@ -1,3 +1,4 @@
+#include <exception>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -38,8 +39,8 @@ int main() {
   } catch (const semanticError &error) {
       std::cout << error.what() << std::endl;
     return 1;
-  } catch (std::runtime_error &) {
-    //  std::cerr << "runtime error"<< std::endl;
+  } catch (std::exception &) {
+      std::cout << "runtime error"<< std::endl;
     throw;
   }
   return 0;

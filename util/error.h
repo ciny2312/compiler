@@ -12,7 +12,7 @@ class compilerError : public std::exception {
     message = error_header + error_type + ": " + error_detail + ".\nLine " + pos.toString();
   }
   const char *what() const noexcept override {
-    return message.c_str();
+    return error_detail.c_str();
   }
 
  private:
