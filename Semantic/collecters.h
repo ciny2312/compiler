@@ -171,6 +171,7 @@ private:
       throw semanticError("Multiple Definitions",node->pos);
     }
     global_scope.add_function(func_name, func, {node->pos});
+    std::cerr<<func_name<<' '<<node->arguments.size()<<"in collect\n";
   }
   void visit(varDefNode *node) final {}
   void visit(assignExprNode *node) final {}

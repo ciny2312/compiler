@@ -179,6 +179,7 @@ std::any ASTBuilder::visitFuncDef(MxParser::FuncDefContext *ctx) {
   auto func_body =
       std::any_cast<std::shared_ptr<StmtNode>>(ctx->suite()->accept(this));
   //  std::cerr << "return visitFunDef\n";
+  std::cerr<<arguments.size()<<'\n';
   return std::shared_ptr<funcDefNode>(
       new funcDefNode({ctx}, std::move(func_name), std::move(return_type),
                       std::move(arguments), std::move(func_body)));

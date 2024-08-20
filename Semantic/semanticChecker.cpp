@@ -110,12 +110,14 @@ void semanticChecker::visit(funcDefNode *node) {
       main_func = true;
     }
   }
+  std::cerr <<node->arguments.size()<< " middle funcDef\n";
   is_return = false;
   scope = {std::make_shared<Scope>(std::move(scope))};
   for (const auto arg : node->arguments) {
     auto arg_type = arg.first;
     auto arg_name = arg.second;
 
+  std::cerr << "middle argu funcDef\n";
     arg_type->accept(this);
 
     if (!global_scope.is_type(arg_type->name)) {
@@ -125,7 +127,9 @@ void semanticChecker::visit(funcDefNode *node) {
     auto type = Type(std::move(type_name), arg_type->dim);
     scope.define_var(arg_name, std::move(type), node->pos);
   }
+  std::cerr << "middle funcDef\n";
   node->func->accept(this);
+  std::cerr<<is_return<<' '<<main_func<<std::endl;
   if (*return_type != *VoidType && !is_return && !main_func) {
     throw semanticError("Missing Return Statement", (node->pos));
   }
@@ -633,7 +637,9 @@ void semanticChecker::visit(arrayAccessExprNode *node) {
   std::cerr << "return arrayAccessExpr\n";
 }
 
-void semanticChecker::visit(emptyStmtNode *node) {}
+void semanticChecker::visit(emptyStmtNode *node) {
+  std::cerr<<"empty\n";
+}
 
 void semanticChecker::visit(suiteStmtNode *node) {
   std::cerr << "check suiteStmt\n";
@@ -813,7 +819,7 @@ void semanticChecker::visit(functionCallExprNode *node) {
     if (type == nullptr &&
             (*func_args[i] == *IntType || *func_args[i] == *BoolType) ||
         type != nullptr && *type != *func_args[i]) {
-      throw semanticError("Argument Wrong", node->pos);
+      throw semanticError("Type Mismatch", node->pos);
     }
   }
   node->updata_type(func->return_type);
