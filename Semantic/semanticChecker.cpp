@@ -82,6 +82,9 @@ void semanticChecker::visit(varDefNode *node) {
       }
     }
     std::cerr<<"define var "<<var_name[i]<<'\n';
+    if(global_scope.is_function(var_name[i])){
+      throw semanticError("Multiple Definitions",node->pos);
+    }
     scope.define_var(var_name[i], type, node->pos);
   }
   std::cerr << "return varDef\n";
@@ -100,6 +103,9 @@ void semanticChecker::visit(funcDefNode *node) {
     auto func = current_class->ask_function(func_name);
     std::cerr<<"HERE\n"<<func_name<<' '<<current_class->ask_function(func_name).return_type->type_name<<"HERE\n";
     return_type = func.return_type;
+    if(current_class->is_member(func_name)) {
+      throw semanticError("Multiple Definitions",node->pos);
+    }
   } else {
     if (!global_scope.is_function(func_name)) {
       throw std::runtime_error("Unidentified function name");
@@ -108,6 +114,9 @@ void semanticChecker::visit(funcDefNode *node) {
     return_type = func.return_type;
     if (func_name == "main") {
       main_func = true;
+    }
+    else if (scope.is_var(func_name)) {
+      throw semanticError("Multiple Definitions",node->pos);
     }
   }
   std::cerr <<node->arguments.size()<< " middle funcDef\n";

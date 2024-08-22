@@ -167,9 +167,9 @@ private:
       args.push_back(std::move(arg_type));
     }
     Function func(std::move(return_type), std::move(args));
-    if (scope.is_var(func_name)) {
-      throw semanticError("Multiple Definitions",node->pos);
-    }
+  //  if (scope.is_var(func_name)) {
+  //    throw semanticError("Multiple Definitions",node->pos);
+  //  }
     global_scope.add_function(func_name, func, {node->pos});
     std::cerr<<func_name<<' '<<node->arguments.size()<<"in collect\n";
   }

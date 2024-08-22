@@ -30,12 +30,6 @@ Function Typename::ask_function(const std::string &func_name) const {
   return *it->second;
 }
 
-void Typename::add_function(const std::string &function_name,
-                            Function function) {
-  auto flag = func.emplace(function_name,
-                           std::make_unique<Function>(std::move(function)))
-                  .second;
-}
 Type::Type():type_name({}), dim(0){}
 Type::Type(std::shared_ptr<Typename> _type_name, int _dim)
     : type_name(std::move(_type_name)) {
@@ -67,6 +61,12 @@ Typename::Typename(std::string _name) : name(_name) {
 void Typename::add_member(const std::string &member_name, const Type &type) {
   auto flag = member.emplace(member_name, type).second;
 };
+void Typename::add_function(const std::string &function_name,
+                            Function function) {
+  auto flag = func.emplace(function_name,
+                           std::make_unique<Function>(std::move(function)))
+                  .second;
+}
 
 bool Typename::is_member(const std::string &mem_name) const {
   return member.count(mem_name) != 0;
