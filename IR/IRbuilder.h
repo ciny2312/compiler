@@ -8,11 +8,12 @@
 #include <map>
 #include <memory>
 #include <shared_mutex>
+#include <vector>
 
 class IRbuilder : public ASTVisitor {
 public:
   void visit(RootNode *node) override;
-  std::shared_ptr<moduleNode> module;
+  std::shared_ptr<moduleNode> module=nullptr;
 
 private:
   void visit(complexArrayNode *node) final;
@@ -52,18 +53,27 @@ private:
   std::shared_ptr<Value> default_type_value(std::shared_ptr<IRType> type);
   void init_builtin();
   void init_global_var();
-  void add_terminals(std::shared_ptr<fuctionNode> func);
-  std::shared_ptr<stringVar> register_literal_str(const std::string & );
+  void add_terminals(std::shared_ptr<functionNode> func);
+
+
   std::shared_ptr<Value> remove_variable_pointer(std::shared_ptr<Value>);
+  std::shared_ptr<stringVar> register_literal_str(const std::string & );
   std::shared_ptr<Var> register_annoy_var(std::shared_ptr<IRType> type,const std::string &prefix);
   std::shared_ptr<ptrVar> register_annoy_ptr_var(std::shared_ptr<IRType> obj_type, const std::string &prefix);
+  std::shared_ptr<simpleType> toIRType(std::shared_ptr<TypeNode> node);
 
   std::map<std::string,std::shared_ptr<stringVar>>literal_strings;
-  std::map<std::string,std::shared_ptr<fuctionNode>> ask_function;
+  std::map<std::string,std::shared_ptr<functionNode>> ask_function;
   std::map<std::string,std::shared_ptr<Var>> ask_var;
-  std::vector<std::pair<std::shared_ptr<IRStmtNode> ,std::shared_ptr<ExprNode>> > InitList;
+  std::map<std::string,std::shared_ptr<classNode>> ask_class;
+
+  std::vector<std::pair<std::shared_ptr<globalVarStmtNode> ,std::shared_ptr<ExprNode>> > InitList;
+  std::vector<std::pair<std::shared_ptr<globalStringStmtNode> ,std::shared_ptr<ExprNode>> > InitListString;
   std::map<std::string, int> annoyCounter;
-  std::map<std::shared_ptr<ASTNode>, std::shared_ptr<Value>> ask_expr;
+  std::map<ASTNode*, std::shared_ptr<Value>> ask_expr;
+
+  std::stack<std::shared_ptr<basicBlockNode> >loop_break;
+  std::stack<std::shared_ptr<basicBlockNode> >loop_continue;
 
   int if_cnt = 0;
   int continue_cnt = 0;
@@ -73,5 +83,6 @@ private:
   int ternary_cnt = 0;
   int new_cnt = 0;
   int loop_cnt = 0;
-  std::shared_ptr<fuctionNode> currentFunction=nullptr;
+  std::shared_ptr<functionNode> currentFunction=nullptr;
+  std::shared_ptr<classNode> currentClass=nullptr;
 };

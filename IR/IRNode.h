@@ -1,4 +1,5 @@
 #pragma once
+#include "AST/StmtNode/StmtNode.h"
 #include "IRType.h"
 #include "IRVisitor.h"
 #include "val.h"
@@ -23,11 +24,12 @@ public:
   virtual void accept(IRVisitor *visitor) = 0;
 };
 class classNode : public IRNode {
+public:
   std::shared_ptr<classType> type;
   std::map<std::string, int> index;
-
-public:
-  classNode(std::string name) {}
+  classNode(std::string name) { type->name = name; }
+  void add_filed(std::shared_ptr<simpleType> mem_type,
+                 const std::string &mem_name);
   void accept(IRVisitor *visitor) override { visitor->visit(this); }
   void print(std::string &out) const override {
     out = out + type->to_string();
@@ -43,7 +45,7 @@ public:
 
 class IRStmtNode : public IRNode {
 public:
-  bool jump=false;
+  bool jump = false;
   [[nodiscard]] virtual std::set<std::shared_ptr<Value>> getUse() const;
   [[nodiscard]] virtual std::shared_ptr<Var> getDef() const;
 };
@@ -58,18 +60,18 @@ public:
   void accept(IRVisitor *visitor) override { visitor->visit(this); }
   void print(std::string &out) const override;
 };
-class fuctionNode : public IRNode {
+class functionNode : public IRNode {
 public:
   std::shared_ptr<IRType> type;
   std::string name;
 
   std::vector<std::pair<std::shared_ptr<IRType>, std::string>> arguments;
   std::vector<std::shared_ptr<basicBlockNode>> blocks;
-  
+
   std::vector<std::shared_ptr<Var>> arguVar;
   std::vector<std::shared_ptr<Var>> localVars;
 
-  fuctionNode(std::shared_ptr<IRType> _type, std::string _name)
+  functionNode(std::shared_ptr<IRType> _type, std::string _name)
       : type(_type), name(std::move(_name)) {}
   void accept(IRVisitor *visitor) override { visitor->visit(this); }
   void print(std::string &out) const override {
@@ -104,14 +106,15 @@ public:
   [[nodiscard]] std::shared_ptr<Var> getDef() const override { return result; }
   void accept(IRVisitor *visitor) override { visitor->visit(this); }
   void print(std::string &out) const override {
-    out = out + result->get_name() + " = alloca " + result->point_to_type->to_string();
+    out = out + result->get_name() + " = alloca " +
+          result->point_to_type->to_string();
   }
 };
 class storeStmtNode : public IRStmtNode {
 public:
-  std::shared_ptr<ptrVar> point;
-  std::shared_ptr<Var> val;
-  storeStmtNode(std::shared_ptr<ptrVar> _point, std::shared_ptr<Var> _val)
+  std::shared_ptr<Var> point;
+  std::shared_ptr<Value> val;
+  storeStmtNode(std::shared_ptr<Value> _val, std::shared_ptr<Var> _point)
       : point(_point), val(_val) {}
 
   void accept(IRVisitor *visitor) override { visitor->visit(this); }
@@ -122,11 +125,11 @@ public:
   }
 };
 class loadStmtNode : public IRStmtNode {
-  std::shared_ptr<ptrVar> point;
+  std::shared_ptr<Var> point;
   std::shared_ptr<Var> result;
 
 public:
-  loadStmtNode(std::shared_ptr<ptrVar> _point, std::shared_ptr<Var> _res)
+  loadStmtNode(std::shared_ptr<Var> _point, std::shared_ptr<Var> _res)
       : point(_point), result(_res) {}
 
   void accept(IRVisitor *visitor) override { visitor->visit(this); }
@@ -135,6 +138,31 @@ public:
           ", ptr " + point->get_name();
   }
 };
+class arithStmtNode : public IRStmtNode {
+public:
+  std::string cmd;
+  std::shared_ptr<Var> res;
+  std::shared_ptr<Value> lhs;
+  std::shared_ptr<Value> rhs;
+
+  arithStmtNode(std::string _cmd, std::shared_ptr<Var> _res,
+              std::shared_ptr<Value> _lhs, std::shared_ptr<Value> _rhs)
+      : cmd(_cmd), res(_res), lhs(_lhs), rhs(_rhs) {}
+
+  [[nodiscard]] std::set<std::shared_ptr<Value>> getUse() const override {
+    return {lhs, rhs};
+  }
+
+  void accept(IRVisitor *visitor) override { visitor->visit(this); }
+  void print(std::string &out) const override {
+    out = out + res->get_name() + " = " + cmd + " " + res->type->to_string() +
+          " ";
+    out = out + lhs->get_name();
+    out = out + ", ";
+    out = out + rhs->get_name();
+  }
+};
+
 class binaryStmtNode : public IRStmtNode {
   std::string op;
   std::shared_ptr<Var> result;
@@ -148,38 +176,37 @@ public:
 
   void accept(IRVisitor *visitor) override { visitor->visit(this); }
   void print(std::string &out) const override {
-    out = out + result->get_name() + " = " + op + " " + result->type->to_string() +
-          " ";
+    out = out + result->get_name() + " = " + op + " " +
+          result->type->to_string() + " ";
     out = out + lhs->get_name();
     out = out + ", ";
     out = out + rhs->get_name();
   }
 };
 class cmpStmtNode : public IRStmtNode {
+public:
   std::string op;
-  std::shared_ptr<Var> result;
+  std::shared_ptr<Var> res;
   std::shared_ptr<Var> lhs;
   std::shared_ptr<Var> rhs;
-
-public:
-  cmpStmtNode(std::shared_ptr<Var> _result, std::shared_ptr<Var> _lhs,
+  cmpStmtNode(std::shared_ptr<Var> _res, std::shared_ptr<Var> _lhs,
               std::shared_ptr<Var> _rhs, std::string _op)
-      : result(_result), lhs(_lhs), rhs(_rhs), op(_op) {}
+      : res(_res), lhs(_lhs), rhs(_rhs), op(_op) {}
 
   void accept(IRVisitor *visitor) override { visitor->visit(this); }
   void print(std::string &out) const override {
-    out = out + result->get_name() + " = icmp " + op + " ";
+    out = out + res->get_name() + " = icmp " + op + " ";
     lhs->print(out);
     out = out + ", ";
     out = out + rhs->get_name();
   }
 };
 class retStmtNode : public IRStmtNode {
-  std::shared_ptr<Value> val=nullptr;
+  std::shared_ptr<Value> val = nullptr;
 
 public:
-  explicit retStmtNode(std::shared_ptr<Value> _val=nullptr) : val(_val) {
-    jump=true;
+  explicit retStmtNode(std::shared_ptr<Value> _val = nullptr) : val(_val) {
+    jump = true;
   }
 
   void accept(IRVisitor *visitor) override { visitor->visit(this); }
@@ -204,8 +231,8 @@ public:
 
   void accept(IRVisitor *visitor) override { visitor->visit(this); }
   void print(std::string &out) const override {
-    out = out + result->get_name() + " = getelementptr " + point->type->name + ", ptr " +
-          point->get_name() + ", ";
+    out = out + result->get_name() + " = getelementptr " + point->type->name +
+          ", ptr " + point->get_name() + ", ";
     for (auto &idx : index) {
       idx->print(out);
       if (idx != index.back())
@@ -215,11 +242,12 @@ public:
 };
 class callStmtNode : public IRStmtNode {
   std::shared_ptr<Var> result = nullptr;
-  std::shared_ptr<fuctionNode> func;
+  std::shared_ptr<functionNode> func;
   std::vector<std::shared_ptr<Value>> argu;
 
 public:
-  callStmtNode(std::shared_ptr<Var> _result, std::shared_ptr<fuctionNode> _func,
+  callStmtNode(std::shared_ptr<Var> _result,
+               std::shared_ptr<functionNode> _func,
                std::vector<std::shared_ptr<Value>> _argu)
       : result(_result), func(_func), argu(_argu) {}
 
@@ -240,9 +268,7 @@ class brStmtNode : public IRStmtNode {
   std::shared_ptr<basicBlockNode> to;
 
 public:
-  brStmtNode(std::shared_ptr<basicBlockNode> _to) {
-    jump=true;
-  }
+  brStmtNode(std::shared_ptr<basicBlockNode> _to) { jump = true; }
 
   void accept(IRVisitor *visitor) override { visitor->visit(this); }
   void print(std::string &out) const override {
@@ -258,15 +284,14 @@ public:
                   std::shared_ptr<basicBlockNode> _to0,
                   std::shared_ptr<basicBlockNode> _to1)
       : val(_val), to0(_to0), to1(_to1) {
-        jump=true;
-      }
+    jump = true;
+  }
 
   void accept(IRVisitor *visitor) override { visitor->visit(this); }
   void print(std::string &out) const override {
     out = out + "br ";
     val->print(out);
-    out =
-        out + ", label %" + to1->label + ", label %" + to0->label;
+    out = out + ", label %" + to1->label + ", label %" + to0->label;
   }
 };
 class phiStmtNode : public IRStmtNode {
@@ -281,7 +306,8 @@ public:
 
   void accept(IRVisitor *visitor) override { visitor->visit(this); }
   void print(std::string &out) const override {
-    out = out + result->get_name() + " = phi " + result->type->to_string() + " ";
+    out =
+        out + result->get_name() + " = phi " + result->type->to_string() + " ";
     bool first = true;
     for (auto &it : block_val) {
       if (!first)
@@ -299,10 +325,9 @@ public:
   void print(std::string &out) const override { out = out + "unreachable"; }
 };
 class globalVarStmtNode : public IRStmtNode {
+public:
   std::shared_ptr<Var> result;
   std::shared_ptr<Value> val;
-
-public:
   globalVarStmtNode(std::shared_ptr<Var> _res, std::shared_ptr<Value> _val)
       : result(_res), val(_val) {}
 
@@ -313,9 +338,8 @@ public:
   }
 };
 class globalStringStmtNode : public IRStmtNode {
-  std::shared_ptr<stringVar> result;
-
 public:
+  std::shared_ptr<stringVar> result;
   globalStringStmtNode(std::shared_ptr<stringVar> _result) : result(_result) {}
 
   void accept(IRVisitor *visitor) override { visitor->visit(this); }
@@ -341,19 +365,19 @@ public:
 class moduleNode : public IRNode {
 
 public:
-/*  moduleNode(std::vector<std::shared_ptr<globalVarStmtNode>> _vars,
-             std::vector<std::shared_ptr<classNode>> _classes,
-             std::vector<std::shared_ptr<fuctionNode>> _functions,
-             std::vector<std::shared_ptr<globalStringStmtNode>> _strings)
-      : vars(_vars), classes(_classes), functions(_functions),
-        strings(_strings) {}
-*/
+  /*  moduleNode(std::vector<std::shared_ptr<globalVarStmtNode>> _vars,
+               std::vector<std::shared_ptr<classNode>> _classes,
+               std::vector<std::shared_ptr<functionNode>> _functions,
+               std::vector<std::shared_ptr<globalStringStmtNode>> _strings)
+        : vars(_vars), classes(_classes), functions(_functions),
+          strings(_strings) {}
+  */
   std::vector<std::shared_ptr<globalVarStmtNode>> vars;
   std::vector<std::shared_ptr<classNode>> classes;
-  std::vector<std::shared_ptr<fuctionNode>> functions;
+  std::vector<std::shared_ptr<functionNode>> functions;
   std::vector<std::shared_ptr<globalStringStmtNode>> strings;
-  
-	std::vector<std::shared_ptr<Var> > globalVars;
+
+  std::vector<std::shared_ptr<Var>> globalVars;
 
   void accept(IRVisitor *visitor) override { visitor->visit(this); }
   void print(std::string &out) const override {

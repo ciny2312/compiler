@@ -1,4 +1,5 @@
 #include "IRbuilder.h"
+#include "AST/ASTVisitor.h"
 #include "IR/IRType.h"
 #include "IR/val.h"
 #include "IRNode.h"
@@ -37,6 +38,7 @@
 #include "util/type.h"
 #include <memory>
 #include <string>
+#include <utility>
 
 void basicBlockNode::print(std::string &out) const {
   out = out + label + ":\n";
@@ -61,6 +63,9 @@ IRbuilder::register_literal_str(const std::string &str) {
   return literal_strings[str];
 }
 
+boolConst get_const(bool val) { return boolConst(IRboolType, val); }
+intConst get_const(int val) { return intConst(IRintType, val); }
+
 const std::string emptyString = "";
 
 const std::shared_ptr<boolConst> defaultBool =
@@ -71,114 +76,114 @@ const std::shared_ptr<nullConst> defaultPtr =
     std::make_shared<nullConst>(IRptrType);
 
 void IRbuilder::init_builtin() {
-  auto print = std::make_shared<fuctionNode>(IRvoidType, "print");
+  auto print = std::make_shared<functionNode>(IRvoidType, "print");
   print->arguments.emplace_back(IRstringType, "str");
   module->functions.push_back(print);
 
-  auto println = std::make_shared<fuctionNode>(IRvoidType, "println");
+  auto println = std::make_shared<functionNode>(IRvoidType, "println");
   println->arguments.emplace_back(IRstringType, "str");
   module->functions.push_back(println);
 
-  auto printInt = std::make_shared<fuctionNode>(IRvoidType, "printInt");
+  auto printInt = std::make_shared<functionNode>(IRvoidType, "printInt");
   print->arguments.emplace_back(IRintType, "n");
   module->functions.push_back(printInt);
 
-  auto printlnInt = std::make_shared<fuctionNode>(IRvoidType, "printlnInt");
+  auto printlnInt = std::make_shared<functionNode>(IRvoidType, "printlnInt");
   print->arguments.emplace_back(IRintType, "n");
   module->functions.push_back(printlnInt);
 
-  auto getString = std::make_shared<fuctionNode>(IRstringType, "getString");
+  auto getString = std::make_shared<functionNode>(IRstringType, "getString");
   module->functions.push_back(getString);
 
-  auto getInt = std::make_shared<fuctionNode>(IRintType, "getInt");
+  auto getInt = std::make_shared<functionNode>(IRintType, "getInt");
   module->functions.push_back(getInt);
 
-  auto toString = std::make_shared<fuctionNode>(IRstringType, "toString");
+  auto toString = std::make_shared<functionNode>(IRstringType, "toString");
   toString->arguments.emplace_back(IRintType, "n");
   module->functions.push_back(toString);
 
-  auto array_size = std::make_shared<fuctionNode>(IRintType, "_array.size");
+  auto array_size = std::make_shared<functionNode>(IRintType, "_array.size");
   array_size->arguments.emplace_back(IRptrType, "array");
   module->functions.push_back(array_size);
 
   auto string_length =
-      std::make_shared<fuctionNode>(IRintType, "string.length");
+      std::make_shared<functionNode>(IRintType, "string.length");
   string_length->arguments.emplace_back(IRstringType, "str");
   module->functions.push_back(string_length);
 
   auto substring =
-      std::make_shared<fuctionNode>(IRstringType, "string.substring");
+      std::make_shared<functionNode>(IRstringType, "string.substring");
   substring->arguments.emplace_back(IRstringType, "str");
   substring->arguments.emplace_back(IRintType, "left");
   substring->arguments.emplace_back(IRintType, "right");
   module->functions.push_back(substring);
 
-  auto parseInt = std::make_shared<fuctionNode>(IRintType, "string.parseInt");
+  auto parseInt = std::make_shared<functionNode>(IRintType, "string.parseInt");
   parseInt->arguments.emplace_back(IRstringType, "str");
   module->functions.push_back(parseInt);
 
-  auto ord = std::make_shared<fuctionNode>(IRintType, "string.ord");
+  auto ord = std::make_shared<functionNode>(IRintType, "string.ord");
   ord->arguments.emplace_back(IRstringType, "str");
   ord->arguments.emplace_back(IRintType, "pos");
   module->functions.push_back(ord);
 
-  auto str_add = std::make_shared<fuctionNode>(IRstringType, "string.add");
+  auto str_add = std::make_shared<functionNode>(IRstringType, "string.add");
   str_add->arguments.emplace_back(IRstringType, "lhs");
   str_add->arguments.emplace_back(IRstringType, "rhs");
   module->functions.push_back(str_add);
 
-  auto str_equal = std::make_shared<fuctionNode>(IRboolType, "string.equal");
+  auto str_equal = std::make_shared<functionNode>(IRboolType, "string.equal");
   str_equal->arguments.emplace_back(IRstringType, "lhs");
   str_equal->arguments.emplace_back(IRstringType, "rhs");
   module->functions.push_back(str_equal);
 
   auto str_notEqual =
-      std::make_shared<fuctionNode>(IRboolType, "string.notEqual");
+      std::make_shared<functionNode>(IRboolType, "string.notEqual");
   str_notEqual->arguments.emplace_back(IRstringType, "lhs");
   str_notEqual->arguments.emplace_back(IRstringType, "rhs");
   module->functions.push_back(str_notEqual);
 
-  auto str_less = std::make_shared<fuctionNode>(IRboolType, "string.less");
+  auto str_less = std::make_shared<functionNode>(IRboolType, "string.less");
   str_less->arguments.emplace_back(IRstringType, "lhs");
   str_less->arguments.emplace_back(IRstringType, "rhs");
   module->functions.push_back(str_less);
 
   auto str_greater =
-      std::make_shared<fuctionNode>(IRboolType, "string.greater");
+      std::make_shared<functionNode>(IRboolType, "string.greater");
   str_greater->arguments.emplace_back(IRstringType, "lhs");
   str_greater->arguments.emplace_back(IRstringType, "rhs");
   module->functions.push_back(str_greater);
 
   auto str_lessEqual =
-      std::make_shared<fuctionNode>(IRboolType, "string.lessEqual");
+      std::make_shared<functionNode>(IRboolType, "string.lessEqual");
   str_lessEqual->arguments.emplace_back(IRstringType, "lhs");
   str_lessEqual->arguments.emplace_back(IRstringType, "rhs");
   module->functions.push_back(str_lessEqual);
 
   auto str_greaterEqual =
-      std::make_shared<fuctionNode>(IRboolType, "string.greaterEqual");
+      std::make_shared<functionNode>(IRboolType, "string.greaterEqual");
   str_greaterEqual->arguments.emplace_back(IRstringType, "lhs");
   str_greaterEqual->arguments.emplace_back(IRstringType, "rhs");
   module->functions.push_back(str_greaterEqual);
 
-  auto malloc_ = std::make_shared<fuctionNode>(IRptrType, "malloc");
+  auto malloc_ = std::make_shared<functionNode>(IRptrType, "malloc");
   malloc_->arguments.emplace_back(IRintType, "size");
   module->functions.push_back(malloc_);
 
-  auto array_size_ = std::make_shared<fuctionNode>(IRintType, "__array.size");
+  auto array_size_ = std::make_shared<functionNode>(IRintType, "__array.size");
   array_size_->arguments.emplace_back(IRptrType, "array");
   module->functions.push_back(array_size_);
 
-  auto newPtrArray = std::make_shared<fuctionNode>(IRptrType, "__newPtrArray");
+  auto newPtrArray = std::make_shared<functionNode>(IRptrType, "__newPtrArray");
   newPtrArray->arguments.emplace_back(IRintType, "size");
   module->functions.push_back(newPtrArray);
 
-  auto newIntArray = std::make_shared<fuctionNode>(IRptrType, "__newIntArray");
+  auto newIntArray = std::make_shared<functionNode>(IRptrType, "__newIntArray");
   newIntArray->arguments.emplace_back(IRintType, "size");
   module->functions.push_back(newIntArray);
 
   auto newBoolArray =
-      std::make_shared<fuctionNode>(IRptrType, "__newBoolArray");
+      std::make_shared<functionNode>(IRptrType, "__newBoolArray");
   newBoolArray->arguments.emplace_back(IRintType, "size");
   module->functions.push_back(newBoolArray);
 
@@ -218,26 +223,31 @@ IRbuilder::remove_variable_pointer(std::shared_ptr<Value> val) {
      static_cast<Var *>(glo)); add_stmt(load); return load->res;
     */
 }
-void IRbuilder::add_terminals(std::shared_ptr<fuctionNode> func) {
-  std::shared_ptr<retStmtNode> return_void=std::make_shared<retStmtNode>(nullptr);
-  std::shared_ptr<retStmtNode> return_0=std::make_shared<retStmtNode>(defaultInt);
+void IRbuilder::add_terminals(std::shared_ptr<functionNode> func) {
+  std::shared_ptr<retStmtNode> return_void =
+      std::make_shared<retStmtNode>(nullptr);
+  std::shared_ptr<retStmtNode> return_0 =
+      std::make_shared<retStmtNode>(defaultInt);
 
-  for(auto it:func->blocks){
-    auto bak=it->stmt.empty()?nullptr:it->stmt.back();
-    if(!(bak&&bak->jump)){
-      if(func->name == "main"){
+  for (auto it : func->blocks) {
+    auto bak = it->stmt.empty() ? nullptr : it->stmt.back();
+    if (!(bak && bak->jump)) {
+      if (func->name == "main") {
         it->stmt.push_back(return_0);
-      }
-      else{
-        if(func->type == IRvoidType){
+      } else {
+        if (func->type == IRvoidType) {
           it->stmt.push_back(return_void);
-        }
-        else{
+        } else {
           it->stmt.push_back(std::make_shared<unreachStmtNode>());
         }
       }
     }
   }
+}
+void classNode::add_filed(std::shared_ptr<simpleType> mem_type,
+                          const std::string &mem_name) {
+  type->mem.emplace_back(mem_type);
+  index[mem_name] = type->mem.size() - 1;
 }
 void IRbuilder::init_global_var() {
   if (InitList.empty())
@@ -250,7 +260,7 @@ void IRbuilder::init_global_var() {
       std::make_shared<globalVarStmtNode>(first_sign, defaultBool);
   module->vars.push_back(first_sign_stmt);
 
-  auto func = std::make_shared<fuctionNode>(IRvoidType, "init-global-var");
+  auto func = std::make_shared<functionNode>(IRvoidType, "init-global-var");
   func->blocks.emplace_back(basicBlockNode("entry"));
   currentFunction = func;
 
@@ -263,24 +273,26 @@ void IRbuilder::init_global_var() {
   currentFunction->blocks.back()->stmt.push_back(is_first);
   currentFunction->blocks.push_back(init_block);
 
-  auto set_sign = std::make_shared<storeStmtNode>(, first_sign);
-  currentFunction->blocks.back()->stmt.push_back(set_sign);
+  //  auto set_sign = std::make_shared<storeStmtNode>(, first_sign);
+  //  currentFunction->blocks.back()->stmt.push_back(set_sign);
 
   //  auto set_sign = IRcreateStoreStmt(IRliteral(true), first_sign);
 
   for (auto &it : InitList) {
     it.second->accept(this);
     auto store = std::make_shared<storeStmtNode>(
-        remove_variable_pointer(ask_expr[it.second]), nullptr);
-    store->point=it.first.result;
-    
-    currentFunction->blocks.back()->stmt.push_back(store);
+        remove_variable_pointer(ask_expr[it.second.get()]), nullptr);
+    store->point = it.first->result;
 
-    if (auto gs = dynamic_cast<GlobalStmt *>(init.first))
-      store->pointer = gs->var;
-    else if (auto gss = dynamic_cast<GlobalStringStmt *>(init.first))
-      store->pointer = gss->var;
-    add_stmt(store);
+    currentFunction->blocks.back()->stmt.push_back(store);
+  }
+  for (auto &it : InitListString) {
+    it.second->accept(this);
+    auto store = std::make_shared<storeStmtNode>(
+        remove_variable_pointer(ask_expr[it.second.get()]), nullptr);
+    store->point = it.first->result;
+
+    currentFunction->blocks.back()->stmt.push_back(store);
   }
   currentFunction->blocks.push_back(end_block);
   add_terminals(func);
@@ -288,12 +300,28 @@ void IRbuilder::init_global_var() {
 
   for (auto f : module->functions)
     if (f->name == "main") {
-      auto call=std::make_shared<callStmtNode>(func);
-      auto &s=f->blocks[0]->stmt;
-      s.insert(s.begin(),call);
+      auto call = std::make_shared<callStmtNode>(func);
+      auto &s = f->blocks[0]->stmt;
+      s.insert(s.begin(), call);
       break;
     }
   module->functions.push_back(func);
+}
+std::shared_ptr<simpleType> get_IRType(std::shared_ptr<TypeNode> node) {
+  if (!node)
+    return IRvoidType;
+  if (node->dim != 0)
+    return IRptrType;
+  if (node->name == "void")
+    return IRvoidType;
+  else if (node->name == "bool")
+    return IRboolType;
+  else if (node->name == "int")
+    return IRintType;
+  else if (node->name == "string")
+    return IRstringType;
+  else
+    return IRptrType; // string and class
 }
 
 void IRbuilder::visit(RootNode *node) {
@@ -310,245 +338,83 @@ void IRbuilder::visit(RootNode *node) {
 
 void IRbuilder::visit(varDefNode *node) {
   //  std::cerr << "check varDef\n";
-  node->type_name->accept(this);
-
-  auto type_name = node->type_name->name;
-  auto dim = node->type_name->dim;
-  if (type_name == "void") {
-    throw semanticError("Invalid Type", node->pos);
-  }
-  if (!global_scope.is_type(type_name)) {
-    throw semanticError("Undefined Identifier", node->pos);
-  }
-  auto type_opt = global_scope.ask_type(type_name);
-  auto type = Type(std::move(type_opt), dim);
+  auto type = get_IRType(node->type_name);
 
   auto var_name = node->var_name;
   auto expr = node->init_val;
   for (int i = 0; i < var_name.size(); ++i) {
     if (expr[i] != nullptr) {
-      expr[i]->accept(this);
-
-      if (expr[i]->get_type() == nullptr) {
-        if (dim == 0 && (type == *IntType || type == *BoolType)) {
-          throw semanticError("Type Mismatch", node->pos);
-        }
-      } else if (*expr[i]->get_type() != type) {
-        throw semanticError("Type Mismatch", node->pos);
-      }
     }
-    //  std::cerr<<"define var "<<var_name[i]<<'\n';
-    if (global_scope.is_function(var_name[i])) {
-      throw semanticError("Multiple Definitions", node->pos);
-    }
-    scope.define_var(var_name[i], type, node->pos);
   }
   //  std::cerr << "return varDef\n";
 }
 
 void IRbuilder::visit(funcDefNode *node) {
   //  std::cerr << "check funcDef\n";
-  //  std::cerr
-  //  <<StringTypename->ask_function("length").return_type->type_name<<"
-  //  _________funcDef\n";
-  node->return_type->accept(this);
-
-  auto func_name = node->func_name;
-  if (current_class) {
-    if (!current_class->is_function(func_name)) {
-      throw std::runtime_error("Unidentified function name");
-    }
-    auto func = current_class->ask_function(func_name);
-    //  std::cerr<<"HERE\n"<<func_name<<'
-    //  '<<current_class->ask_function(func_name).return_type->type_name<<"HERE\n";
-    return_type = func.return_type;
-    if (current_class->is_member(func_name)) {
-      throw semanticError("Multiple Definitions", node->pos);
-    }
-  } else {
-    if (!global_scope.is_function(func_name)) {
-      throw std::runtime_error("Unidentified function name");
-    }
-    auto func = global_scope.ask_function(func_name);
-    return_type = func.return_type;
-    if (func_name == "main") {
-      main_func = true;
-    } else if (scope.is_var(func_name)) {
-      throw semanticError("Multiple Definitions", node->pos);
-    }
+  auto func = std::make_shared<functionNode>(
+      toIRType(node->return_type),
+      currentClass ? currentClass->type->name + "." + node->func_name
+                   : node->func_name);
+  if (currentClass) {
+    func->arguments.push_back(std::make_pair(IRptrType, "this"));
   }
-  //  std::cerr <<node->arguments.size()<< " middle funcDef\n";
-  is_return = false;
-  scope = {std::make_shared<Scope>(std::move(scope))};
-  for (const auto arg : node->arguments) {
-    auto arg_type = arg.first;
-    auto arg_name = arg.second;
-
-    //  std::cerr << "middle argu funcDef\n";
-    arg_type->accept(this);
-
-    if (!global_scope.is_type(arg_type->name)) {
-      throw std::runtime_error("Unidentified arg type");
-    }
-    auto type_name = global_scope.ask_type(arg_type->name);
-    auto type = Type(std::move(type_name), arg_type->dim);
-    scope.define_var(arg_name, std::move(type), node->pos);
+  for (auto it : node->arguments) {
+    func->arguments.push_back(std::make_pair(toIRType(it.first), it.second));
   }
-  //  std::cerr << "middle funcDef\n";
-  node->func->accept(this);
-  //  std::cerr<<is_return<<' '<<main_func<<std::endl;
-  if (*return_type != *VoidType && !is_return && !main_func) {
-    throw semanticError("Missing Return Statement", (node->pos));
-  }
-  main_func = false;
-  scope = std::move(*scope.ask_parent());
+  module->functions.push_back(func);
+  ask_function[func->name] = func;
   //  std::cerr << "return funcDef\n";
 }
 
 void IRbuilder::visit(classDefNode *node) {
   //  std::cerr << "check classDef\n";
-  auto type_name = node->name;
-  if (!global_scope.is_type(type_name)) {
-    throw std::runtime_error("Unidentified class name");
+  auto c = std::make_shared<classNode>(node->name);
+  for (auto it : node->varDef) {
+    auto type = get_IRType(it->type_name);
+    for (auto var : it->var_name) {
+      c->add_filed(type, var);
+    }
   }
-  current_class = global_scope.ask_type(type_name);
-  scope = {std::make_shared<Scope>(std::move(scope))};
-  scope.define_var("this", Type(current_class, 0), node->pos);
-
-  for (const auto &member : current_class->member) {
-    scope.define_var(member.first, member.second, node->pos);
-  }
+  module->classes.push_back(c);
+  ask_class[node->name] = c;
+  currentClass = c;
   for (auto it : node->consDef) {
     it->accept(this);
   }
   for (auto it : node->funcDef) {
     it->accept(this);
   }
-  scope = std::move(*scope.ask_parent());
-  current_class = nullptr;
+  currentClass = nullptr;
   //  std::cerr << "return classDef\n";
 }
 
 void IRbuilder::visit(constructorClassStmtNode *node) {
   //  std::cerr << "check constructor\n";
-  return_type = VoidType;
-  node->ask_func()->accept(this);
-  return_type = nullptr;
+
+  //  return_type = VoidType;
+  //  node->ask_func()->accept(this);
+  //  return_type = nullptr;
+
   //  std::cerr << "return constructor\n";
 }
 
-void IRbuilder::visit(simpleArrayNode *node) {
-  //  std::cerr << "check simpleArray\n";
-  auto elements = node->ele;
-  for (auto it : elements) {
-    it->accept(this);
-  }
-  for (int i = 0; i + 1 < elements.size(); ++i) {
-    if (elements[i]->ask_type() == nullptr ||
-        elements[i + 1]->ask_type() == nullptr) {
-      throw semanticError("Invalid Type", node->pos);
-    }
-    if (*elements[i]->ask_type() != *elements[i + 1]->ask_type()) {
-      throw semanticError("Type Mismatch", node->pos);
-    }
-  }
-  if (elements.empty()) {
-    node->updata_type(nullptr);
-  } else {
-    auto type = elements[0]->ask_type();
-    node->updata_type(std::make_shared<Type>(type->type_name, 1));
-  }
-  //  std::cerr << "return simpleArray\n";
-}
-
-void IRbuilder::visit(complexArrayNode *node) {
-  //  std::cerr << "check complexArray\n";
-  auto elements = node->ele;
-  for (auto it : elements) {
-    it->accept(this);
-  }
-  std::shared_ptr<Type> type(nullptr);
-  for (int i = 0; i < elements.size(); ++i) {
-    if (type == nullptr && elements[i]->ask_type() != nullptr) {
-      type = elements[i]->ask_type();
-    }
-    for (int j = i + 1; j < elements.size(); ++j) {
-      if (elements[i]->ask_type() != nullptr &&
-          elements[j]->ask_type() != nullptr) {
-        if (*elements[i]->ask_type() != *elements[j]->ask_type()) {
-          throw semanticError("Type Mismatch", node->pos);
-        }
-      }
-    }
-  }
-  node->updata_type(std::make_shared<Type>(type->type_name, type->dim + 1));
-}
 
 void IRbuilder::visit(constPrimaryNode *node) {
   //  std::cerr << "check constPrimary\n";
-  switch (node->const_type) {
-  case constPrimaryNode::Bool: {
-    node->updata_type(BoolType);
-    break;
-  }
-  case constPrimaryNode::Int: {
-    node->updata_type(IntType);
-    break;
-  }
-  case constPrimaryNode::Null: {
-    node->updata_type(std::shared_ptr<Type>(nullptr));
-    break;
-  }
-  case constPrimaryNode::String: {
-    node->updata_type(StringType);
-    break;
-  }
-  case constPrimaryNode::Array: {
-    auto array_node = std::get<std::shared_ptr<ArrayNode>>(node->value);
-    array_node->accept(this);
-    node->updata_type(array_node->ask_type());
-    break;
-  }
-  case constPrimaryNode::Unknown: {
-    throw std::runtime_error("Invalid literal type");
-  }
-  }
   //  std::cerr << "return constPrimary\n";
 }
 
 void IRbuilder::visit(newPrimaryNode *node) {
   //  std::cerr << "check newPrimary\n";
-  node->type_name->accept(this);
-
-  auto type_name = node->type_name->name;
-  if (!global_scope.is_type(type_name)) {
-    throw semanticError("Undefined Identifier", node->pos);
+  std::vector<std::shared_ptr<Value>> array_size;
+  for (auto it : node->type->arraySize) {
+    it->accept(this);
+    auto v = remove_variable_pointer(ask_expr[it]);
+    array_size.push_back(v);
   }
-  auto type = global_scope.ask_type(type_name);
-  if (*type == *VoidTypename) {
-    throw semanticError("Invalid Type", node->pos);
-  }
-
-  switch (node->new_type) {
-  case newPrimaryNode::NewType::var: {
-    node->updata_type(
-        std::make_shared<Type>(std::move(type), node->type_name->dim));
-    break;
-  }
-  case newPrimaryNode::NewType::array: {
-    auto array = node->array;
-    array->accept(this);
-    auto node_type = Type(std::move(type), node->type_name->dim);
-    if (node_type != *array->ask_type()) {
-      throw semanticError("Type Mismatch", {node->pos});
-    }
-    node->updata_type(std::make_shared<Type>(std::move(node_type)));
-    break;
-  }
-  case newPrimaryNode::NewType::Unknown: {
-    throw std::runtime_error("Invalid new type");
-  }
-  }
+  ++new_cnt;
+  ask_expr[node] = TransformNewToFor(
+      array_size, static_cast<int>(node->type->dim), node->type->name);
   //  std::cerr << "return newPrimary\n";
 }
 
@@ -581,15 +447,9 @@ void IRbuilder::visit(parenPrimaryNode *node) {
 }
 
 void IRbuilder::visit(atomExprNode *node) {
-  //  std::cerr
-  //  <<StringTypename->ask_function("length").return_type->type_name<<"
-  //  __________atom\n";
   //  std::cerr << "check atomExpr\n";
-  auto primary = node->primary_node;
-  primary->accept(this);
-  node->updata_type(primary->ask_type());
-  node->updata_assignable(primary->assignable);
-  node->updata_null(primary->isnull);
+  auto pri = node->primary_node;
+  pri->accept(this);
   //  std::cerr << "return atomExpr\n";
 }
 
@@ -600,311 +460,191 @@ void IRbuilder::visit(assignExprNode *node) {
 
   lhs->accept(this);
   rhs->accept(this);
-  if (!lhs->assignable) {
-    throw semanticError("Type Mismatch", node->pos);
-  }
-  auto left_type = lhs->get_type();
-  auto right_type = rhs->get_type();
-  if ((left_type->dim > 0 || left_type->dim == 0 && *left_type != *IntType &&
-                                 *left_type != *BoolType) &&
-      rhs->isnull) {
-    node->updata_type(left_type);
-    return;
-  }
-  if (left_type == nullptr || right_type == nullptr) {
-    throw semanticError("Invalid Type", node->pos);
-  }
-  if (*left_type != *right_type) {
-    //  std::cerr << lhs->pos.toString() << ' ' << left_type->dim << '\n';
-    //  std::cerr << rhs->pos.toString() << ' ' << right_type->dim << '\n';
-    throw semanticError("Type Mismatch", node->pos);
-  }
-  node->updata_type(left_type);
-  node->updata_assignable(false);
-  node->updata_null(false);
+
+  auto st = std::make_shared<storeStmtNode>(
+      remove_variable_pointer(ask_expr[rhs.get()]),
+      std::make_shared<Var>(ask_expr[lhs.get()]));
+  currentFunction->blocks.back()->stmt.push_back(st);
   //  std::cerr << "return assignExpr\n";
 }
 
 void IRbuilder::visit(oneExprNode *node) {
   //  std::cerr << "check oneExpr\n";
-  auto expr = node->expr_node;
-  expr->accept(this);
-  switch (node->op_type) {
-  case oneExprNode::OpType::Tilde:
-  case oneExprNode::OpType::Minus: {
-    if (expr->get_type() == nullptr || *expr->get_type() != *IntType) {
-      throw semanticError("Type Mismatch", node->pos);
-    }
-    node->updata_type(IntType);
-    node->updata_assignable(false);
-    node->updata_null(false);
-    break;
-  }
-  case oneExprNode::OpType::SufIncrement:
-  case oneExprNode::OpType::SufDecrement: {
-    if (expr->get_type() == nullptr || *expr->get_type() != *IntType) {
-      throw semanticError("Type Mismatch", node->pos);
-    }
-    //  std::cerr<<"HERE2\n";
-    if (!expr->assignable) {
-      throw semanticError("Type Mismatch", node->pos);
-    }
-    node->updata_type(IntType);
-    node->updata_assignable(false);
-    node->updata_null(false);
-    break;
-  }
-  case oneExprNode::OpType::PreIncrement:
-  case oneExprNode::OpType::PreDecrement: {
-    if (expr->get_type() == nullptr || *expr->get_type() != *IntType) {
-      throw semanticError("Type Mismatch", node->pos);
-    }
-    //  std::cerr<<"HERE\n";
-    if (!expr->assignable) {
-      throw semanticError("Type Mismatch", node->pos);
-    }
-    node->updata_type(IntType);
-    node->updata_assignable(true);
-    node->updata_null(false);
-    break;
-  }
-  case oneExprNode::OpType::Not: {
-    if (expr->get_type() == nullptr || *expr->get_type() != *BoolType) {
-      throw semanticError("Type Mismatch", node->pos);
-    }
-    node->updata_type(BoolType);
-    node->updata_assignable(false);
-    node->updata_null(false);
-    break;
-  }
-  case oneExprNode::OpType::Unknown: {
-    throw std::runtime_error("Invalid unary operator type");
-  }
-  }
+  node->expr_node->accept(this);
+  if (node->op_type == oneExprNode::OpType::PreDecrement ||
+      node->op_type == oneExprNode::OpType::SufDecrement ||
+      node->op_type == oneExprNode::OpType::PreIncrement ||
+      node->op_type ==
+          oneExprNode::OpType::SufIncrement) { // A++, A--, ++A, --A
+
+    auto add = std::make_shared<arithStmtNode>(
+        (node->op_type == oneExprNode::OpType::PreDecrement ||
+         node->op_type == oneExprNode::OpType::SufDecrement)
+            ? "add"
+            : "sub",
+        nullptr, remove_variable_pointer(ask_expr[node->expr_node.get()]),
+        get_const(1));
+    add->res = register_annoy_var(IRintType, ".arith.");
+    currentFunction->blocks.back()->stmt.push_back(add);
+
+    if (!node->assignable)
+      ask_expr[node] = add->lhs;
+    else
+      ask_expr[node] = ask_expr[node->expr_node.get()];
+
+    auto store = std::make_shared<storeStmtNode>(
+        add->res, std::make_shared<Var>(ask_expr[node->expr_node.get()]));
+    currentFunction->blocks.back()->stmt.push_back(store);
+  } else if (node->op_type == oneExprNode::OpType::Minus) {
+    auto sub = std::make_shared<arithStmtNode>(
+        "sub", nullptr, get_const(0),
+        remove_variable_pointer(ask_expr[node->expr_node.get()]));
+    sub->res = register_annoy_var(IRintType, ".arith.");
+    currentFunction->blocks.back()->stmt.push_back(sub);
+    ask_expr[node] = sub->res;
+  } else if (node->op_type == oneExprNode::OpType::Not) {
+    auto xor_ = std::make_shared<arithStmtNode>(
+        "xor", nullptr,
+        remove_variable_pointer(ask_expr[node->expr_node.get()]),
+        get_const(true));
+    xor_->res = register_annoy_var(IRboolType, ".arith.");
+    currentFunction->blocks.back()->stmt.push_back(xor_);
+    ask_expr[node] = xor_->res;
+  } else if (node->op_type == oneExprNode::OpType::Tilde) {
+    auto xor_ = std::make_shared<arithStmtNode>(
+        "xor", nullptr,
+        remove_variable_pointer(ask_expr[node->expr_node.get()]),
+        get_const(-1));
+    xor_->res = register_annoy_var(IRintType, ".arith.");
+    currentFunction->blocks.back()->stmt.push_back(xor_);
+    ask_expr[node] = xor_->res;
+  } else
+    throw std::runtime_error("unknown single expr op");
+
   //  std::cerr << "return oneExpr\n";
 }
-
+void enterAndOrBinaryExprNode(binaryExprNode *node) {}
+void enterStringBinaryExprNode(binaryExprNode *node) {}
 void IRbuilder::visit(binaryExprNode *node) {
   //  std::cerr << "check binaryExpr\n";
-  //  std::cerr
-  //  <<StringTypename->ask_function("length").return_type->type_name<<"
-  //  __________binary\n";
-  auto lhs = node->lhs;
-  auto rhs = node->rhs;
-  lhs->accept(this);
-  rhs->accept(this);
-  auto left_type = lhs->get_type();
-  auto right_type = rhs->get_type();
-  switch (node->opCode) {
-  case binaryExprNode::OpType::Add: {
-    if (left_type == nullptr || right_type == nullptr) {
-      throw semanticError("Invalid Type", node->pos);
-    }
-    if (*left_type != *right_type) {
-      throw semanticError("Type Mismatch", node->pos);
-    }
-    if (*left_type != *IntType && *left_type != *StringType) {
-      throw semanticError("Invalid Type", node->pos);
-    }
-    node->updata_type(left_type);
-    node->updata_assignable(false);
-    node->updata_null(false);
-    break;
+
+  if (node->opCode == binaryExprNode::OpType::AndAnd ||
+      node->opCode == binaryExprNode::OpType::OrOr) {
+    enterAndOrBinaryExprNode(node);
+    return;
   }
-  case binaryExprNode::OpType::Sub:
-  case binaryExprNode::OpType::Mul:
-  case binaryExprNode::OpType::Div:
-  case binaryExprNode::OpType::Mod:
-  case binaryExprNode::OpType::And:
-  case binaryExprNode::OpType::Or:
-  case binaryExprNode::OpType::Xor:
-  case binaryExprNode::OpType::ShiftL:
-  case binaryExprNode::OpType::ShiftR: {
-    if (left_type == nullptr || right_type == nullptr) {
-      throw semanticError("Invalid Type", node->pos);
-    }
-    if (*left_type != *right_type) {
-      throw semanticError("Type Mismatch", node->pos);
-    }
-    if (*left_type != *IntType) {
-      throw semanticError("Invalid Type", node->pos);
-    }
-    node->updata_type(IntType);
-    node->updata_assignable(false);
-    node->updata_null(false);
-    break;
+  if (node->lhs->get_type()->type_name->name == "string" &&
+      node->lhs->get_type()->dim == 0) {
+    enterStringBinaryExprNode(node);
+    return;
   }
-  case binaryExprNode::OpType::Less:
-  case binaryExprNode::OpType::Greater:
-  case binaryExprNode::OpType::LessEqual:
-  case binaryExprNode::OpType::GreaterEqual: {
-    if (left_type == nullptr || right_type == nullptr) {
-      throw semanticError("Invalid Type", node->pos);
-    }
-    if (*left_type != *right_type) {
-      throw semanticError("Type Mismatch", node->pos);
-    }
-    if (*left_type != *IntType && *left_type != *StringType) {
-      throw semanticError("Invalid Type", node->pos);
-    }
-    node->updata_type(BoolType);
-    node->updata_assignable(false);
-    node->updata_null(false);
-    break;
-  }
-  case binaryExprNode::OpType::Equal:
-  case binaryExprNode::OpType::NotEqual: {
-    if (left_type == nullptr && right_type != nullptr &&
-        (*right_type == *IntType || *right_type == *BoolType)) {
-      throw semanticError("Invalid Type", node->pos);
-    }
-    if (right_type == nullptr && left_type != nullptr &&
-        (*left_type == *IntType || *left_type == *BoolType)) {
-      throw semanticError("Invalid Type", node->pos);
-    }
-    if (left_type != nullptr && right_type != nullptr &&
-        *left_type != *right_type) {
-      throw semanticError("Type Mismatch", node->pos);
-    }
-    node->updata_type(BoolType);
-    node->updata_assignable(false);
-    node->updata_null(false);
-    break;
-  }
-  case binaryExprNode::OpType::AndAnd:
-  case binaryExprNode::OpType::OrOr: {
-    if (left_type == nullptr || right_type == nullptr) {
-      throw semanticError("Invalid Type", node->pos);
-    }
-    if (*left_type != *right_type) {
-      throw semanticError("Type Mismatch", node->pos);
-    }
-    if (*left_type != *BoolType) {
-      throw semanticError("Invalid Type", node->pos);
-    }
-    node->updata_type(BoolType);
-    node->updata_assignable(false);
-    node->updata_null(false);
-    break;
-  }
-  case binaryExprNode::OpType::Unknown: {
-    throw std::runtime_error("Invalid binary operator type");
-  }
-  }
+  std::map<binaryExprNode::OpType, std::string> arth = {
+      {binaryExprNode::OpType::Add, "add"},
+      {binaryExprNode::OpType::Sub, "sub"},
+      {binaryExprNode::OpType::Mul, "mul"},
+      {binaryExprNode::OpType::Div, "sdiv"},
+      {binaryExprNode::OpType::Mod, "srem"},
+      {binaryExprNode::OpType::ShiftL, "shl"},
+      {binaryExprNode::OpType::ShiftR, "ashr"},
+      {binaryExprNode::OpType::And, "and"},
+      {binaryExprNode::OpType::Or, "or"},
+      {binaryExprNode::OpType::Xor, "xor"},
+  };
+  std::map<binaryExprNode::OpType, std::string> cmp = {
+      {binaryExprNode::OpType::Equal, "eq"},
+      {binaryExprNode::OpType::NotEqual, "ne"},
+      {binaryExprNode::OpType::Less, "slt"},
+      {binaryExprNode::OpType::Greater, "sgt"},
+      {binaryExprNode::OpType::LessEqual, "sle"},
+      {binaryExprNode::OpType::GreaterEqual, "sge"},
+  };
+  node->lhs->accept(this);
+  auto l = remove_variable_pointer(ask_expr[node->lhs.get()]);
+  node->rhs->accept(this);
+  auto r = remove_variable_pointer(ask_expr[node->rhs.get()]);
+  if (arth.count(node->opCode) != 0) {
+    auto a = std::make_shared<arithStmtNode>(arth[node->opCode], nullptr, l, r);
+    ask_expr[node] = a->res = register_annoy_var(IRintType, ".arith.");
+    currentFunction->blocks.back()->stmt.push_back(a);
+  } else if (cmp.count(node->opCode) != 0) {
+    auto c = std::make_shared<cmpStmtNode>(cmp[node->opCode], nullptr, l, r);
+    ask_expr[node] = c->res = register_annoy_var(IRboolType, ".cmp.");
+    currentFunction->blocks.back()->stmt.push_back(c);
+  } else
+    throw std::runtime_error("IRBuilder: unknown binary operator: ");
+
   //  std::cerr << "return binaryExpr\n";
 }
 
 void IRbuilder::visit(threeExprNode *node) {
-  auto condition = node->condi;
-  condition->accept(this);
-  auto then_expr = node->then_expr;
-  then_expr->accept(this);
-  auto else_expr = node->else_expr;
-  else_expr->accept(this);
-  auto condition_type = condition->get_type();
-  if (condition_type == nullptr || *condition_type != *BoolType) {
-    throw semanticError("Invalid Type", node->pos);
+  ++ternary_cnt;
+  auto true_expr =
+      env.createBasicBlock("ternary_true_" + std::to_string(ternary_cnt));
+  auto false_expr =
+      env.createBasicBlock("ternary_false_" + std::to_string(ternary_cnt));
+  auto end =
+      env.createBasicBlock("ternary_end_" + std::to_string(ternary_cnt));
+
+  visit(node->cond);
+  auto br_cond = env.createCondBrStmt(
+      remove_variable_pointer(ask_expr[node->cond]), true_expr, false_expr);
+  add_stmt(br_cond);
+
+  add_block(true_expr);
+  visit(node->trueExpr);
+  auto true_res = remove_variable_pointer(ask_expr[node->trueExpr]);
+  add_stmt(env.createDirectBrStmt(end));
+  auto from_true = currentFunction->blocks.back();
+
+  add_block(false_expr);
+  visit(node->falseExpr);
+  auto false_res = remove_variable_pointer(ask_expr[node->falseExpr]);
+  add_stmt(env.createDirectBrStmt(end));
+  auto from_false = currentFunction->blocks.back();
+
+  add_block(end);
+  if (!node->valueType.is_void()) {
+    auto phi = env.createPhiStmt(
+        register_annoy_var(toIRType(node->valueType), ".ternary_res."),
+        std::map<BasicBlock *, Val *>{{from_true, true_res},
+                                      {from_false, false_res}});
+    add_phi(phi);
+    ask_expr[node] = phi->res;
   }
-  auto then_type = then_expr->get_type();
-  auto else_type = else_expr->get_type();
-  if (then_type == nullptr && else_type == nullptr) {
-    node->updata_type(nullptr);
-    node->updata_assignable(false);
-    node->updata_null(true);
-    return;
-  }
-  if (then_type == nullptr) {
-    if (else_type->dim == 0 &&
-        (*else_type == *IntType || *else_type == *BoolType)) {
-      throw semanticError("Type Mismatch", node->pos);
-    }
-    node->updata_type(else_type);
-    node->updata_assignable(false);
-    node->updata_null(false);
-    return;
-  }
-  if (else_type == nullptr) {
-    if (then_type->dim == 0 &&
-        (*then_type == *IntType || *then_type == *BoolType)) {
-      throw semanticError("Type Mismatch", node->pos);
-    }
-    node->updata_type(then_type);
-    node->updata_assignable(false);
-    node->updata_null(false);
-    return;
-  }
-  if (*then_type != *else_type) {
-    throw semanticError("Type Mismatch", node->pos);
-  }
-  node->updata_type(then_type);
-  node->updata_assignable(false);
-  node->updata_null(false);
 }
 
 void IRbuilder::visit(classMemExprNode *node) {
   //  std::cerr << "check classMemExpr\n";
-  auto expr = node->expr_node;
-  expr->accept(this);
-  auto member_name = node->name;
-  auto expr_type = expr->get_type();
-  if (expr_type == nullptr) {
-    throw semanticError("Invalid Class Member", node->pos);
-  }
-  if (expr_type->dim > 0) {
-    throw semanticError("Invalid Type", node->pos);
-  }
-  if (!expr_type->type_name->is_member(member_name)) {
-    throw semanticError("Invalid Class Member", node->pos);
-  }
-  auto member = expr_type->type_name->ask_member(member_name);
-  node->updata_type(std::make_shared<Type>(std::move(member)));
-  node->updata_assignable(true);
-  node->updata_null(false);
   //  std::cerr << "return classMemExpr\n";
 }
 
 void IRbuilder::visit(formatStringExprNode *node) {
   //  std::cerr << "check formatStringExpr\n";
-  auto &elements = node->ele;
-  for (auto it : elements) {
-    if (std::holds_alternative<std::shared_ptr<ExprNode>>(it)) {
-      auto expr = std::get<std::shared_ptr<ExprNode>>(it);
-      expr->accept(this);
-      auto expr_type = expr->get_type();
-      if (expr_type == nullptr ||
-          (*expr_type != *IntType && *expr_type != *BoolType &&
-           *expr_type != *StringType)) {
-        throw semanticError("Invalid Type", node->pos);
-      }
-    }
-  }
-  node->updata_type(StringType);
-  node->updata_assignable(false);
-  node->updata_null(false);
   //  std::cerr << "return formatStringExpr\n";
+}
+
+void IRbuilder::visit(simpleArrayNode *node) {
+  //  std::cerr << "check simpleArray\n";
+  //  std::cerr << "return simpleArray\n";
+}
+
+void IRbuilder::visit(complexArrayNode *node) {
+  //  std::cerr << "check complexArray\n";
 }
 
 void IRbuilder::visit(arrayAccessExprNode *node) {
   //  std::cerr << "check arrayAccessExpr\n";
-  auto a = node->a_expr;
-  auto index = node->index_expr;
-  a->accept(this);
-  auto a_type = a->get_type();
-  if (a_type == nullptr || a_type->dim < index.size()) {
-    throw semanticError("Dimension Out Of Bound", node->pos);
-  }
-  for (auto it : index) {
-    it->accept(this);
-    auto type = it->get_type();
-    if (type == nullptr || *type != *IntType) {
-      throw semanticError("Invalid Type", node->pos);
-    }
-  }
-  node->updata_type(
-      std::make_shared<Type>(a_type->type_name, a_type->dim - index.size()));
-  node->updata_assignable(true);
-  node->updata_null(false);
-  //  //  std::cerr<<node->get_type()->dim<<' '<<node->pos.toString()<<'\n';
+  visit(node->array);
+  visit(node->index);
+  auto array = remove_variable_pointer(ask_expr[node->array]);
+  auto index = remove_variable_pointer(ask_expr[node->index]);
+  auto type = toIRType(node->valueType);
+  auto gep = env.createGetElementPtrStmt(
+      type->to_string(), register_annoy_ptr_var(type, ".arr."),
+      dynamic_cast<Var *>(array), std::vector<Val *>{index});
+  add_stmt(gep);
+  ask_expr[node] = gep->res;
+
   //  std::cerr << "return arrayAccessExpr\n";
 }
 
@@ -914,29 +654,42 @@ void IRbuilder::visit(emptyStmtNode *node) {
 
 void IRbuilder::visit(suiteStmtNode *node) {
   //  std::cerr << "check suiteStmt\n";
-
-  scope = {std::make_shared<Scope>(std::move(scope))};
-  for (auto stmt : node->get_stmts()) {
-    stmt->accept(this);
-  }
-  scope = std::move(*scope.ask_parent());
+  for (auto it : node->get_stmts())
+    it->accept(this);
   //  std::cerr << "return suiteStmt\n";
 }
 
 void IRbuilder::visit(ifStmtNode *node) {
-  auto condition = node->condition;
-  condition->accept(this);
-  if (condition->get_type() == nullptr || *condition->get_type() != *BoolType) {
-    throw semanticError("Invalid Type", node->pos);
+
+  auto after = env.createBasicBlock("if_end_" + std::to_string(ifCounter));
+
+  for (auto &clause : node->ifStmts) {
+    ++if_cnt;
+    auto true_block =
+        env.createBasicBlock("if_true_" + std::to_string(ifCounter));
+    auto false_block =
+        (&clause != &node->ifStmts.back() || node->elseStmt)
+            ? env.createBasicBlock("if_false_" + std::to_string(ifCounter))
+            : nullptr;
+
+    visit(clause.first);
+    auto br_cond =
+        env.createCondBrStmt(remove_variable_pointer(ask_expr[clause.first]),
+                             true_block, false_block ? false_block : after);
+    add_stmt(br_cond);
+
+    add_block(true_block);
+    visit(clause.second);
+    add_stmt(env.createDirectBrStmt(after));
+
+    if (false_block)
+      add_block(false_block);
   }
-  scope = {std::make_shared<Scope>(std::move(scope))};
-  node->thenStmt->accept(this);
-  scope = std::move(*scope.ask_parent());
-  scope = {std::make_shared<Scope>(std::move(scope))};
-  if (auto else_stmt = node->elseStmt) {
-    else_stmt->accept(this);
+  if (node->elseStmt) {
+    visit(node->elseStmt);
+    add_stmt(env.createDirectBrStmt(after));
   }
-  scope = std::move(*scope.ask_parent());
+  add_block(after);
 }
 
 void IRbuilder::visit(exprStmtNode *node) {
@@ -948,16 +701,35 @@ void IRbuilder::visit(exprStmtNode *node) {
 }
 
 void IRbuilder::visit(whileStmtNode *node) {
-  auto condition = node->condi_expr;
-  condition->accept(this);
   ++loop_cnt;
-  if (condition->get_type() == nullptr || *condition->get_type() != *BoolType) {
-    throw semanticError("Invalid Type", node->pos);
-  }
-  scope = {std::make_shared<Scope>(std::move(scope))};
+  auto condi = std::make_shared<basicBlockNode>("while_cond_" +
+                                                std::to_string(loop_cnt));
+  auto body = std::make_shared<basicBlockNode>("while_body_" +
+                                               std::to_string(loop_cnt));
+  auto afterLoop =
+      std::make_shared<basicBlockNode>("while_end_" + std::to_string(loop_cnt));
+
+  auto br_condi = std::make_shared<brStmtNode>(condi);
+  currentFunction->blocks.back()->stmt.push_back(br_condi);
+  currentFunction->blocks.push_back(condi);
+
+  node->condi_expr->accept(this);
+  auto br_body = std::make_shared<condiBrStmtNode>(
+      remove_variable_pointer(ask_expr[node->condi_expr.get()]), body,
+      afterLoop);
+  currentFunction->blocks.back()->stmt.push_back(br_body);
+  currentFunction->blocks.push_back(body);
+
+  loop_break.push(afterLoop);
+  loop_continue.push(condi);
+
   node->loop_stmt->accept(this);
-  --loop_cnt;
-  scope = std::move(*scope.ask_parent());
+  currentFunction->blocks.back()->stmt.push_back(br_condi);
+
+  loop_break.pop();
+  loop_continue.pop();
+
+  currentFunction->blocks.push_back(afterLoop);
 }
 
 void IRbuilder::visit(varDefStmtNode *node) {
@@ -970,33 +742,32 @@ void IRbuilder::visit(controlStmtNode *node) {
   //  std::cerr << "check controlStmt\n";
   auto control_type = node->stmt_type;
   switch (control_type) {
-  case controlStmtNode::StmtType::Continue:
+  case controlStmtNode::StmtType::Continue: {
+    auto br = env.createDirectBrStmt(loopContinueTo.top());
+    add_stmt(br);
+    auto block = env.createBasicBlock("after_continue_" +
+                                      std::to_string(++continueCounter));
+    add_block(block);
+    break;
+  }
   case controlStmtNode::StmtType::Break: {
-    if (loop_cnt == 0) {
-      throw semanticError("Invalid Control Flow", node->pos);
-    }
+    auto br = env.createDirectBrStmt(loopBreakTo.top());
+    add_stmt(br);
+    auto block =
+        env.createBasicBlock("after_break_" + std::to_string(++breakCounter));
+    add_block(block);
     break;
   }
   case controlStmtNode::StmtType::Return: {
-    auto expr = node->value;
-    is_return = true;
-    if (expr == nullptr) {
-      if (*return_type != *VoidType) {
-        //  std::cerr<<"HERE1\n";
-        throw semanticError("Type Mismatch", node->pos);
-      }
-    } else {
-      expr->accept(this);
-      if (expr->get_type() != nullptr && *expr->get_type() != *return_type) {
-        //  //  std::cerr<<' '<<return_type->type_name->name<<"HERE2\n";
-        throw semanticError("Type Mismatch", node->pos);
-      }
-      if (expr->get_type() == nullptr &&
-          (*return_type == *IntType || *return_type == *BoolType)) {
-        //  std::cerr<<"HERE3\n";
-        throw semanticError("Type Mismatch", node->pos);
-      }
+    auto ret = env.createRetStmt();
+    if (node->expr) {
+      visit(node->expr);
+      ret->value = remove_variable_pointer(ask_expr[node->expr]);
     }
+    add_stmt(ret);
+    auto block =
+        env.createBasicBlock("after_return_" + std::to_string(++returnCounter));
+    add_block(block);
     break;
   }
   case controlStmtNode::StmtType::Unknown: {
@@ -1007,24 +778,52 @@ void IRbuilder::visit(controlStmtNode *node) {
 }
 
 void IRbuilder::visit(forStmtNode *node) {
-  scope = {std::make_shared<Scope>(std::move(scope))};
-  node->ask_init()->accept(this);
-  auto condition = node->ask_condi();
-  if (condition) {
-    condition->accept(this);
-    if (condition->get_type() == nullptr ||
-        *condition->get_type() != *BoolType) {
-      throw semanticError("Invalid Type", node->pos);
-    }
+  // visit init
+  if (node->init)
+    visit(node->init);
+
+  // create blocks
+  ++loopCounter;
+  auto body = env.createBasicBlock("for_body_" + std::to_string(loopCounter));
+  auto cond =
+      node->cond
+          ? env.createBasicBlock("for_cond_" + std::to_string(loopCounter))
+          : body;
+  auto step =
+      node->step
+          ? env.createBasicBlock("for_step_" + std::to_string(loopCounter))
+          : cond;
+  auto afterLoop =
+      env.createBasicBlock("for_end_" + std::to_string(loopCounter));
+
+  auto br2cond = env.createDirectBrStmt(cond);
+  add_stmt(br2cond);
+
+  // visit cond
+  if (node->cond) {
+    add_block(cond);
+    visit(node->cond);
+    auto br2body = env.createCondBrStmt(
+        remove_variable_pointer(ask_expr[node->cond]), body, afterLoop);
+    add_stmt(br2body);
   }
-  auto step = node->ask_step();
-  if (step) {
-    step->accept(this);
+  // visit body
+  add_block(body);
+  push_loop(step, afterLoop);
+  for (auto stmt : node->body)
+    visit(stmt);
+  auto br2step = env.createDirectBrStmt(step);
+  add_stmt(br2step);
+  pop_loop();
+
+  // visit step
+  if (node->step) {
+    add_block(step);
+    visit(node->step);
+    add_stmt(br2cond);
   }
-  ++loop_cnt;
-  node->ask_loop()->accept(this);
-  --loop_cnt;
-  scope = {std::move(*scope.ask_parent())};
+  // after loop
+  add_block(afterLoop);
 }
 
 void IRbuilder::visit(functionCallExprNode *node) {

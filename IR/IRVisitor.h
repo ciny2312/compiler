@@ -2,10 +2,11 @@
 class IRNode;
 class classNode;
 class basicBlockNode;
-class fuctionNode;
+class functionNode;
 class allocaStmtNode;
 class storeStmtNode;
 class loadStmtNode;
+class arithStmtNode;
 class binaryStmtNode;
 class cmpStmtNode;
 class retStmtNode;
@@ -23,10 +24,11 @@ struct IRVisitor {
 //	virtual void visit(IRNode *node) { node->accept(this); }
 	virtual void visit(classNode *node) {}
 	virtual void visit(basicBlockNode *node) {}
-	virtual void visit(fuctionNode *node) {}
+	virtual void visit(functionNode *node) {}
 	virtual void visit(allocaStmtNode *node) {}
 	virtual void visit(storeStmtNode *node) {}
 	virtual void visit(loadStmtNode *node) {}
+	virtual void visit(arithStmtNode *node) {}
 	virtual void visit(binaryStmtNode *node) {}
 	virtual void visit(cmpStmtNode *node) {}
 	virtual void visit(retStmtNode *node) {}
