@@ -410,11 +410,11 @@ void IRbuilder::visit(constructorClassStmtNode *node) {
 void IRbuilder::visit(constPrimaryNode *node) {
   //  std::cerr << "check constPrimary\n";
 	if (node->valueType.is_null())
-		exprResult[node] = env.literal(nullptr);
+		ask_expr[node] = get_const(nullptr);
 	else if (node->valueType.is_bool())
-		exprResult[node] = env.literal(node->value == "true");
+		ask_expr[node] = get_const(node->value == "true");
 	else if (node->valueType.is_int())
-		exprResult[node] = env.literal(std::stoi(node->value));
+		ask_expr[node] = get_const(std::stoi(node->value));
 	else if (node->valueType.is_string()) {
 		std::string str;
 		str.reserve(node->value.size() - 2);
@@ -432,7 +432,7 @@ void IRbuilder::visit(constPrimaryNode *node) {
 					throw std::runtime_error("unknown escape sequence");
 			}
 		}
-		exprResult[node] = register_literal_str(str);
+		ask_expr[node] = register_literal_str(str);
 	}
 	else
 		throw std::runtime_error("IRBuilder: unknown literal type");
@@ -658,7 +658,7 @@ void IRbuilder::visit(classMemExprNode *node) {
 		auto cls = name2class[node->object->valueType.to_string()];
 		int index = static_cast<int>(cls->name2index[node->member]);
 
-		auto obj = remove_variable_pointer(exprResult[node->object]);
+		auto obj = remove_variable_pointer(ask_expr[node->object]);
 		auto gep = env.createGetElementPtrStmt("%class." + cls->type.name,
 											   register_annoy_ptr_var(cls->type.fields[index], ".gep."),
 											   dynamic_cast<Var *>(obj),
@@ -666,7 +666,7 @@ void IRbuilder::visit(classMemExprNode *node) {
 		if (!gep->pointer)
 			throw std::runtime_error("IRBuilder: member access on non-variable");
 		add_stmt(gep);
-		exprResult[node] = gep->res;
+		ask_expr[node] = gep->res;
 	}
   //  std::cerr << "return classMemExpr\n";
 }
