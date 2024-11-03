@@ -7,7 +7,6 @@ class allocaStmtNode;
 class storeStmtNode;
 class loadStmtNode;
 class arithStmtNode;
-class binaryStmtNode;
 class cmpStmtNode;
 class retStmtNode;
 class getElePtrStmtNode;
@@ -29,7 +28,6 @@ struct IRVisitor {
 	virtual void visit(storeStmtNode *node) {}
 	virtual void visit(loadStmtNode *node) {}
 	virtual void visit(arithStmtNode *node) {}
-	virtual void visit(binaryStmtNode *node) {}
 	virtual void visit(cmpStmtNode *node) {}
 	virtual void visit(retStmtNode *node) {}
 	virtual void visit(getElePtrStmtNode *node) {}

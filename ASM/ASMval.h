@@ -1,12 +1,13 @@
 #pragma once
 #include <string>
 
-class Val {
+class ASMval {
 public:
   [[nodiscard]] virtual std::string to_string() const = 0;
+  virtual ~ASMval() = default;
 };
 
-class Imm : public Val {};
+class Imm : public ASMval {};
 
 class ImmI32 : public Imm {
 public:
@@ -28,7 +29,7 @@ private:
   StackVal *stackVal = nullptr;
 };
 
-class StackVal : public Val {
+class StackVal : public ASMval {
 public:
   StackVal() = default;
   int offset = 0;
@@ -41,7 +42,7 @@ private:
   OffsetOfStackVal *offsetOfStackVal = nullptr;
 };
 
-class GlobalVal;
+class ASMGlobalVal;
 
 class RelocationFunction : public Imm {
 public:
@@ -49,10 +50,10 @@ public:
   [[nodiscard]] std::string to_string() const override;
 
 private:
-  explicit RelocationFunction(std::string type, GlobalVal *globalVal)
+  explicit RelocationFunction(std::string type, ASMGlobalVal *globalVal)
       : type(std::move(type)), globalVal(globalVal) {}
   std::string type;
-  GlobalVal *globalVal = nullptr;
+  ASMGlobalVal *globalVal = nullptr;
 };
 
 class GlobalPosition : public Imm {
@@ -61,13 +62,13 @@ public:
   [[nodiscard]] std::string to_string() const override;
 
 private:
-  explicit GlobalPosition(GlobalVal *globalVal) : globalVal(globalVal) {}
-  GlobalVal *globalVal = nullptr;
+  explicit GlobalPosition(ASMGlobalVal *globalVal) : globalVal(globalVal) {}
+  ASMGlobalVal *globalVal = nullptr;
 };
 
-class GlobalVal : public Val {
+class ASMGlobalVal : public ASMval {
 public:
-  explicit GlobalVal(std::string name) : name(std::move(name)) {}
+  explicit ASMGlobalVal(std::string name) : name(std::move(name)) {}
   [[nodiscard]] std::string to_string() const override { return name; }
   RelocationFunction *get_hi();
   RelocationFunction *get_lo();
