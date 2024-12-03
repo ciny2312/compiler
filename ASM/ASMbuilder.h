@@ -3,7 +3,7 @@
 #include "ASM/ASMNode.h"
 #include "ASM/ASMregister.h"
 #include "IR/IRNode.h"
-#include "IR/val.h"
+#include "IR/IRval.h"
 
 class ASMbuilder : public IRVisitor {
 public:
@@ -43,7 +43,7 @@ private:
   std::map<Value *, Reg *> val2reg;
   std::map<Var *, StackVal *> ptr2stack;
   // TODO: use global var to unify global val and string literal val
-  std::map<Var *, ASMGlobalVal *> globalVar2globalVal;
+  std::map<Var *, GlobalVal *> globalVar2globalVal;
   std::map<PhysicalReg *, VirtualReg *> calleeSaveTo;
   int middle_block_count = 0;
 
@@ -56,7 +56,7 @@ private:
   void add_inst(Instruction *inst);
   StackVal *add_object_to_stack();
   StackVal *add_object_to_stack_front();
-  ASMGlobalVal *add_global_val(Var *ir_var);
+  GlobalVal *add_global_val(Var *ir_var);
   static std::vector<std::pair<Var *, Value *>>
   block_phi_val(basicBlockNode *dst, basicBlockNode *src);
 

@@ -42,7 +42,7 @@ private:
   OffsetOfStackVal *offsetOfStackVal = nullptr;
 };
 
-class ASMGlobalVal;
+class GlobalVal;
 
 class RelocationFunction : public Imm {
 public:
@@ -50,10 +50,10 @@ public:
   [[nodiscard]] std::string to_string() const override;
 
 private:
-  explicit RelocationFunction(std::string type, ASMGlobalVal *globalVal)
+  explicit RelocationFunction(std::string type, GlobalVal *globalVal)
       : type(std::move(type)), globalVal(globalVal) {}
   std::string type;
-  ASMGlobalVal *globalVal = nullptr;
+  GlobalVal *globalVal = nullptr;
 };
 
 class GlobalPosition : public Imm {
@@ -62,13 +62,13 @@ public:
   [[nodiscard]] std::string to_string() const override;
 
 private:
-  explicit GlobalPosition(ASMGlobalVal *globalVal) : globalVal(globalVal) {}
-  ASMGlobalVal *globalVal = nullptr;
+  explicit GlobalPosition(GlobalVal *globalVal) : globalVal(globalVal) {}
+  GlobalVal *globalVal = nullptr;
 };
 
-class ASMGlobalVal : public ASMval {
+class GlobalVal : public ASMval {
 public:
-  explicit ASMGlobalVal(std::string name) : name(std::move(name)) {}
+  explicit GlobalVal(std::string name) : name(std::move(name)) {}
   [[nodiscard]] std::string to_string() const override { return name; }
   RelocationFunction *get_hi();
   RelocationFunction *get_lo();

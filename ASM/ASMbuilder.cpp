@@ -1,6 +1,6 @@
 #include "ASMbuilder.h"
 #include "IR/IRVisitor.h"
-#include "IR/val.h"
+#include "IR/IRval.h"
 #include <queue>
 #include <set>
 
@@ -423,8 +423,8 @@ StackVal *ASMbuilder::add_object_to_stack_front() {
   return obj;
 }
 
-ASMGlobalVal *ASMbuilder::add_global_val(Var *ir_var) {
-  auto val = new ASMGlobalVal{ir_var->name};
+GlobalVal *ASMbuilder::add_global_val(Var *ir_var) {
+  auto val = new GlobalVal{ir_var->name};
   globalVar2globalVal[ir_var] = val;
   return val;
 }

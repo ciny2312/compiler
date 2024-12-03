@@ -63,7 +63,7 @@ class ASMFunction : public ASMNode {
 
 class GlobalVarInst : public ASMNode {
   public:
-	ASMGlobalVal *globalVal = nullptr;
+	GlobalVal *globalVal = nullptr;
 	Imm *initVal = nullptr;
 	void print(std::ostream &os) const override;
 	void accept(ASMVisitor *visitor) override { visitor->visitGlobalVarInst(this); }
@@ -71,7 +71,7 @@ class GlobalVarInst : public ASMNode {
 
 class LiteralStringInst : public ASMNode {
   public:
-	ASMGlobalVal *globalVal = nullptr;
+	GlobalVal *globalVal = nullptr;
 	std::string val;
 	void print(std::ostream &os) const override;
 	void accept(ASMVisitor *visitor) override { visitor->visitLiteralStringInst(this); }
