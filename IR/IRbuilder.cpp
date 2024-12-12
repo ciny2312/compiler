@@ -819,19 +819,6 @@ void IRbuilder::visit(AstFuncCallExprNode *node) {
 	else if (auto id = dynamic_cast<AstAtomExprNode *>(node->func))
 		func_name = id->name;
 
-	auto p = currentClass ? name2function.find(currentClass->type.name + "." + func_name) : name2function.find(func_name);
-	if (p == name2function.end()) p = name2function.find(func_name);
-	else if (currentClass)
-		args.push_back(remove_variable_pointer(name2var["this"]));
-	for (auto &arg: node->args) {
-		visit(arg);
-		args.push_back(remove_variable_pointer(exprResult[arg]));
-	}
-
-	auto call = env.createCallStmt(p->second, std::move(args));
-	call->res = (call->func->type == env.voidType ? nullptr : register_annoy_var(call->func->type, ".call."));
-	add_stmt(call);
-	exprResult[node] = call->res;
 }
 
 IR::StringLiteralVar *IRbuilder::register_literal_str(const std::string &str) {
